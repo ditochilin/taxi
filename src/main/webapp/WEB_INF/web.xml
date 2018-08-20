@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <display-name>Project</display-name>
+    <listener>
+        <listener-class>listener.ServletListener</listener-class>
+    </listener>
+    <servlet>
+        <description></description>
+        <display-name>
+            Controller
+        </display-name>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>controller.Controller</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>/Controller</url-pattern>
+    </servlet-mapping>
+    <!--<session-config>-->
+        <!--<session-timeout>-->
+            <!--30-->
+        <!--</session-timeout>-->
+    <!--</session-config>-->
+    <filter>
+        <filter-name>pageFilter</filter-name>
+        <filter-class>filter.PageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>pageFilter</filter-name>
+        <url-pattern>/jsp/filter.jsp</url-pattern>
+    </filter-mapping>
+</web-app>

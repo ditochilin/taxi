@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" 
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          version="2.0">
+
+    <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
+
+    <html>
+        <head>
+            <title> Error </title>
+        </head>
+        <body>
+            <h3>Error</h3>
+            <jsp:expression>(request.getAttribute("error") != null)
+                    ? (String) request.getAttribute("error") : "unknown error"</jsp:expression>               
+
+                <a href="Controller">Return to login page</a>
+            </body>
+        </html>
+</jsp:root>
