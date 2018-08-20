@@ -13,7 +13,7 @@ public class ControllerHelper  {
     private static ControllerHelper instance = null;
     private static Map<String, ICommand> commands = new HashMap<String, ICommand>();
 
-    public ControllerHelper() {
+    private ControllerHelper() {
         commands.put("login", new LoginCommand());
     }
 

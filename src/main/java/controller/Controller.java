@@ -20,8 +20,6 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
 
     private static ControllerHelper controllerHelper = ControllerHelper.getInstance();
-    private static Config config = Config.getInstance();
-    private static Messenger messenger = Messenger.getInstance();
 
     public Controller() {
         super();
@@ -47,9 +45,9 @@ public class Controller extends HttpServlet {
             ICommand command = controllerHelper.getCommand(request);
             page = command.execute(request, response);
         } catch (ServletException e) {
-            page = catchHandler(e,request, messenger.SERVLET_EXCEPTION);
+            page = catchHandler(e,request, Messenger.SERVLET_EXCEPTION);
         } catch (IOException e) {
-            page = catchHandler(e,request, messenger.IO_EXCEPTION);
+            page = catchHandler(e,request, Messenger.IO_EXCEPTION);
         }
 
         //RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
@@ -59,8 +57,8 @@ public class Controller extends HttpServlet {
     private String catchHandler(Exception e, HttpServletRequest request, String message){
         //todo delete printStackTrace
         e.printStackTrace();
-        request.setAttribute("messageError", messenger.getInstance().getProperty(message));
-        return config.getProperty(Config.ERROR);
+        request.setAttribute("messageError", Messenger.getProperty(message));
+        return Config.getProperty(Config.ERROR);
     }
 
     /**

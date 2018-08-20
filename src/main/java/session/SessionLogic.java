@@ -15,8 +15,6 @@ import javax.servlet.http.HttpSession;
  */
 public class SessionLogic {
 
-    private static Config config = Config.getInstance();
-
     public SessionLogic() {
     }
     
@@ -32,7 +30,7 @@ public class SessionLogic {
             out.write("<br> Session Id" + session.getId());
             
             //int interval = 10;//60*30;
-            session.setMaxInactiveInterval(Integer.parseInt(config.getProperty("SESSION_INTERVAL")));
+            session.setMaxInactiveInterval(Integer.parseInt(Config.getProperty("SESSION_INTERVAL")));
             
             out.flush();
             out.close();

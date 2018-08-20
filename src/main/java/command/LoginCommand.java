@@ -15,8 +15,6 @@ public class LoginCommand implements ICommand {
 
     // todo check if everything has been done
     private static IUserService userService = UserService.getInstance();
-    private static Config config = Config.getInstance();
-    private static Messenger messenger = Messenger.getInstance();
 
     public LoginCommand() {
     }
@@ -30,10 +28,10 @@ public class LoginCommand implements ICommand {
 
         if (userService.userIsCorrect(userDump)) {
             request.setAttribute("user", login);
-            return config.getProperty(Config.MAIN);
+            return Config.getProperty(Config.MAIN);
         }
 
-        request.setAttribute("error", messenger.getProperty(Messenger.LOGIN_ERROR));
-        return config.getProperty(Config.ERROR);
+        request.setAttribute("error", Messenger.getProperty(Messenger.LOGIN_ERROR));
+        return Config.getProperty(Config.ERROR);
     }
 }
