@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IUserService;
+import service.exceptions.ServiceException;
 
 import java.util.List;
 
@@ -27,22 +28,22 @@ public class UserService implements IUserService {
         return instance;
     }
 
-    public boolean userIsCorrect(User user) {
-        String phone = user.getPhone();
+    public boolean userIsCorrect(User user) throws ServiceException {
+        String userName = user.getUserName();
         try {
-            List<User> users = userDao.findByPhone(phone);
+            List<User> users = userDao.findByName(userName);
             if (users.isEmpty()) {
-                LOGGER.log(Level.INFO, String.format("User with phone %s", phone));
+                LOGGER.log(Level.INFO, String.format("User with nickname %s", userName));
                 return false;
             }
             return checkPassword(user, users.get(0));
         } catch (DaoException e) {
-            return false;
+            throw new ServiceException("User not found. "+e.getMessage(),e);
         }
     }
 
     private boolean checkPassword(User user, User userSecond) {
-        return user.getPassword() == userSecond.getPassword();
+        return user.getPassword().equals(userSecond.getPassword());
     }
 
 

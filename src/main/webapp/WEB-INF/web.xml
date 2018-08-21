@@ -31,6 +31,10 @@
     </filter>
     <filter-mapping>
         <filter-name>pageFilter</filter-name>
-        <url-pattern>/jsp/filter.jsp</url-pattern>
+        <url-pattern>/WEB-INF/jsp/filter.jspx</url-pattern>
     </filter-mapping>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
 </web-app>

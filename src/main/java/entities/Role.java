@@ -17,6 +17,11 @@ public class Role implements Serializable {
     public Role() {
     }
 
+    public Role(String description, String roleName) {
+        this.description = description;
+        this.roleName = roleName;
+    }
+
     public Long getId() {
         return id;
     }
@@ -52,13 +57,10 @@ public class Role implements Serializable {
             return false;
         }
         Role other = (Role) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override

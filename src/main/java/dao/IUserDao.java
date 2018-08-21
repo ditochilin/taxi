@@ -18,4 +18,5 @@ public interface IUserDao extends IDao<User> {
 
     List<User> findByPhone(String phone) throws DaoException, NoSuchEntityException;
 
+    List<User> findByName(String userName) throws DaoException;
 }

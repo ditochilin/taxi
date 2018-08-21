@@ -1,6 +1,7 @@
 package service;
 
 import entities.User;
+import service.exceptions.ServiceException;
 
 /**
  * Service for working with user
@@ -13,6 +14,6 @@ public interface IUserService {
      * @param user user for check
      * @return
      */
-    boolean userIsCorrect(User user);
+    boolean userIsCorrect(User user) throws ServiceException;
 
 }

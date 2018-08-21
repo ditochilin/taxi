@@ -59,6 +59,11 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao {
     }
 
     @Override
+    public List<User> findByName(String userName) throws DaoException {
+        return findBy(FIND_ALL, "user_name", userName, extractor, enricher);
+    }
+
+    @Override
     public List<User> findByRole(Role role) throws DaoException {
         return findBy(FIND_ALL, "id_role", role.getId(), extractor, enricher);
     }

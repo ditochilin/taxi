@@ -20,9 +20,16 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String phone, String password) {
+    public User(String name, String password) {
+        this.userName = name;
+        this.password = password;
+    }
+
+    public User(String phone, String password, String userName, Role role) {
         this.phone = phone;
         this.password = password;
+        this.userName = userName;
+        this.role = role;
     }
 
     public Long getId() {
@@ -80,13 +87,10 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override

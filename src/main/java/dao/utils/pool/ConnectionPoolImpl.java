@@ -71,10 +71,11 @@ public class ConnectionPoolImpl implements IConnectionPool {
         Connection connection = connectionQueue.poll();
         if (connection == null) {
             try {
+                Class.forName("com.mysql.jdbc.Driver");
                 connection = DriverManager.getConnection(jdbcUrl, login, password);
 //                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 //                connection.setAutoCommit(false);
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 throw new DaoException("Could not get connection from driver for : " + jdbcUrl, e);
             }
         }

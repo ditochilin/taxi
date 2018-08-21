@@ -2,6 +2,7 @@ package command;
 
 import entities.User;
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.UserService;
 import utils.Config;
 import utils.Messenger;
@@ -20,15 +21,19 @@ public class LoginCommand implements ICommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
         User userDump = new User(login, password);
 
-        if (userService.userIsCorrect(userDump)) {
-            request.setAttribute("user", login);
-            return Config.getProperty(Config.MAIN);
+        try {
+            if (userService.userIsCorrect(userDump)) {
+                request.setAttribute("user", login);
+                return Config.getProperty(Config.MAIN);
+            }
+        } catch (ServiceException e) {
+            request.setAttribute("errorDescription", e.getMessage());
         }
 
         request.setAttribute("error", Messenger.getProperty(Messenger.LOGIN_ERROR));
