@@ -70,21 +70,21 @@ public class fulfillDatabase {
 
     public void insertUsers(List<User> users) throws DaoException, NoSuchEntityException {
         User currentUser = users.get(0);
-        currentUser.setRole(roleDao.findByName("Admin").get(0));
+        currentUser.setRole(roleDao.findByName("Admin"));
         currentUser.setUserName("root");
         currentUser.setPassword("root");
         currentUser.setPhone("0678124444");
         userDao.insert(currentUser);
 
         User currentUser1 = users.get(1);
-        currentUser1.setRole(roleDao.findByName("Client").get(0));
+        currentUser1.setRole(roleDao.findByName("Client"));
         currentUser1.setUserName("Alex");
         currentUser1.setPassword("root");
         currentUser1.setPhone("0678124433");
         userDao.insert(currentUser1);
 
         User currentUser2 = users.get(2);
-        currentUser2.setRole(roleDao.findByName("Driver").get(0));
+        currentUser2.setRole(roleDao.findByName("Driver"));
         currentUser2.setUserName("Ivan");
         currentUser2.setPassword("root");
         currentUser2.setPhone("0678124422");

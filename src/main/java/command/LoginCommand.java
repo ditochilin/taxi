@@ -8,7 +8,6 @@ import service.implementation.UserService;
 import utils.Config;
 import utils.Messenger;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,7 +32,6 @@ public class LoginCommand implements ICommand {
                 Role role = userDump.getRole();
                 session.setAttribute("user", login);
                 session.setAttribute("role", role);
-                //response.addCookie(new Cookie("JSESSIONID", session.getId()));
                 return getCorrectPage(role);
             }
         } catch (ServiceException e) {
@@ -49,7 +47,7 @@ public class LoginCommand implements ICommand {
             case "Driver":
                 return Config.getProperty(Config.ORDERS);
             case "Client":
-                return Config.getProperty(Config.ONE_ORDER);
+                return Config.getProperty(Config.EDIT_ORDER);
             default:
                 return Config.getProperty(Config.MAIN);
         }

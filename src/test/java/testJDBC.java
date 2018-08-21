@@ -30,7 +30,7 @@ public class testJDBC {
     final ITaxiOrderDao taxiOrderDao = TaxiOrderDaoImpl.getInstance();
 
     @Test
-    public void rolesTest() throws Exception {
+    public void rolesTest() {
         IRoleDao roleDao = RoleDaoImpl.getInstance();
         Role role1 = new Role();
         Role role2 = new Role();
@@ -69,7 +69,7 @@ public class testJDBC {
     }
 
     @Test
-    public void sharesTest() throws Exception {
+    public void sharesTest() {
         IShareDao shareDao = ShareDaoImpl.getInstance();
         Share share1 = new Share();
         Share share2 = new Share();
@@ -238,7 +238,7 @@ public class testJDBC {
     }
 
     @Test
-    public void carTypeTest() throws Exception {
+    public void carTypeTest() {
         CarType carType1 = new CarType();
         CarType carType2 = new CarType();
         CarType carType3 = new CarType();
@@ -307,7 +307,7 @@ public class testJDBC {
             User newUser2 = userDao.findById(user2.getId());
             Assert.assertEquals(user2.getPhone(), newUser2.getPhone());
 
-            Role role1ForSearch = roleDao.findByName("testClient").get(0);
+            Role role1ForSearch = roleDao.findByName("testClient");
             List<User> list = userDao.findByRole(role1ForSearch);
             Assert.assertEquals(user1.getId(), list.get(0).getId());
 
@@ -401,7 +401,7 @@ public class testJDBC {
         taxis[0].setCarNumber("AA5987ED");
         taxis[0].setCarName("Scoda Oktavia");
         taxis[0].setBusy(false);
-        taxis[0].setDriver(userDao.findByRole(roleDao.findByName("testDriver").get(0)).get(0));
+        taxis[0].setDriver(userDao.findByRole(roleDao.findByName("testDriver")).get(0));
         taxiDao.insert(taxis[0]);
 
         taxis[1].setCarType(carTypeDao.findByName("Cupe").get(0));
@@ -415,7 +415,7 @@ public class testJDBC {
         taxis[2].setBusy(true);
         taxis[2].setCarNumber("AA5444ED");
         taxis[2].setCarName("Saab");
-        taxis[2].setDriver(userDao.findByRole(roleDao.findByName("testDriver").get(0)).get(0));
+        taxis[2].setDriver(userDao.findByRole(roleDao.findByName("testDriver")).get(0));
         taxiDao.insert(taxis[2]);
 
     }
@@ -457,16 +457,16 @@ public class testJDBC {
         users[0].setUserName("client1");
         users[0].setPassword("123");
         users[0].setPhone("80672224455");
-        users[0].setRole(roleDao.findByName("testClient").get(0));
+        users[0].setRole(roleDao.findByName("testClient"));
         userDao.insert(users[0]);
 
-        users[1].setRole(roleDao.findByName("testAdmin").get(0));
+        users[1].setRole(roleDao.findByName("testAdmin"));
         users[1].setUserName("client2");
         users[1].setPassword("123");
         users[1].setPhone("80672228877");
         userDao.insert(users[1]);
 
-        users[2].setRole(roleDao.findByName("testDriver").get(0));
+        users[2].setRole(roleDao.findByName("testDriver"));
         users[2].setUserName("driver3");
         users[2].setPassword("123");
         users[2].setPhone("80672229911");

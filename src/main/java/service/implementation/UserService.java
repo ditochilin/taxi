@@ -1,8 +1,12 @@
 package service.implementation;
 
+import dao.IRoleDao;
 import dao.IUserDao;
 import dao.exceptions.DaoException;
+import dao.exceptions.NoSuchEntityException;
+import dao.implementation.RoleDaoImpl;
 import dao.implementation.UserDaoImpl;
+import entities.Role;
 import entities.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import service.IUserService;
 import service.exceptions.ServiceException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserService implements IUserService {
@@ -17,9 +22,11 @@ public class UserService implements IUserService {
     private static final Logger LOGGER = LogManager.getLogger(UserService.class.getName());
     private static UserService instance;
     private static IUserDao userDao;
+    private static IRoleDao roleDao;
 
     private UserService() {
         userDao = UserDaoImpl.getInstance();
+        roleDao = RoleDaoImpl.getInstance();
     }
 
     public static UserService getInstance() {
@@ -44,6 +51,17 @@ public class UserService implements IUserService {
             return null;
         } catch (DaoException e) {
             throw new ServiceException(String.format("User $s not found. %s",userName,e.getMessage()),e);
+        }
+    }
+
+    @Override
+    public List<User> getAllClients() {
+        try {
+            Role roleClient = roleDao.findByName("Client");
+            return userDao.findByRole(roleClient);
+        } catch (DaoException | NoSuchEntityException e) {
+            LOGGER.error("Couldn't get clients from database.");
+            return new ArrayList<>();
         }
     }
 

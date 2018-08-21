@@ -13,56 +13,67 @@
 </head>
 <body>
 <input type="hidden" name="command" value="editOrder"/>
-<table>
-    <h3>Edit client's order</h3>
-    <tr>
-        <th>Status</th>
-        <th><select name='statusList'>
+<form method="post" action="Controller" name="editOrder">
+    <table>
+        <h3>Edit client's order</h3>
+        <tr>
+            <th>Status</th>
+            <th><select name='statusList'>
                 <c:forEach items="${statusList}" var="status">
                     <option value="${status}">${status}</option>
                 </c:forEach>
             </select>
-        </th>
-    <tr>
-    <tr>
-        <th>Date</th>
-        <th><input type="datetime-local" name="date"></th>
-    </tr>
-    <tr>
-        <th>Client</th>
-        <th><input type="text" name="client"></th>
-    </tr>
-    <tr>
-        <th>Taxi</th>
-        <th><input type="text" name="taxi"></th>
-    </tr>
-    <tr>
-        <th>Start point</th>
-        <th><input type="text" name="startPoint"></th>
-    </tr>
-    <tr>
-        <th>Destination</th>
-        <th><input type="text" name="endPoint"></th>
-    </tr>
-    <tr>
-        <th>Distance</th>
-        <th><input type="number" name="distance"></th>
-    </tr>
-    <tr>
-        <th>Shares</th>
-        <!--todo  multiple choice can be added-->
-        <th><input type="text" name="share"></th>
-        <th><input type="text" name="share"></th>
-        <th><input type="text" name="share"></th>
-    </tr>
-    <tr>
-        <th>Cost</th>
-        <th><input type="cost" name="cost"></th>
-    </tr>
-    <tr>
-        <th>Feed time</th>
-        <th><input type="feedTime" name="feedTime"></th>
-    </tr>
-</table>
+            </th>
+        <tr>
+        <tr>
+            <th>Date</th>
+            <th><input type="datetime-local" name="date"></th>
+        </tr>
+        <tr>
+            <th>Client</th>
+            <th>
+            <th><select name='clientList'>
+                <c:forEach items="${clientList}" var="client">
+                    <option value="${client}">${client}</option>
+                </c:forEach>
+            </select></th>
+        </tr>
+        <tr>
+            <th>Taxi</th>
+            <th><select name='taxiList'>
+                <c:forEach items="${taxiList}" var="taxi">
+                    <option value="${taxi}">${taxi}</option>
+                </c:forEach>
+            </select></th>
+        </tr>
+        <tr>
+            <th>Start point</th>
+            <th><input type="text" name="startPoint"></th>
+        </tr>
+        <tr>
+            <th>Destination</th>
+            <th><input type="text" name="endPoint"></th>
+        </tr>
+        <tr>
+            <th>Distance</th>
+            <th><input type="number" name="distance"></th>
+        </tr>
+        <tr>
+            <th>Shares</th>
+            <!--todo  multiple choice can be added-->
+            <th><input type="text" name="share"></th>
+            <th><input type="text" name="share"></th>
+            <th><input type="text" name="share"></th>
+        </tr>
+        <tr>
+            <th>Cost</th>
+            <th><input type="cost" name="cost"></th>
+        </tr>
+        <tr>
+            <th>Feed time</th>
+            <th><input type="feedTime" name="feedTime"></th>
+        </tr>
+    </table>
+</form>
 </body>
 </html>

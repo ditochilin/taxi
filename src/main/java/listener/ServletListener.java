@@ -1,5 +1,10 @@
 package listener;
 
+import dao.transactionManager.TransactionManagerImpl;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
@@ -10,11 +15,14 @@ import javax.servlet.http.HttpSessionBindingEvent;
 public class ServletListener implements HttpSessionAttributeListener {
 
     private String counterName = "counter";
+    private static final Logger LOGGER = LogManager.getLogger(TransactionManagerImpl.class.getName());
 
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
         String name = event.getName();
         String url = "URL";
+
+        LOGGER.log(Level.INFO, "test message");
 
         if (name.equals(counterName)) {
             Integer currentName = (Integer) event.getValue();

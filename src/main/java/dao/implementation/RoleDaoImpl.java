@@ -56,8 +56,12 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
     }
 
     @Override
-    public List<Role> findByName(String roleName) throws DaoException, NoSuchEntityException {
-        return findBy(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL);
+    public Role findByName(String roleName) throws DaoException {
+        List<Role> roles = findBy(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL);
+        if(roles.isEmpty()){
+            return null;
+        }
+        return roles.get(0);
     }
 
     @Override

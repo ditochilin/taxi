@@ -71,7 +71,7 @@ public class ConnectionPoolImpl implements IConnectionPool {
         Connection connection = connectionQueue.poll();
         if (connection == null) {
             try {
-                Class.forName("com.mysql.jdbc.Driver");
+                Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(jdbcUrl, login, password);
 //                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 //                connection.setAutoCommit(false);
