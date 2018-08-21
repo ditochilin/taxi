@@ -14,14 +14,16 @@ import java.io.IOException;
 public interface ICommand {
 
     /**
-     *
+     * Method execute implemented by each command class.
+     * Describes systems behavior on user's events
+     * May set attributes, do some settings or checking and returns route to page
      * @param request   - http request
-     * @param responce  - http response
+     * @param response  - http response
      * @return
      * @throws ServletException
      * @throws IOException
      */
-    String execute(HttpServletRequest request, HttpServletResponse responce) throws ServletException, IOException;
+    String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 
 }
 

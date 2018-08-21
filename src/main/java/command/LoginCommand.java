@@ -8,6 +8,7 @@ import service.implementation.UserService;
 import utils.Config;
 import utils.Messenger;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,12 +27,13 @@ public class LoginCommand implements ICommand {
 
         try {
             userDump = userService.checkUserByPassword(userDump);
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(false);
             // todo:  && session.isNew() ???
             if (userDump != null ) {
                 Role role = userDump.getRole();
                 session.setAttribute("user", login);
                 session.setAttribute("role", role);
+                //response.addCookie(new Cookie("JSESSIONID", session.getId()));
                 return getCorrectPage(role);
             }
         } catch (ServiceException e) {

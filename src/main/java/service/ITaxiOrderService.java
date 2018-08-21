@@ -1,5 +1,6 @@
 package service;
 
+import entities.Status;
 import entities.TaxiOrder;
 
 import java.util.List;
@@ -11,5 +12,6 @@ import java.util.List;
 public interface ITaxiOrderService {
 
     List<TaxiOrder> findTaxiOrders();
+
 
 }

@@ -3,6 +3,7 @@ package service.implementation;
 import dao.ITaxiOrderDao;
 import dao.exceptions.DaoException;
 import dao.implementation.TaxiOrderDaoImpl;
+import entities.Status;
 import entities.TaxiOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,4 +38,5 @@ public class TaxiOrderService implements ITaxiOrderService {
             return new ArrayList<>();
         }
     }
+
 }

@@ -1,9 +1,6 @@
 package controller;
 
-import command.EmptyCommand;
-import command.GetOrdersCommand;
-import command.ICommand;
-import command.LoginCommand;
+import command.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -17,6 +14,8 @@ public class ControllerHelper  {
     private ControllerHelper() {
         commands.put("login", new LoginCommand());
         commands.put("getOrders", new GetOrdersCommand());
+        commands.put("editOrder", new EditOrderCommand());
+        commands.put("showOrders", new GetOrdersCommand());
     }
 
     public ICommand getCommand(HttpServletRequest request) {

@@ -11,6 +11,7 @@
     <title>Orders of clients</title>
 </head>
 <body>
+<input type="hidden" name="command" value="showOrders"/>
 <c:out value='${requestScope["user"]}, Hello! '/>
 <table border="1">
     <tr>
