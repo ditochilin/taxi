@@ -1,6 +1,7 @@
 package controller;
 
 import command.EmptyCommand;
+import command.GetOrdersCommand;
 import command.ICommand;
 import command.LoginCommand;
 
@@ -15,6 +16,7 @@ public class ControllerHelper  {
 
     private ControllerHelper() {
         commands.put("login", new LoginCommand());
+        commands.put("getOrders", new GetOrdersCommand());
     }
 
     public ICommand getCommand(HttpServletRequest request) {

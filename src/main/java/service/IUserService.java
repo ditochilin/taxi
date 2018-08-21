@@ -12,8 +12,8 @@ public interface IUserService {
     /**
      * Check if the user is authenticated
      * @param user user for check
-     * @return
+     * @return  fulfill dummy user with data from database
      */
-    boolean userIsCorrect(User user) throws ServiceException;
+    User checkUserByPassword(User user) throws ServiceException;
 
 }

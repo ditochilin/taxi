@@ -1,5 +1,6 @@
 package service.implementation;
 
+import dao.IUserDao;
 import dao.exceptions.DaoException;
 import dao.implementation.UserDaoImpl;
 import entities.User;
@@ -15,7 +16,7 @@ public class UserService implements IUserService {
 
     private static final Logger LOGGER = LogManager.getLogger(UserService.class.getName());
     private static UserService instance;
-    private final UserDaoImpl userDao;
+    private static IUserDao userDao;
 
     private UserService() {
         userDao = UserDaoImpl.getInstance();
@@ -28,22 +29,30 @@ public class UserService implements IUserService {
         return instance;
     }
 
-    public boolean userIsCorrect(User user) throws ServiceException {
+    public User checkUserByPassword(User user) throws ServiceException {
         String userName = user.getUserName();
         try {
             List<User> users = userDao.findByName(userName);
             if (users.isEmpty()) {
                 LOGGER.log(Level.INFO, String.format("User with nickname %s", userName));
-                return false;
+                return null;
             }
-            return checkPassword(user, users.get(0));
+            User userByName = users.get(0);
+            if(checkPassword(user, userByName)){
+                return userByName;
+            }
+            return null;
         } catch (DaoException e) {
-            throw new ServiceException("User not found. "+e.getMessage(),e);
+            throw new ServiceException(String.format("User $s not found. %s",userName,e.getMessage()),e);
         }
     }
 
-    private boolean checkPassword(User user, User userSecond) {
-        return user.getPassword().equals(userSecond.getPassword());
+    private boolean checkPassword(User user, User userByName) {
+        if(!user.getPassword().equals(userByName.getPassword())){
+            LOGGER.log(Level.INFO, String.format("Password is not correct entered for %s", user.getUserName()));
+            return false;
+        }
+        return true;
     }
 
 

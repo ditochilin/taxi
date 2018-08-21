@@ -1,5 +1,6 @@
 package command;
 
+import entities.Role;
 import entities.User;
 import service.IUserService;
 import service.exceptions.ServiceException;
@@ -7,18 +8,14 @@ import service.implementation.UserService;
 import utils.Config;
 import utils.Messenger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 public class LoginCommand implements ICommand {
 
     // todo check if everything has been done
     private static IUserService userService = UserService.getInstance();
-
-    public LoginCommand() {
-    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -28,9 +25,14 @@ public class LoginCommand implements ICommand {
         User userDump = new User(login, password);
 
         try {
-            if (userService.userIsCorrect(userDump)) {
-                request.setAttribute("user", login);
-                return Config.getProperty(Config.MAIN);
+            userDump = userService.checkUserByPassword(userDump);
+            HttpSession session = request.getSession();
+            // todo:  && session.isNew() ???
+            if (userDump != null ) {
+                Role role = userDump.getRole();
+                session.setAttribute("user", login);
+                session.setAttribute("role", role);
+                return getCorrectPage(role);
             }
         } catch (ServiceException e) {
             request.setAttribute("errorDescription", e.getMessage());
@@ -38,5 +40,16 @@ public class LoginCommand implements ICommand {
 
         request.setAttribute("error", Messenger.getProperty(Messenger.LOGIN_ERROR));
         return Config.getProperty(Config.ERROR);
+    }
+
+    private String getCorrectPage(Role role) {
+        switch (role.getRoleName()) {
+            case "Driver":
+                return Config.getProperty(Config.ORDERS);
+            case "Client":
+                return Config.getProperty(Config.ONE_ORDER);
+            default:
+                return Config.getProperty(Config.MAIN);
+        }
     }
 }

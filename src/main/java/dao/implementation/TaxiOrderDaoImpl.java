@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -215,4 +216,5 @@ public class TaxiOrderDaoImpl extends AbstractDao<TaxiOrder> implements ITaxiOrd
 
         return statement;
     }
+
 }
