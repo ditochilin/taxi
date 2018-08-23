@@ -18,9 +18,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class testJDBC {
+public class TestDAO {
 
-    private static final Logger LOGGER = LogManager.getLogger(testJDBC.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(TestDAO.class.getName());
 
     final ITaxiDao taxiDao = TaxiDaoImpl.getInstance();
     final IUserDao userDao = UserDaoImpl.getInstance();
@@ -116,7 +116,7 @@ public class testJDBC {
 
 
     @Test
-    public void testTaxiOrders() throws Exception {
+    public void testTaxiOrders() {
 
         Role role1 = new Role();
         Role role2 = new Role();
@@ -194,23 +194,21 @@ public class testJDBC {
 //            List<TaxiOrder> ordersClient  = taxiOrderDao.findByClient(testClient);
 //            ordersClient.stream().forEach(LOGGER::debug);
 //
-            TaxiOrder order = taxiOrderDao.findById(242L);
+//            TaxiOrder order = taxiOrderDao.findById(taxiOrder1.getId());
 //            Assert.assertEquals(order.getId(),taxiOrder1.getId());
-
-
-            order.setCost(BigDecimal.valueOf(999));
-            order.addShare(shareDao.findById(321L));
-
-            taxiOrderDao.update(order);
+//
+//
+//            order.setCost(BigDecimal.valueOf(999));
+//            order.addShare(shareDao.findById(321L));
+//
+//            taxiOrderDao.update(order);
 
             //taxiOrderDao.delete(order);
-
-        } catch (NoSuchEntityException e) {
-            e.printStackTrace();
-//        } catch (ParseException e) {
+//
+//        } catch (NoSuchEntityException e) {
 //            e.printStackTrace();
         } finally {
-
+            clearAllTables();
         }
     }
 
@@ -268,7 +266,6 @@ public class testJDBC {
             carTypes.stream().forEach(LOGGER::debug);
 
             LOGGER.debug("Find by name 'Sedan':" + carTypeDao.findByName("Sedan"));
-
 
             carTypeDao.delete(carType1);
             carTypeDao.delete(carType2);
@@ -392,7 +389,6 @@ public class testJDBC {
             } catch (DaoException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -435,7 +431,7 @@ public class testJDBC {
     }
 
     @Test
-    public void ClearAllTables() {
+    public void clearAllTables() {
         try (Connection connection = TransactionManagerImpl.getConnection();
              Statement statement = connection.createStatement()) {
             int resultSet7 = statement.executeUpdate("DELETE FROM orders_shares");
@@ -524,14 +520,17 @@ public class testJDBC {
         IRoleDao roleDao = RoleDaoImpl.getInstance();
         int COUNT = 100;
 
+        fulfillRoles(new Role(), new Role(), new Role());
         List<Long> time = new ArrayList<>();
         for (int i = 0; i < COUNT; i++) {
             long tic = System.nanoTime();
+
             List<Role> roles = roleDao.findAll();
-            System.out.println(roles.get(0).toString());
+
+            LOGGER.debug(roles.get(0).toString());
             long tac = System.nanoTime();
             long diff = (tac - tic) / 1000;
-            System.out.println(diff);
+            LOGGER.debug(diff);
             time.add(diff);
         }
 
@@ -541,6 +540,7 @@ public class testJDBC {
             sum += time.get(i);
         }
 
-        System.out.println("avg = " + 10 * sum / (COUNT * 8));
+        clearAllTables();
+        LOGGER.debug("avg = " + 10 * sum / (COUNT * 8));
     }
 }

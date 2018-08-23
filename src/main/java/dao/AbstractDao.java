@@ -91,6 +91,7 @@ public abstract class AbstractDao<T> implements IDao<T> {
             resultSet.next();
             return entity;
         } catch (SQLException e) {
+            //  todo   ...
             throw catchError("Can't get id for updated entity sql:", sql, e);
         }
     }
@@ -169,15 +170,14 @@ public abstract class AbstractDao<T> implements IDao<T> {
      * @param sql
      * @param e
      * @return
-     * @throws DaoException
      */
-    protected DaoException catchError(String errorMessage, String sql, Exception e) throws DaoException {
+    protected DaoException catchError(String errorMessage, String sql, Exception e) {
         String message = String.format("%s %s ;cause:{%s}",
                 errorMessage,
                 sql,
                 e.getMessage());
         LOGGER.error(message);
-        throw new DaoException(message, e);
+        return new DaoException(message, e);
     }
 
 }

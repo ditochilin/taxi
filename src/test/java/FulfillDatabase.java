@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
-public class fulfillDatabase {
+public class FulfillDatabase {
 
     final ITaxiDao taxiDao = TaxiDaoImpl.getInstance();
     final IUserDao userDao = UserDaoImpl.getInstance();
@@ -30,28 +30,28 @@ public class fulfillDatabase {
         insertUsers(createUsers());
     }
 
-    public List<Role> createRoles(){
-        return Arrays.asList(new Role(),new Role(),new Role());
+    public List<Role> createRoles() {
+        return Arrays.asList(new Role(), new Role(), new Role());
     }
 
-    public List<User> createUsers(){
-        return Arrays.asList(new User(),new User(),new User());
+    public List<User> createUsers() {
+        return Arrays.asList(new User(), new User(), new User());
     }
 
-    public List<CarType> createCarTypes(){
-        return Arrays.asList(new CarType(),new CarType(),new CarType());
+    public List<CarType> createCarTypes() {
+        return Arrays.asList(new CarType(), new CarType(), new CarType());
     }
 
-    public List<Share> createShares(){
-        return Arrays.asList(new Share(),new Share(),new Share());
+    public List<Share> createShares() {
+        return Arrays.asList(new Share(), new Share(), new Share());
     }
 
-    public List<Taxi> createTaxis(){
-        return Arrays.asList(new Taxi(),new Taxi(),new Taxi());
+    public List<Taxi> createTaxis() {
+        return Arrays.asList(new Taxi(), new Taxi(), new Taxi());
     }
 
-    public List<TaxiOrder> createOrders(){
-        return Arrays.asList(new TaxiOrder(),new TaxiOrder(),new TaxiOrder());
+    public List<TaxiOrder> createOrders() {
+        return Arrays.asList(new TaxiOrder(), new TaxiOrder(), new TaxiOrder());
     }
 
     public void insertRoles(List<Role> roles) throws DaoException {
@@ -96,8 +96,6 @@ public class fulfillDatabase {
         try (Connection connection = TransactionManagerImpl.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM roles");
-        } catch (DaoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -108,13 +106,8 @@ public class fulfillDatabase {
         try (Connection connection = TransactionManagerImpl.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM users");
-        } catch (DaoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-
-
 }
