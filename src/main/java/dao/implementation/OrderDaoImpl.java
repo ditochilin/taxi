@@ -4,7 +4,6 @@ import dao.*;
 import dao.enricher.IEnricher;
 import dao.enricher.OrderEnricher;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.extractor.IExtractor;
 import dao.extractor.OrderExtractor;
 import dao.propSetter.IPropSetter;
@@ -149,6 +148,9 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     public boolean delete(Order order) throws DaoException {
         boolean success = TransactionManagerImpl.doInTransaction(() -> {
             deleteShares(order);
+            if (order.getTaxi() != null) {
+                taxiDao.turnBusynessInTransaction(order.getTaxi(), false);
+            }
             return deleteInTransaction(order, DELETE);
         });
         LOGGER.log(Level.INFO, "Order has been deleted: " + order);
@@ -158,10 +160,13 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     /**
      * delete related with order rows in transit orders_shares table
      *
-     * @param Order - order for clear
+     * @param order - order for clear
      */
-    private void deleteShares(Order Order) throws DaoException {
-        Long id = Order.getId();
+    private void deleteShares(Order order) throws DaoException {
+        if (order.getShares().isEmpty()) {
+            return;
+        }
+        Long id = order.getId();
         try (PreparedStatement statement =
                      createStatement(getConnection(), DELETE_TRANSIT_SHAREORDER, "id_order", id)
         ) {
@@ -174,21 +179,21 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     /**
      * Add new shares into transit table
      *
-     * @param Order
+     * @param order
      */
-    private void insertShares(Order Order) throws DaoException {
+    private void insertShares(Order order) throws DaoException {
         try (PreparedStatement statement =
-                     createStatementForInsertShares(getConnection(), Order)) {
+                     createStatementForInsertShares(getConnection(), order)) {
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw catchError("Could not insert orders_shares for order " + Order, INSERT_TRANSIT_SHARES, e);
+            throw catchError("Could not insert orders_shares for order " + order, INSERT_TRANSIT_SHARES, e);
         }
     }
 
-    private PreparedStatement createStatementForInsertShares(Connection connection, Order Order) throws SQLException {
+    private PreparedStatement createStatementForInsertShares(Connection connection, Order order) throws SQLException {
         StringBuilder sqlBuilder = new StringBuilder(INSERT_TRANSIT_SHARES);
-        Queue<Share> shares = new LinkedList<>(Order.getShares());
-        Long id_order = Order.getId();
+        Queue<Share> shares = new LinkedList<>(order.getShares());
+        Long id_order = order.getId();
         boolean sharesIsEmpty = shares.isEmpty();
         while (!sharesIsEmpty) {
             Share share = shares.poll();

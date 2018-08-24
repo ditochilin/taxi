@@ -302,6 +302,7 @@ public class FulfillDatabase {
 
         List<Share> shares = shareDao.findAll();
         order.setShares(shares);
+        order.setStatus(Status.INWORK);
         orderDao.update(order);
 
         Order updatedOrder = orderDao.findById(order.getId());
@@ -312,7 +313,7 @@ public class FulfillDatabase {
         Order updatedOrder2 = orderDao.findById(order.getId());
         Assert.assertEquals(updatedOrder2.getShares().size(),2);
 
-
+        orderDao.delete(updatedOrder);
     }
 
 //    @Test
