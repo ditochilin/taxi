@@ -98,14 +98,14 @@ create table orders
 	cost decimal null,
 	feed_time time null,
 	status_order varchar(20) default 'CREATED' not null,
-	constraint fk_orders_taxiorder_taxis
+	constraint fk_orders_Order_taxis
 		foreign key (id_taxi) references taxis (id_taxi),
 	constraint fk_orders_userorder_users
 		foreign key (id_user) references users (id_user)
 )
 ;
 
-create index fk_orders_taxiorder_taxis
+create index fk_orders_Order_taxis
 	on orders (id_taxi)
 ;
 

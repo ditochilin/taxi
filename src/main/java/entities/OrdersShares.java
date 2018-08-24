@@ -3,7 +3,7 @@ package entities;
 import java.io.Serializable;
 
 /**
- * Transit entity to connect TaxiOrders with their Shares (M:M) relation
+ * Transit entity to connect Orders with their Shares (M:M) relation
  *
  * @author Dmitry Tochilin
  */
@@ -11,7 +11,7 @@ public class OrdersShares implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
-    private TaxiOrder order;
+    private Order order;
     private Share share;
 
     public OrdersShares() {
@@ -25,11 +25,11 @@ public class OrdersShares implements Serializable {
         this.id = id;
     }
 
-    public TaxiOrder getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(TaxiOrder Order) {
+    public void setOrder(Order Order) {
         this.order = order;
     }
 
@@ -41,7 +41,7 @@ public class OrdersShares implements Serializable {
         this.share = share;
     }
 
-    public Long getTaxiOrderId() {
+    public Long getOrderId() {
         return order.getId();
     }
 
@@ -60,13 +60,10 @@ public class OrdersShares implements Serializable {
             return false;
         }
         OrdersShares other = (OrdersShares) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override

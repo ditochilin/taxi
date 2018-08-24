@@ -27,7 +27,7 @@ public class TestDAO {
     final ICarTypeDao carTypeDao = CarTypeDaoImpl.getInstance();
     final IRoleDao roleDao = RoleDaoImpl.getInstance();
     final IShareDao shareDao = ShareDaoImpl.getInstance();
-    final ITaxiOrderDao taxiOrderDao = TaxiOrderDaoImpl.getInstance();
+    final IOrderDao OrderDao = OrderDaoImpl.getInstance();
 
     @Test
     public void rolesTest() {
@@ -102,7 +102,7 @@ public class TestDAO {
             Assert.assertEquals(shares.size(), 2);
             shares.stream().forEach(LOGGER::debug);
 
-            List<Share> shareList = shareDao.findSharesByOrder(new TaxiOrder());
+            List<Share> shareList = shareDao.findSharesByOrder(new Order());
             Assert.assertEquals(shareList.size(), 0);
 
             shareDao.delete(share1);
@@ -114,9 +114,8 @@ public class TestDAO {
 
     }
 
-
     @Test
-    public void testTaxiOrders() {
+    public void testOrders() {
 
         Role role1 = new Role();
         Role role2 = new Role();
@@ -125,9 +124,9 @@ public class TestDAO {
         CarType carType1 = new CarType();
         CarType carType2 = new CarType();
         CarType carType3 = new CarType();
-        TaxiOrder taxiOrder1 = new TaxiOrder();
-        TaxiOrder taxiOrder2 = new TaxiOrder();
-        TaxiOrder taxiOrder3 = new TaxiOrder();
+        Order Order1 = new Order();
+        Order Order2 = new Order();
+        Order Order3 = new Order();
         Share share1 = new Share();
         Share share2 = new Share();
         Share share3 = new Share();
@@ -148,62 +147,62 @@ public class TestDAO {
 //
 //            SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
 ////
-//            taxiOrder1.setShares(Arrays.asList(share1, share2));
-//            taxiOrder1.setStatus(Status.INWORK);
-//            taxiOrder1.setTaxi(taxi1);
-//            taxiOrder1.setUser(user1);
-//            taxiOrder1.setStartPoint("address 1");
-//            taxiOrder1.setEndPoint("address 2");
-//            taxiOrder1.setFeedTime(Time.valueOf("00:15:00"));
-//            taxiOrder1.setDistance(1245);
-//            taxiOrder1.setOrderDate(dateformat.parse("02-04-2018 00:11:42"));
-//            taxiOrder1.setCost(BigDecimal.valueOf(170));
+//            Order1.setShares(Arrays.asList(share1, share2));
+//            Order1.setStatus(Status.INWORK);
+//            Order1.setTaxi(taxi1);
+//            Order1.setClient(user1);
+//            Order1.setStartPoint("address 1");
+//            Order1.setEndPoint("address 2");
+//            Order1.setFeedTime(Time.valueOf("00:15:00"));
+//            Order1.setDistance(1245);
+//            Order1.setDateTime(dateformat.parse("02-04-2018 00:11:42"));
+//            Order1.setCost(BigDecimal.valueOf(170));
 //
-//            taxiOrder2.setShares(Arrays.asList(share2));
-//            taxiOrder2.setStatus(Status.CREATED);
-//            taxiOrder2.setTaxi(taxi2);
-//            taxiOrder2.setUser(user2);
-//            taxiOrder2.setStartPoint("address 3");
-//            taxiOrder2.setEndPoint("address 4");
-//            taxiOrder2.setFeedTime(Time.valueOf("00:10:00"));
-//            taxiOrder2.setDistance(1100);
-//            taxiOrder2.setOrderDate(dateformat.parse("02-05-2018 10:21:42"));
-//            taxiOrder2.setCost(BigDecimal.valueOf(120));
+//            Order2.setShares(Arrays.asList(share2));
+//            Order2.setStatus(Status.CREATED);
+//            Order2.setTaxi(taxi2);
+//            Order2.setClient(user2);
+//            Order2.setStartPoint("address 3");
+//            Order2.setEndPoint("address 4");
+//            Order2.setFeedTime(Time.valueOf("00:10:00"));
+//            Order2.setDistance(1100);
+//            Order2.setDateTime(dateformat.parse("02-05-2018 10:21:42"));
+//            Order2.setCost(BigDecimal.valueOf(120));
 //
-//            taxiOrder3.setShares(Arrays.asList(share1, share3));
-//            taxiOrder3.setStatus(Status.REJECTED);
-//            taxiOrder3.setTaxi(taxi3);
-//            taxiOrder3.setUser(user2);
-//            taxiOrder3.setStartPoint("address 5");
-//            taxiOrder3.setEndPoint("address 6");
-//            taxiOrder3.setFeedTime(Time.valueOf("00:20:00"));
-//            taxiOrder3.setDistance(1500);
-//            taxiOrder3.setOrderDate(dateformat.parse("02-08-2018 18:35:42"));
-//            taxiOrder3.setCost(BigDecimal.valueOf(200));
+//            Order3.setShares(Arrays.asList(share1, share3));
+//            Order3.setStatus(Status.REJECTED);
+//            Order3.setTaxi(taxi3);
+//            Order3.setClient(user2);
+//            Order3.setStartPoint("address 5");
+//            Order3.setEndPoint("address 6");
+//            Order3.setFeedTime(Time.valueOf("00:20:00"));
+//            Order3.setDistance(1500);
+//            Order3.setDateTime(dateformat.parse("02-08-2018 18:35:42"));
+//            Order3.setCost(BigDecimal.valueOf(200));
 //
 //
-//            taxiOrderDao.insert(taxiOrder1);
-//            taxiOrderDao.insert(taxiOrder2);
-//            taxiOrderDao.insert(taxiOrder3);
+//            OrderDao.insert(Order1);
+//            OrderDao.insert(Order2);
+//            OrderDao.insert(Order3);
 //
 //            User testDriver = userDao.findByPhone("80672229911").get(0);
-//            List<TaxiOrder> orders  = taxiOrderDao.findByDriver(testDriver);
+//            List<Order> orders  = OrderDao.findByDriver(testDriver);
 //            orders.stream().forEach(LOGGER::debug);
 //
 //            User testClient = userDao.findByPhone("80672224455").get(0);
-//            List<TaxiOrder> ordersClient  = taxiOrderDao.findByClient(testClient);
+//            List<Order> ordersClient  = OrderDao.findByClient(testClient);
 //            ordersClient.stream().forEach(LOGGER::debug);
 //
-//            TaxiOrder order = taxiOrderDao.findById(taxiOrder1.getId());
-//            Assert.assertEquals(order.getId(),taxiOrder1.getId());
+//            Order order = OrderDao.findById(Order1.getId());
+//            Assert.assertEquals(order.getId(),Order1.getId());
 //
 //
 //            order.setCost(BigDecimal.valueOf(999));
 //            order.addShare(shareDao.findById(321L));
 //
-//            taxiOrderDao.update(order);
+//            OrderDao.update(order);
 
-            //taxiOrderDao.delete(order);
+            //OrderDao.delete(order);
 //
 //        } catch (NoSuchEntityException e) {
 //            e.printStackTrace();

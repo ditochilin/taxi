@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * Loyalty program means a discount received by client depending on the cost of his trip
  * (example: 100 uah and more - 3% discount; 150 uah and more - 5%; 180 and more - 7%)
  * A simple Share may be set or not  (not mandatory)  (isOn flag). If Share isOn==true, than it will
- * be applied in all TaxiOrders
+ * be applied in all Orders
  * Loyalty applied by default (onOff = true)
  *
  * @author Dmitry Tochilin
@@ -86,13 +86,10 @@ public class Share implements Serializable {
             return false;
         }
         Share other = (Share) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override

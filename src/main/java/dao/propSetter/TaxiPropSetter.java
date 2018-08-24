@@ -13,8 +13,8 @@ public class TaxiPropSetter implements IPropSetter<entities.Taxi> {
             statement.setString(1, taxi.getCarName());
             statement.setString(2, taxi.getCarNumber());
             statement.setBoolean(3, taxi.getBusy());
-            setIdIfNotNull(statement, 4,taxi.getDriverId());
-            setIdIfNotNull(statement, 5,taxi.getCarTypeId());
+            setValueOrNull(statement, 4,taxi.getDriverId());
+            setValueOrNull(statement, 5,taxi.getCarTypeId());
             setIdIfNotNull(statement, 6,taxi.getId());
 
         } catch (SQLException e) {

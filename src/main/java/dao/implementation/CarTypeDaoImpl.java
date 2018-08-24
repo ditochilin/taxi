@@ -9,8 +9,8 @@ import dao.extractor.CarTypeExtractor;
 import dao.extractor.IExtractor;
 import dao.propSetter.CarTypePropSetter;
 import dao.propSetter.IPropSetter;
+import dao.transactionManager.TransactionManagerImpl;
 import entities.CarType;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,39 +42,35 @@ public class CarTypeDaoImpl extends AbstractDao<CarType> implements ICarTypeDao 
     }
 
     @Override
-    public CarType findById(Long id) throws DaoException, NoSuchEntityException {
-        return findById(FIND_ALL, "id_car_type", id, extractor, IEnricher.NULL);
+    public CarType findById(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->
+                findById(FIND_ALL, "id_car_type", id, extractor, IEnricher.NULL));
     }
 
     @Override
     public List<CarType> findAll() throws DaoException {
-        return findBy(FIND_ALL, null, null, extractor, IEnricher.NULL);
+        return TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, null, null, extractor, IEnricher.NULL));
     }
 
     @Override
     public List<CarType> findByName(String typeName) throws DaoException {
-        return findBy(FIND_ALL, "type_name", typeName, extractor, IEnricher.NULL);
+        return TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, "type_name", typeName, extractor, IEnricher.NULL));
     }
 
     @Override
     public Long insert(CarType carType) throws DaoException {
-        Long id = insert(carType, INSERT, propSetter);
-        carType.setId(id);
-        LOGGER.log(Level.INFO, "New record of entity in database: " + carType);
-        return id;
+        return TransactionManagerImpl.doInTransaction(() -> insertInTransaction(carType, INSERT, propSetter));
     }
 
     @Override
     public CarType update(CarType newCarType) throws DaoException {
-        update(newCarType, UPDATE, propSetter);
-        LOGGER.log(Level.INFO, "CarType has been changed: " + newCarType);
-        return newCarType;
+        return TransactionManagerImpl.doInTransaction(() -> updateInTransaction(newCarType, UPDATE, propSetter));
     }
 
     @Override
     public boolean delete(CarType carType) throws DaoException {
-        boolean success = deleteById(carType.getId(), DELETE);
-        LOGGER.log(Level.INFO, "CarType has been deleted: " + carType);
-        return success;
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(carType, DELETE));
     }
 }

@@ -1,14 +1,19 @@
 package dao;
 
+import com.sun.jdi.InvocationException;
 import dao.enricher.IEnricher;
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
 import dao.extractor.IExtractor;
 import dao.propSetter.IPropSetter;
 import dao.transactionManager.TransactionManagerImpl;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.taglibs.standard.lang.jstl.LessThanOrEqualsOperator;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,31 +30,26 @@ public abstract class AbstractDao<T> implements IDao<T> {
         return connection;
     }
 
-    protected Connection getSerializableConnection() throws DaoException {
-        try {
-            Connection connection = getConnection();
-            if (connection.getTransactionIsolation() != Connection.TRANSACTION_SERIALIZABLE) {
-                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-                connection.setAutoCommit(false);
-            }
-            return connection;
-        } catch (SQLException e) {
-            throw catchError("Can't create connection", "", e);
-        }
-    }
+//    protected Connection getSerializableConnection() throws DaoException {
+//        try {
+//            Connection connection = getConnection();
+//            return connection;
+//        } catch (SQLException e) {
+//            throw catchError("Can't create connection", "", e);
+//        }
+//    }
 
     protected T findById(String sql, String selectedField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException, NoSuchEntityException {
-        List<T> list = findBy(sql, selectedField, value, extractor, enricher);
+        List<T> list = findByInTransaction(sql, selectedField, value, extractor, enricher);
         if (list.isEmpty()) {
             throw new NoSuchEntityException(String.format("Entity by id {%s} not found", value));
         }
         return list.get(0);
     }
 
-    protected List<T> findBy(String sql, String selectionField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
+    protected List<T> findByInTransaction(String sql, String selectionField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
         List<T> result = new ArrayList<>();
-        try (Connection connection = getConnection();
-             PreparedStatement statement = createStatement(connection, sql, selectionField, value);
+        try (PreparedStatement statement = createStatement(getConnection(), sql, selectionField, value);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 T record = extractor.extractEntityData(resultSet);
@@ -64,60 +64,61 @@ public abstract class AbstractDao<T> implements IDao<T> {
         return result;
     }
 
-    protected Long insert(T entity, String sql, IPropSetter<T> propSetter) throws DaoException {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            return insertHandler(entity, sql, statement, propSetter);
+    protected Long insertInTransaction(T entity, String sql, IPropSetter<T> propSetter) throws DaoException {
+        try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            propSetter.setProperties(statement, entity);
+            int effected = statement.executeUpdate();
+            if(effected==0){
+                return 0L;
+            }
+            ResultSet keys = statement.getGeneratedKeys();
+            keys.next();
+            Long id = keys.getLong(1);
+            try {
+                entity.getClass().getMethod("setId", Long.class).invoke(entity,id);
+                statement.setLong(1, id);
+            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
+                LOGGER.error(String.format("Entity {%s} does not have setId()... Id didn't set",entity));
+                return 0L;
+            }
+            LOGGER.log(Level.INFO, "New record of entity in database: " + entity);
+            return id;
         } catch (SQLException e) {
             throw catchError("Can't execute sql:", sql, e);
         }
     }
 
-    protected Long insertHandler(T entity, String sql, PreparedStatement statement, IPropSetter<T> propSetter) throws SQLException {
-        propSetter.setProperties(statement, entity);
-        statement.executeUpdate();
-        try (ResultSet resultSet = statement.getGeneratedKeys()) {
-            resultSet.next();
-            return resultSet.getLong(1);
-        } catch (SQLException e) {
-            throw catchError("Can't get new id for inserted entity sql:", sql, e);
-        }
-    }
-
-    protected T updateHandler(T entity, String sql, PreparedStatement statement, IPropSetter<T> propSetter) throws SQLException {
-        propSetter.setProperties(statement, entity);
-        statement.executeUpdate();
-        try (ResultSet resultSet = statement.getGeneratedKeys()) {
-            resultSet.next();
+    protected T updateInTransaction(T entity, String sql, IPropSetter<T> propSetter) throws DaoException {
+        try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+             ResultSet resultSet = statement.getGeneratedKeys()) {
+            propSetter.setProperties(statement, entity);
+            statement.executeUpdate();
             return entity;
         } catch (SQLException e) {
-            //  todo   ...
-            throw catchError("Can't get id for updated entity sql:", sql, e);
-        }
-    }
-
-    protected T update(T entity, String sql, IPropSetter<T> propSetter) throws DaoException {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            return updateHandler(entity, sql, statement, propSetter);
-        } catch (SQLException e) {
             throw catchError("Can't execute sql:", sql, e);
         }
     }
 
-    protected boolean deleteById(Long id, String sql) throws DaoException {
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            return deleteByIdHandler(id,statement);
+    protected boolean deleteInTransaction(T entity, String sql) throws DaoException, InvocationTargetException, IllegalAccessException {
+        if(entity == null){
+            return false;
+        }
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            try {
+                Long id = (Long) entity.getClass().getMethod("getId").invoke(entity);
+                statement.setLong(1, id);
+            }catch (NoSuchMethodException e){
+                LOGGER.error(String.format("Entity {%s} does not have getId()",entity));
+                return false;
+            }
+            boolean result = statement.executeUpdate() > 0;
+            if(result){
+                LOGGER.log(Level.INFO, String.format("Entity {%s} was deleted from db",entity));
+            }
+            return result;
         } catch (SQLException e) {
             throw catchError("Can't execute sql:", sql, e);
         }
-    }
-
-    protected boolean deleteByIdHandler(Long id, PreparedStatement statement) throws SQLException {
-        statement.setLong(1, id);
-        int result = statement.executeUpdate();
-        return result > 0;
     }
 
     /**

@@ -9,6 +9,7 @@ import dao.extractor.IExtractor;
 import dao.extractor.RoleExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.RolePropSetter;
+import dao.transactionManager.TransactionManagerImpl;
 import entities.Role;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import java.util.List;
 
 /**
  * Defines CRUD operations for Role entity
+ *
  * @author Dmitry Tochilin
  */
 public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
@@ -47,18 +49,21 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
 
     @Override
     public List<Role> findAll() throws DaoException {
-        return findBy(FIND_ALL, null, null, extractor, IEnricher.NULL);
+        return TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, null, null, extractor, IEnricher.NULL));
     }
 
     @Override
-    public Role findById(Long id) throws DaoException, NoSuchEntityException {
-        return findById(FIND_ALL, "id_role", id, extractor, IEnricher.NULL);
+    public Role findById(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->
+                findById(FIND_ALL, "id_role", id, extractor, IEnricher.NULL));
     }
 
     @Override
     public Role findByName(String roleName) throws DaoException {
-        List<Role> roles = findBy(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL);
-        if(roles.isEmpty()){
+        List<Role> roles = TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL));
+        if (roles.isEmpty()) {
             return null;
         }
         return roles.get(0);
@@ -66,24 +71,17 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
 
     @Override
     public Long insert(Role role) throws DaoException {
-        Long id = insert(role, INSERT, propSetter);
-        role.setId(id);
-        LOGGER.log( Level.INFO,"New record of entity in database: "+role);
-        return id;
+        return TransactionManagerImpl.doInTransaction(() -> insertInTransaction(role, INSERT, propSetter));
     }
 
     @Override
     public Role update(Role newRole) throws DaoException {
-        update(newRole, UPDATE, propSetter);
-        LOGGER.log(Level.INFO, "Role has been changed: "+newRole);
-        return newRole;
+        return TransactionManagerImpl.doInTransaction(()->updateInTransaction(newRole, UPDATE, propSetter));
     }
 
     @Override
     public boolean delete(Role role) throws DaoException {
-        boolean success = deleteById(role.getId(), DELETE);
-        LOGGER.log(Level.INFO, "Role has been deleted: "+role);
-        return success;
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(role, DELETE));
     }
 
 

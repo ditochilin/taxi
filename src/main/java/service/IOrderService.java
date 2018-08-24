@@ -1,7 +1,7 @@
 package service;
 
 import entities.Status;
-import entities.TaxiOrder;
+import entities.Order;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import java.util.List;
  * Service for working with orders
  * @author Dmitry Tochilin
  */
-public interface ITaxiOrderService {
+public interface IOrderService {
 
-    List<TaxiOrder> findTaxiOrders();
+    List<Order> findOrders();
 
 
 }

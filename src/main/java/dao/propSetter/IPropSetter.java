@@ -2,8 +2,10 @@ package dao.propSetter;
 
 import dao.exceptions.DaoException;
 
+import java.lang.reflect.Type;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Sets properties of prepared statement with entity's fields values
@@ -17,6 +19,14 @@ public interface IPropSetter<T> {
     default void setIdIfNotNull(PreparedStatement statement, int parameterIndex, Long id) throws SQLException {
         if (id != null) {
             statement.setLong(parameterIndex, id);
+        }
+    }
+
+    default void setValueOrNull(PreparedStatement statement, int parameterIndex, Long id) throws SQLException {
+        if (id != null) {
+            statement.setLong(parameterIndex, id);
+        }else {
+            statement.setNull(parameterIndex, Types.BIGINT);
         }
     }
 }

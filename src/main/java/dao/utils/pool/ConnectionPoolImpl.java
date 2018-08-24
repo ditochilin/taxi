@@ -42,14 +42,14 @@ public class ConnectionPoolImpl implements IConnectionPool {
      * @throws DaoException
      */
     private Connection getConnection(ResourceBundle resources) throws DaoException {
-        String jdbcUrl = resources.getString("url");
-        String login = resources.getString("user");
-        String password = resources.getString("password");
-        final Connection connection = getActualConnection(jdbcUrl, login, password);
+        final Connection connection = getActualConnection(resources);
+
         return new ConnectionWrapper(connection) {
             @Override
             public void doClose() throws SQLException {
                 try {
+                    connection.setAutoCommit(true);
+                    //connection.setTransactionIsolation();
                     connectionQueue.put(connection);
                 } catch (Exception e) {
                     throw new DaoException("Could not return connection in the pool", e);
@@ -60,24 +60,31 @@ public class ConnectionPoolImpl implements IConnectionPool {
 
     /**
      * Gives connection from pool or created new one, pushed into the pool (connectionQueue)
-     *
-     * @param jdbcUrl  - url of database
-     * @param login    - user's login
-     * @param password - user's password
+     * @resource - bundle with:
+     * jdbcUrl  - url of database
+     * login    - user's login
+     * password - user's password
      * @return connection for wrapping
      * @throws DaoException
      */
-    private Connection getActualConnection(String jdbcUrl, String login, String password) throws DaoException {
+    private Connection getActualConnection(ResourceBundle resources) throws DaoException {
         Connection connection = connectionQueue.poll();
         if (connection == null) {
+            String jdbcUrl = resources.getString("url");
+            String login = resources.getString("user");
+            String password = resources.getString("password");
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(jdbcUrl, login, password);
-//                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-//                connection.setAutoCommit(false);
+                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             } catch (SQLException | ClassNotFoundException e) {
                 throw new DaoException("Could not get connection from driver for : " + jdbcUrl, e);
             }
+        }
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new DaoException("Could not set Autocommit = false", e);
         }
         return connection;
     }

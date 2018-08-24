@@ -17,5 +17,8 @@ public interface ITaxiDao extends IDao<Taxi> {
 
     List<Taxi> findAllBusyFree(boolean busy) throws DaoException;
 
-    void turnBusyness(Taxi taxi, boolean busy) throws DaoException;
+    Taxi turnBusynessInTransaction(Taxi taxi, boolean busy) throws DaoException;
+
+    Taxi turnBusyness(Taxi taxi, boolean busy) throws DaoException;
+
 }

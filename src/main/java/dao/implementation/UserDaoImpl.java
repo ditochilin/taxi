@@ -11,6 +11,7 @@ import dao.extractor.IExtractor;
 import dao.extractor.UserExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.UserPropSetter;
+import dao.transactionManager.TransactionManagerImpl;
 import entities.Role;
 import entities.User;
 import org.apache.logging.log4j.Level;
@@ -50,48 +51,46 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao {
 
     @Override
     public List<User> findAll() throws DaoException {
-        return findBy(FIND_ALL, null, null, extractor, enricher);
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findByInTransaction(FIND_ALL, null, null, extractor, enricher)));
     }
 
     @Override
-    public User findById(Long id) throws DaoException, NoSuchEntityException {
-        return findById(FIND_ALL, "id_user", id, extractor, enricher);
+    public User findById(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findById(FIND_ALL, "id_user", id, extractor, enricher)));
     }
 
     @Override
     public List<User> findByName(String userName) throws DaoException {
-        return findBy(FIND_ALL, "user_name", userName, extractor, enricher);
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findByInTransaction(FIND_ALL, "user_name", userName, extractor, enricher)));
     }
 
     @Override
     public List<User> findByRole(Role role) throws DaoException {
-        return findBy(FIND_ALL, "id_role", role.getId(), extractor, enricher);
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findByInTransaction(FIND_ALL, "id_role", role.getId(), extractor, enricher)));
     }
 
     @Override
     public List<User> findByPhone(String phone) throws DaoException {
-        return findBy(FIND_ALL, "phone", phone, extractor, enricher);
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findByInTransaction(FIND_ALL, "phone", phone, extractor, enricher)));
     }
 
     @Override
     public Long insert(User user) throws DaoException {
-        Long id = insert(user, INSERT, propSetter);
-        user.setId(id);
-        LOGGER.log(Level.INFO, "New record of entity in database: " + user);
-        return id;
+        return TransactionManagerImpl.doInTransaction(()->insertInTransaction(user, INSERT, propSetter));
     }
 
     @Override
-    public User update(User newUser) throws DaoException {
-        update(newUser, UPDATE, propSetter);
-        LOGGER.log(Level.INFO, "User has been changed: " + newUser);
-        return newUser;
+    public User update(User user) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(()-> updateInTransaction(user, UPDATE, propSetter));
     }
 
     @Override
     public boolean delete(User user) throws DaoException {
-        boolean success = deleteById(user.getId(), DELETE);
-        LOGGER.log(Level.INFO, "User has been deleted: " + user);
-        return success;
+        return TransactionManagerImpl.doInTransaction(()->deleteInTransaction(user, DELETE));
     }
 }

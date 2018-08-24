@@ -12,7 +12,7 @@
 </head>
 <body>
 <input type="hidden" name="command" value="showOrders"/>
-<c:out value='${requestScope["user"]}, Hello! '/>
+<c:out value='${requestScope["client"]}, Hello! '/>
 <table border="1">
     <tr>
         <th>Status</th>
@@ -29,7 +29,7 @@
     <c:forEach var="order" items="${orders}">
         <tr>
             <td><c:out value="${order.status}" /></td>
-            <td><c:out value="${order.orderDate}" /></td>
+            <td><c:out value="${order.dateTime}" /></td>
             <td><c:out value="${order.client}" /></td>
             <td><c:out value="${order.taxi}" /></td>
             <td><c:out value="${order.startPoint}" /></td>

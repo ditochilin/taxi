@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Dmitry Tochilin
  */
+
+//  todo check if this is needed??
 public class CookieLogic {
 
     public static void setCookie(HttpServletResponse response) {

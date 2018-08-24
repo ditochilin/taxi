@@ -13,13 +13,15 @@ _Описание проекта_
 
 
 _Инструкция по установке_
+
 Для работы приложения требуется установить следующее программное обеспечение      
 jdk-10.0.2  или высше (http://www.oracle.com/technetwork/java/javase/downloads/)
 Apache Maven-3.5.4 или высше (https://maven.apache.org/download.cgi) 
 MySQL server 8.0.11 или высше (https://dev.mysql.com/downloads/)
 Apache Tomcat 9.0.10 или высше  (https://tomcat.apache.org/download-90.cgi) 
 
-Установка
+_Установка_
+
 Скачать проект с ресурса GitHub
 Принеобходимости указать логин и пароль пользователя базы данных в файле \src\main\resources\database.properties
 Запустить MySQL сервер и выполнить скрипт createdb.sql из корня проекта для создания таблиц базы
@@ -28,7 +30,7 @@ Apache Tomcat 9.0.10 или высше  (https://tomcat.apache.org/download-90.c
 Скопировать taxi-1.0-SNAPSHOT.war из папки target в папку %TOMCAT%\webapps
 
 
-Запуск
+_Запуск_
 
 Запустить tomcat сервер используя скрипт %TOMCAT%\bin\startup .bat для Windows или .sh для Unix-систем.
 После запуска сервера приложение должно быть доступно по адресу URL http://localhost:8080/

@@ -73,6 +73,9 @@ public class User implements Serializable {
     }
 
     public Long getRoleId() {
+        if(role==null){
+            return null;
+        }
         return role.getId();
     }
 

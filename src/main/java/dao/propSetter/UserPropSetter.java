@@ -13,7 +13,7 @@ public class UserPropSetter implements IPropSetter<User> {
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getPhone());
-            setIdIfNotNull(statement, 4,user.getRoleId());
+            setValueOrNull(statement, 4,user.getRoleId());
             setIdIfNotNull(statement, 5,user.getId());
 
         } catch (SQLException e) {

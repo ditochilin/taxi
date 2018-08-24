@@ -4,6 +4,7 @@ import dao.exceptions.DaoException;
 import dao.utils.JdbcUtils;
 import dao.utils.pool.ConnectionPoolImpl;
 import dao.utils.pool.IConnectionPool;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.Callable;
  *
  * @author Dmitry Tochilin
  */
-public class TransactionManagerImpl implements ITransactionManager {
+public class TransactionManagerImpl {
 
     private static TransactionManagerImpl instance;
     private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
@@ -42,14 +43,13 @@ public class TransactionManagerImpl implements ITransactionManager {
      * @throws Exception if transmitted method throws exception, transaction must be rollback and exception will
      *                   be rethrown in execution stack
      */
-    @Override
-    public <T> T doInTransaction(Callable<T> unitOfWork) throws DaoException {
+    public static <T> T doInTransaction(Callable<T> unitOfWork) throws DaoException {
         Connection connection = CONNECTION_POOL.newConnection();
         connectionHolder.set(connection);
         LOGGER.debug(String.format("Get connection: %s from pool and set to Thread: %s", connection, Thread.currentThread()));
         try {
             T result = unitOfWork.call();
-            LOGGER.debug(String.format("Do unit of work. result: %s", result));
+            LOGGER.debug(String.format("Do unit of work. result: %s", unitOfWork));
             connection.commit();
             LOGGER.debug("Commit success.");
             return result;
@@ -62,6 +62,7 @@ public class TransactionManagerImpl implements ITransactionManager {
             LOGGER.warn("Rollback success.");
             throw new DaoException("rollback transaction during " + unitOfWork, e);
         } finally {
+            // todo check connection.setAutoCommit(true)  ?
             JdbcUtils.closeQuietly(connection);
             LOGGER.debug(String.format("Close connection success. Unset connection %s from Thread: %s", connection, Thread.currentThread()));
             connectionHolder.remove();

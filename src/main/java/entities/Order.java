@@ -3,6 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,22 +13,22 @@ import java.util.List;
  *
  * @author Dmitry Tochilin
  */
-public class TaxiOrder implements Serializable {
+public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
-    private Date orderDate;
+    private Date dateTime;
     private String startPoint;
     private String endPoint;
     private Integer distance;
     private BigDecimal cost;
     private Time feedTime;
     private Taxi taxi;
-    private User user;
+    private User client;
     private Status status;
     private List<Share> shares;
 
-    public TaxiOrder() {
+    public Order() {
     }
 
     public Long getId() {
@@ -38,12 +39,12 @@ public class TaxiOrder implements Serializable {
         this.id = idOrder;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getStartPoint() {
@@ -94,23 +95,32 @@ public class TaxiOrder implements Serializable {
         this.taxi = taxi;
     }
 
-    public User getUser() {
-        return user;
+    public User getClient() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setClient(User client) {
+        this.client = client;
     }
 
     public Long getTaxiId() {
+        if (taxi == null) {
+            return null;
+        }
         return taxi.getId();
     }
 
-    public Long getUserId() {
-        return user.getId();
+    public Long getClientId() {
+        if (client == null) {
+            return null;
+        }
+        return client.getId();
     }
 
     public List<Share> getShares() {
+        if(shares==null){
+            return new ArrayList<>();
+        }
         return shares;
     }
 
@@ -118,11 +128,11 @@ public class TaxiOrder implements Serializable {
         this.shares = shares;
     }
 
-    public void addShare(Share share){
+    public void addShare(Share share) {
         shares.add(share);
     }
 
-    public boolean removeShare(Share share){
+    public boolean removeShare(Share share) {
         return shares.remove(share);
     }
 
@@ -141,22 +151,19 @@ public class TaxiOrder implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof TaxiOrder)) {
+        if (!(object instanceof Order)) {
             return false;
         }
-        TaxiOrder other = (TaxiOrder) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        Order other = (Order) object;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override
     public String toString() {
-        return "entities.TaxiOrder[ id=" + id + " ]";
+        return "entities.Order[ id=" + id + " ], client=" + client + ", taxi=" + taxi + "";
     }
 
 }

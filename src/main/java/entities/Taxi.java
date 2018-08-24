@@ -15,7 +15,7 @@ public class Taxi implements Serializable {
     private Long id;
     private String carName;
     private String carNumber;
-    private Boolean busy;
+    private boolean busy;
     private CarType carType;
     private User driver;
 
@@ -46,11 +46,11 @@ public class Taxi implements Serializable {
         this.carNumber = carNumber;
     }
 
-    public Boolean getBusy() {
+    public boolean getBusy() {
         return busy;
     }
 
-    public void setBusy(Boolean busy) {
+    public void setBusy(boolean busy) {
         this.busy = busy;
     }
 
@@ -75,6 +75,9 @@ public class Taxi implements Serializable {
     }
 
     public Long getCarTypeId() {
+        if(carType==null){
+            return null;
+        }
         return carType.getId();
     }
 
@@ -89,13 +92,10 @@ public class Taxi implements Serializable {
             return false;
         }
         Taxi other = (Taxi) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override

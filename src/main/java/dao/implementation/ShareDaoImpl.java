@@ -9,8 +9,9 @@ import dao.extractor.IExtractor;
 import dao.extractor.ShareExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.SharePropSetter;
+import dao.transactionManager.TransactionManagerImpl;
 import entities.Share;
-import entities.TaxiOrder;
+import entities.Order;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,49 +56,46 @@ public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
 
     @Override
     public List<Share> findAll() throws DaoException {
-        return findBy(FIND_ALL, null, null, extractor, IEnricher.NULL);
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findByInTransaction(FIND_ALL, null, null, extractor, IEnricher.NULL)));
     }
 
     @Override
-    public Share findById(Long id) throws DaoException, NoSuchEntityException {
-        return findById(FIND_ALL, "id_share", id, extractor, IEnricher.NULL);
+    public Share findById(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->(
+                findById(FIND_ALL, "id_share", id, extractor, IEnricher.NULL)));
+    }
+
+    @Override
+    public List<Share> findSharesByOrder(Order Order) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->{
+        List<Share> shares = new ArrayList<>();
+        try (PreparedStatement statement = createStatement(getConnection(), FIND_BY_ORDER, null, Order.getId());
+             ResultSet resultSet = statement.executeQuery()) {
+             while (resultSet.next()) {
+                Share share = extractor.extractEntityData(resultSet);
+                shares.add(share);
+             }
+
+        } catch (SQLException e) {
+            LOGGER.warn("Could not get shares for order: " + Order);
+        }
+            return shares;
+        });
     }
 
     @Override
     public Long insert(Share share) throws DaoException {
-        Long id = insert(share, INSERT, propSetter);
-        share.setId(id);
-        LOGGER.log(Level.INFO, "New record of entity in database: " + share);
-        return id;
+        return TransactionManagerImpl.doInTransaction(() -> insertInTransaction(share, INSERT, propSetter));
     }
 
     @Override
     public Share update(Share share) throws DaoException {
-        update(share, UPDATE, propSetter);
-        LOGGER.log(Level.INFO, "Share has been changed: " + share);
-        return share;
+        return TransactionManagerImpl.doInTransaction(() -> updateInTransaction(share, UPDATE, propSetter));
     }
 
     @Override
     public boolean delete(Share share) throws DaoException {
-        boolean success = deleteById(share.getId(), DELETE);
-        LOGGER.log(Level.INFO, "Share has been deleted: " + share);
-        return success;
-    }
-
-    @Override
-    public List<Share> findSharesByOrder(TaxiOrder taxiOrder) {
-        List<Share> shares = new ArrayList<>();
-        try (Connection connection = getConnection();
-             PreparedStatement statement = createStatement(connection, FIND_BY_ORDER, null, taxiOrder.getId());
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                Share share = extractor.extractEntityData(resultSet);
-                shares.add(share);
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("Could not get shares for order: " + taxiOrder);
-        }
-        return shares;
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(share, DELETE));
     }
 }
