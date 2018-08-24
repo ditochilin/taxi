@@ -261,7 +261,7 @@ public class FulfillDatabase {
         order2.setClient(userDao.findByName("root").get(0));
         order2.setDistance(1950);
         order2.setCost(BigDecimal.valueOf(158));
-        order2.setFeedTime(Time.valueOf("00:18:00"));
+        order2.setFeedTime(18);
         order2.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(0));
         order2.setStatus(Status.INWORK);
         order2.setDateTime(dateformat.parse("02-04-2018 00:11:42"));
@@ -271,7 +271,7 @@ public class FulfillDatabase {
         order3.setClient(userDao.findByName("root").get(0));
         order3.setDistance(4800);
         order3.setCost(BigDecimal.valueOf(158));
-        order3.setFeedTime(Time.valueOf("00:14:00"));
+        order3.setFeedTime(14);
         order3.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(1));
         order3.setStatus(Status.INWORK);
         order3.setDateTime(dateformat.parse("20-08-2018 15:51:04"));

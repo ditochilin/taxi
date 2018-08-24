@@ -22,7 +22,7 @@ public class Order implements Serializable {
     private String endPoint;
     private Integer distance;
     private BigDecimal cost;
-    private Time feedTime;
+    private int feedTime;
     private Taxi taxi;
     private User client;
     private Status status;
@@ -79,11 +79,11 @@ public class Order implements Serializable {
         this.cost = cost;
     }
 
-    public Time getFeedTime() {
+    public int getFeedTime() {
         return feedTime;
     }
 
-    public void setFeedTime(Time feedTime) {
+    public void setFeedTime(int feedTime) {
         this.feedTime = feedTime;
     }
 

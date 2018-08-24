@@ -12,14 +12,12 @@ public class OrderExtractor implements IExtractor<Order> {
     public Order extractEntityData(ResultSet resultSet) throws SQLException {
         Order Order = new Order();
         Order.setId(resultSet.getLong("id_order"));
-        // todo. check date transferring
         Order.setDateTime(resultSet.getTimestamp("order_date"));
         Order.setStartPoint(resultSet.getString("start_point"));
         Order.setEndPoint(resultSet.getString("end_point"));
         Order.setDistance(resultSet.getInt("distance"));
         Order.setCost(resultSet.getBigDecimal("cost"));
-        // todo. check date transferring
-        Order.setFeedTime(resultSet.getTime("feed_time"));
+        Order.setFeedTime(resultSet.getInt("feed_time"));
         Order.setStatus(Status.valueOf(resultSet.getString("status_order")));
         return Order;
     }

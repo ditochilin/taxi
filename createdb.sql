@@ -96,7 +96,7 @@ create table orders
 	end_point varchar(500) not null,
 	distance int null,
 	cost decimal null,
-	feed_time time null,
+	feed_time int null,
 	status_order varchar(20) default 'CREATED' not null,
 	constraint fk_orders_Order_taxis
 		foreign key (id_taxi) references taxis (id_taxi),
