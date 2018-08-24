@@ -4,9 +4,9 @@ import dao.IShareDao;
 import dao.ITaxiDao;
 import dao.IUserDao;
 import dao.exceptions.NoSuchEntityException;
+import entities.Order;
 import entities.Share;
 import entities.Taxi;
-import entities.Order;
 import entities.User;
 
 import java.sql.ResultSet;
@@ -26,20 +26,22 @@ public class OrderEnricher implements IEnricher<Order> {
     }
 
     @Override
-    public void enrich(Order Order, ResultSet resultSet) throws SQLException, NoSuchEntityException {
-        if (Order.getClient() == null) {
-            User user = userDao.findById(resultSet.getLong("id_user"));
-            Order.setClient(user);
+    public void enrich(Order order, ResultSet resultSet) throws SQLException, NoSuchEntityException {
+        Long idUser = resultSet.getLong("id_user");
+        if (order.getClient() == null && idUser != 0) {
+            User user = userDao.findById(idUser);
+            order.setClient(user);
         }
 
-        if (Order.getTaxi() == null) {
-            Taxi taxi = taxiDao.findById(resultSet.getLong("id_taxi"));
-            Order.setTaxi(taxi);
+        Long idTaxi = resultSet.getLong("id_taxi");
+        if (order.getTaxi() == null && idTaxi != 0) {
+            Taxi taxi = taxiDao.findById(idTaxi);
+            order.setTaxi(taxi);
         }
 
-        if (Order.getShares() == null) {
-            List<Share> shares = shareDao.findSharesByOrder(Order);
-            Order.setShares(shares);
+        if (order.getShares().isEmpty()) {
+            List<Share> shares = shareDao.findSharesByOrder(order);
+            order.setShares(shares);
         }
     }
 }

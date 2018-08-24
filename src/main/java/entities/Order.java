@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Document that fixes start stage of client's ordering taxi service (i.e. set up Start address,
+ * Document that fixes start stage of client's ordering taxi service
+ * (i.e. set up Start address,
+ * feedTime - holds time for taxi to be at start point
+ * waitingTime - how many minutes client should to wait his car
  * End address (destination) )
  *
  * @author Dmitry Tochilin
@@ -22,13 +25,31 @@ public class Order implements Serializable {
     private String endPoint;
     private Integer distance;
     private BigDecimal cost;
-    private int feedTime;
+    private Date feedTime;
+    private int waitingTime;
     private Taxi taxi;
     private User client;
-    private Status status;
-    private List<Share> shares;
 
+    private Status status;
+
+    private List<Share> shares;
     public Order() {
+    }
+
+    public void setFeedTime(Date feedTime) {
+        this.feedTime = feedTime;
+    }
+
+    public Date getFeedTime() {
+        return feedTime;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
     }
 
     public Long getId() {
@@ -77,14 +98,6 @@ public class Order implements Serializable {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
-    }
-
-    public int getFeedTime() {
-        return feedTime;
-    }
-
-    public void setFeedTime(int feedTime) {
-        this.feedTime = feedTime;
     }
 
     public Taxi getTaxi() {
@@ -163,7 +176,7 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Order[ id=" + id + " ], client=" + client + ", taxi=" + taxi + "";
+        return "Order[ dateTime="+dateTime+", client=" + client + ", taxi=" + taxi + "]";
     }
 
 }

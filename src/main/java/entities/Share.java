@@ -94,7 +94,7 @@ public class Share implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Share[ id = " + id + " ]";
+        return "Share[ name = " + shareName + " ]";
     }
 
 }

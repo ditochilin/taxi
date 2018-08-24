@@ -98,7 +98,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.User[ id = " + id + " userName=" + userName +" ]";
+        return "User[ userName=" + userName +" ]";
     }
 
 }

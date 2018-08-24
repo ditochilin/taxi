@@ -100,7 +100,7 @@ public class Taxi implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Taxi[ id = " + id + " carNumber = "+carNumber+" ]";
+        return "Taxi[ carNumber = "+carNumber+" ]";
     }
 
 }

@@ -17,8 +17,9 @@ public class OrderExtractor implements IExtractor<Order> {
         Order.setEndPoint(resultSet.getString("end_point"));
         Order.setDistance(resultSet.getInt("distance"));
         Order.setCost(resultSet.getBigDecimal("cost"));
-        Order.setFeedTime(resultSet.getInt("feed_time"));
+        Order.setFeedTime(resultSet.getTimestamp("feed_time"));
         Order.setStatus(Status.valueOf(resultSet.getString("status_order")));
+        Order.setWaitingTime(resultSet.getInt("waiting_time"));
         return Order;
     }
 }

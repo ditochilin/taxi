@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class FulfillDatabase {
 
@@ -98,17 +99,17 @@ public class FulfillDatabase {
         share1.setIsLoyalty(true);
 
         Share share2 = shares.get(1);
-        share2.setShareName("loyalry_10");
+        share2.setShareName("Share_5");
         share2.setOn(true);
-        share2.setSum(BigDecimal.valueOf(150));
-        share2.setPercent(10);
-        share2.setIsLoyalty(true);
+        share2.setSum(BigDecimal.valueOf(100));
+        share2.setPercent(5);
+        share2.setIsLoyalty(false);
 
         Share share3 = shares.get(2);
-        share3.setShareName("loyalry_10");
+        share3.setShareName("Share_15");
         share3.setOn(true);
-        share3.setSum(BigDecimal.valueOf(150));
-        share3.setPercent(10);
+        share3.setSum(BigDecimal.valueOf(250));
+        share3.setPercent(15);
         share3.setIsLoyalty(true);
 
         shareDao.insert(share1);
@@ -246,7 +247,7 @@ public class FulfillDatabase {
     @Test
     public void insertOrders() throws DaoException, ParseException {
         List<Order> orders = createOrders();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss",Locale.ROOT);
         Order order1 = orders.get(0);
         Order order2 = orders.get(1);
         Order order3 = orders.get(2);
@@ -255,13 +256,15 @@ public class FulfillDatabase {
         order1.setEndPoint("Kioto 1");
         order1.setClient(userDao.findByName("Alex").get(0));
         order1.setDistance(2645);
+        order1.setFeedTime(dateformat.parse("24-08-2018 14:05:00"));
 
         order2.setStartPoint("Zodchih 5");
         order2.setEndPoint("Rudenko 7");
         order2.setClient(userDao.findByName("root").get(0));
         order2.setDistance(1950);
         order2.setCost(BigDecimal.valueOf(158));
-        order2.setFeedTime(18);
+        order2.setFeedTime(dateformat.parse("02-08-2018 19:17:00"));
+        order2.setWaitingTime(25);
         order2.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(0));
         order2.setStatus(Status.INWORK);
         order2.setDateTime(dateformat.parse("02-04-2018 00:11:42"));
@@ -270,8 +273,9 @@ public class FulfillDatabase {
         order3.setEndPoint("Gonty 98");
         order3.setClient(userDao.findByName("root").get(0));
         order3.setDistance(4800);
+        order3.setWaitingTime(15);
         order3.setCost(BigDecimal.valueOf(158));
-        order3.setFeedTime(14);
+        order3.setFeedTime(dateformat.parse("01-08-2018 21:00:00"));
         order3.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(1));
         order3.setStatus(Status.INWORK);
         order3.setDateTime(dateformat.parse("20-08-2018 15:51:04"));
@@ -279,8 +283,37 @@ public class FulfillDatabase {
         orderDao.insert(order1);
         orderDao.insert(order2);
         orderDao.insert(order3);
+
     }
 
+    @Test
+    public void testUpdateOrder() throws NoSuchEntityException, DaoException {
+        Order order = orderDao.findByClient(userDao.findByPhone("0502225547").get(0)).get(0);
+        Taxi taxi = taxiDao.findByUser(userDao.findByPhone("0679514720").get(0)).get(0);
+        order.setTaxi(taxi);
+        orderDao.update(order);
+        Order updatedOrder = orderDao.findById(order.getId());
+        Assert.assertEquals(taxi, updatedOrder.getTaxi());
+    }
+
+    @Test
+    public void testSharesInOrder() throws NoSuchEntityException, DaoException {
+        Order order = orderDao.findByClient(userDao.findByPhone("0502225547").get(0)).get(0);
+
+        List<Share> shares = shareDao.findAll();
+        order.setShares(shares);
+        orderDao.update(order);
+
+        Order updatedOrder = orderDao.findById(order.getId());
+        Assert.assertEquals(updatedOrder.getShares().size(),3);
+
+        updatedOrder.getShares().remove(2);
+        orderDao.update(updatedOrder);
+        Order updatedOrder2 = orderDao.findById(order.getId());
+        Assert.assertEquals(updatedOrder2.getShares().size(),2);
+
+
+    }
 
 //    @Test
 //    public void deleteUsers() throws NoSuchEntityException, DaoException {

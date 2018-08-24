@@ -60,18 +60,15 @@ public class CarType implements Serializable {
             return false;
         }
         CarType other = (CarType) object;
-        if ((this.id == null &&
-                other.id != null) ||
-                (this.id != null &&
-                        !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null ||
+                other.id == null) &&
+                (this.id == null ||
+                        this.id.equals(other.id));
     }
 
     @Override
     public String toString() {
-        return "entities.CarType[ id = " + id + " typeName = "+typeName+" ]";
+        return "CarType[ typeName = "+typeName+" ]";
     }
 
 }
