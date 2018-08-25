@@ -31,6 +31,7 @@ public class ControllerHelper  {
         commands.put("getOrders", new GetOrdersCommand());
         commands.put("editOrder", new EditOrderCommand());
         commands.put("showOrders", new GetOrdersCommand());
+        commands.put("changeLocal", new ChangeLocal());
     }
 
     public ICommand getCommand(HttpServletRequest request) {
@@ -48,11 +49,4 @@ public class ControllerHelper  {
         return instance;
     }
 
-    public void prepareBeforeRendering(String page, HttpServletRequest request, HttpServletResponse response) {
-        if(page.equals(Config.getProperty(Config.EDIT_ORDER))){
-            request.setAttribute("statusList",Status.values());
-            request.setAttribute("clientList",userService.getAllClients());
-            request.setAttribute("taxiList",taxiService.findFreeTaxis());
-        }
-    }
 }

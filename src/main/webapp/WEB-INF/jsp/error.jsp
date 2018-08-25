@@ -8,15 +8,15 @@
 </head>
 <body>
     <br/>
-    <button onclick="history.back()">Back to Previous Page</button>
-
+    <p>Error!</p>
     <c:set var="message" value='${requestScope["error"]}' />
     <p style="color: red"><c:out value="${message}"/></p>
-        <br/>
+    <br/>
     <c:set var="description" value='${requestScope["errorDescription"]}' />
     <p style="color: red; font-size: small"><c:out value="${description}"/></p>
 
     <p><b>Request URI:</b> ${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}</p>
+    <button onclick="history.back()">Back to Previous Page</button>
     <br/>
 </body>
 </html>

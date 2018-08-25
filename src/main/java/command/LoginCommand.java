@@ -1,6 +1,7 @@
 package command;
 
 import entities.Role;
+import entities.Status;
 import entities.User;
 import service.IUserService;
 import service.exceptions.ServiceException;
@@ -11,6 +12,7 @@ import utils.Messenger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Locale;
 
 public class LoginCommand implements ICommand {
 
@@ -30,8 +32,9 @@ public class LoginCommand implements ICommand {
             // todo:  && session.isNew() ???
             if (userDump != null ) {
                 Role role = userDump.getRole();
-                session.setAttribute("user", login);
-                session.setAttribute("role", role);
+                session.setAttribute("user", userDump.getUserName());
+                session.setAttribute("role", role.getRoleName());
+                session.setAttribute("locale", "ru_RU");  // todo :
                 return getCorrectPage(role);
             }
         } catch (ServiceException e) {
@@ -50,6 +53,14 @@ public class LoginCommand implements ICommand {
                 return Config.getProperty(Config.EDIT_ORDER);
             default:
                 return Config.getProperty(Config.MAIN);
+        }
+    }
+
+    public void prepareBeforeRendering(String page, HttpServletRequest request, HttpServletResponse response) {
+        if(page.equals(Config.getProperty(Config.EDIT_ORDER))){
+            request.setAttribute("statusList",Status.values());
+            request.setAttribute("clientList",userService.getAllClients());
+     //       request.setAttribute("taxiList",taxiService.findFreeTaxis());
         }
     }
 }

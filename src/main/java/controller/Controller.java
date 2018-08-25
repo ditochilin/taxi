@@ -40,7 +40,6 @@ public class Controller extends HttpServlet {
         try {
             ICommand command = controllerHelper.getCommand(request);
             page = command.execute(request, response);
-            controllerHelper.prepareBeforeRendering(page, request, response);
         } catch (ServletException e) {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);
         } catch (IOException e) {
