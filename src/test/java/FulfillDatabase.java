@@ -2,25 +2,23 @@ import dao.*;
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
 import dao.implementation.*;
-import dao.transactionManager.TransactionManagerImpl;
 import entities.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FulfillDatabase {
 
     private static final Logger LOGGER = LogManager.getLogger(TestDAO.class.getName());
@@ -32,65 +30,104 @@ public class FulfillDatabase {
     final IShareDao shareDao = ShareDaoImpl.getInstance();
     final IOrderDao orderDao = OrderDaoImpl.getInstance();
 
-    public List<Role> createRoles() {
-        return Arrays.asList(new Role(), new Role(), new Role());
-    }
-
-    public List<User> createUsers() {
-        return Arrays.asList(new User(), new User(), new User(), new User());
-    }
-
-    public List<CarType> createCarTypes() {
-        return Arrays.asList(new CarType(), new CarType(), new CarType());
-    }
-
-    public List<Share> createShares() {
-        return Arrays.asList(new Share(), new Share(), new Share());
-    }
-
-    public List<Taxi> createTaxis() {
-        return Arrays.asList(new Taxi(), new Taxi(), new Taxi());
-    }
-
-    public List<Order> createOrders() {
-        return Arrays.asList(new Order(), new Order(), new Order());
-    }
+    List<Role> roles = null;
+    List<CarType> carTypes = null;
+    List<Share> shares = null;
+    List<User> users = null;
+    List<Taxi> taxis = null;
+    List<Order> orders = null;
 
     @Test
-    public void insertRoles() throws DaoException {
-        List<Role> roles = createRoles();
+    public void testFullBase() throws DaoException, ParseException, NoSuchEntityException {
+        deleteAll();
+        fulfillRoles();
+        insertRoles();
+        fulfillCarTypes();
+        insertCarTypes();
+        fulfillShares();
+        insertShares();
+        fulfillUsers();
+        insertUsers();
+        fulfillTaxis();
+        insertTaxis();
+        fulfillOrders();
+        insertOrders();
+    }
+
+    //@Test
+    public void deleteAll() throws DaoException, NoSuchEntityException {
+        testDeleteOrders();
+        testDeleteTaxis();
+        testDeleteUsers();
+        testDeleteShares();
+        testDeleteRoles();
+        testDeleteCarTypes();
+    }
+
+    public void fulfillRoles() {
+        roles = Arrays.asList(new Role(), new Role(), new Role());
         roles.get(0).setRoleName("Admin");
         roles.get(0).setDescription("Administrator");
-        roleDao.insert(roles.get(0));
 
         roles.get(1).setRoleName("Client");
         roles.get(1).setDescription("Client (buyer)");
-        roleDao.insert(roles.get(1));
 
         roles.get(2).setRoleName("Driver");
         roles.get(2).setDescription("Taxi driver");
-        roleDao.insert(roles.get(2));
     }
 
-    @Test
-    public void testFindRoleById() throws NoSuchEntityException, DaoException {
-        Role role = roleDao.findByName("Admin");
-        Assert.assertEquals(roleDao.findById(role.getId()),role);
-    }
+    public void fulfillUsers() throws NoSuchEntityException, DaoException {
+        users = Arrays.asList(new User(), new User(), new User(), new User());
+        User currentUser = users.get(0);
+        if (userDao.findByPhone("0672184141").isEmpty()) {
+            currentUser.setRole(roleDao.findByName("Admin"));
+            currentUser.setUserName("root");
+            currentUser.setPassword("root");
+            currentUser.setPhone("0672184141");
+        }
 
-    @Test()
-    public void testFindAllRoles(){
-        try {
-            List<Role> list = roleDao.findAll();
-            Assert.assertEquals(3,list.size());
-        } catch (DaoException e) {
-            LOGGER.error("testFindAllRoles not works");
+        User currentUser1 = users.get(1);
+        if (userDao.findByPhone("0502225547").isEmpty()) {
+            currentUser1.setRole(roleDao.findByName("Client"));
+            currentUser1.setUserName("Alex");
+            currentUser1.setPassword("root");
+            currentUser1.setPhone("0502225547");
+        }
+
+        User currentUser2 = users.get(2);
+        if (userDao.findByPhone("0678124422").isEmpty()) {
+            currentUser2.setRole(roleDao.findByName("Driver"));
+            currentUser2.setUserName("Ivan");
+            currentUser2.setPassword("root");
+            currentUser2.setPhone("0678124422");
+        }
+        User currentUser3 = users.get(3);
+        if (userDao.findByPhone("0679514720").isEmpty()) {
+            currentUser3.setRole(roleDao.findByName("Driver"));
+            currentUser3.setUserName("Николай");
+            currentUser3.setPassword("root");
+            currentUser3.setPhone("0679514720");
         }
     }
 
-    @Test
-    public void insertShares() throws DaoException {
-        List<Share> shares = createShares();
+    public void fulfillCarTypes() {
+        carTypes = Arrays.asList(new CarType(), new CarType(), new CarType());
+        CarType type1 = carTypes.get(0);
+        CarType type2 = carTypes.get(1);
+        CarType type3 = carTypes.get(2);
+
+        type1.setTypeName("Pikap");
+        type2.setTypeName("Sedan");
+        type3.setTypeName("Universal");
+
+        type1.setPrice(BigDecimal.valueOf(55));
+        type2.setPrice(BigDecimal.valueOf(40));
+        type3.setPrice(BigDecimal.valueOf(65));
+    }
+
+    public void fulfillShares() {
+        shares = Arrays.asList(new Share(), new Share(), new Share());
+
         Share share1 = shares.get(0);
         share1.setShareName("loyalry_10");
         share1.setOn(true);
@@ -112,102 +149,18 @@ public class FulfillDatabase {
         share3.setPercent(15);
         share3.setIsLoyalty(true);
 
-        shareDao.insert(share1);
-        shareDao.insert(share2);
-        shareDao.insert(share3);
     }
 
-    @Test
-    public void insertCarTypes() throws DaoException {
-        List<CarType> typeList = createCarTypes();
-        CarType type1 = typeList.get(0);
-        CarType type2 = typeList.get(1);
-        CarType type3 = typeList.get(2);
-
-        type1.setTypeName("Pikap");
-        type2.setTypeName("Sedan");
-        type3.setTypeName("Universal");
-
-        type1.setPrice(BigDecimal.valueOf(55));
-        type2.setPrice(BigDecimal.valueOf(40));
-        type3.setPrice(BigDecimal.valueOf(65));
-
-        carTypeDao.insert(type1);
-        carTypeDao.insert(type2);
-        carTypeDao.insert(type3);
-    }
-
-    @Test
-    public void insertUsers() throws DaoException, NoSuchEntityException {
-        List<User> users = createUsers();
-        User currentUser = users.get(0);
-        if(userDao.findByPhone("0672184141").isEmpty()) {
-            currentUser.setRole(roleDao.findByName("Admin"));
-            currentUser.setUserName("root");
-            currentUser.setPassword("root");
-            currentUser.setPhone("0672184141");
-            userDao.insert(currentUser);
-        }
-
-        User currentUser1 = users.get(1);
-        if(userDao.findByPhone("0502225547").isEmpty()) {
-            currentUser1.setRole(roleDao.findByName("Client"));
-            currentUser1.setUserName("Alex");
-            currentUser1.setPassword("root");
-            currentUser1.setPhone("0502225547");
-            userDao.insert(currentUser1);
-        }
-
-        User currentUser2 = users.get(2);
-        if(userDao.findByPhone("0678124422").isEmpty()) {
-            currentUser2.setRole(roleDao.findByName("Driver"));
-            currentUser2.setUserName("Ivan");
-            currentUser2.setPassword("root");
-            currentUser2.setPhone("0678124422");
-            userDao.insert(currentUser2);
-        }
-        User currentUser3 = users.get(3);
-        if(userDao.findByPhone("0679514720").isEmpty()) {
-            currentUser3.setRole(roleDao.findByName("Driver"));
-            currentUser3.setUserName("Николай");
-            currentUser3.setPassword("root");
-            currentUser3.setPhone("0679514720");
-            userDao.insert(currentUser3);
-        }
-    }
-
-    @Test
-    public void findByRole() throws NoSuchEntityException, DaoException {
-        List<User> users = userDao.findByRole(roleDao.findByName("Admin"));
-        Assert.assertEquals(users.size(),1);
-    }
-
-    @Test
-    public void findByPhone() throws NoSuchEntityException, DaoException {
-        List<User> users = userDao.findByPhone("0672184141");
-        Assert.assertEquals(users.get(0).getUserName(),"root");
-    }
-
-    @Test
-    public void updateUsers() throws DaoException {
-        User user = userDao.findByName("Alex").get(0);
-        user.setPhone("0502225547");
-        userDao.update(user);
-    }
-
-    @Test
-    public void insertTaxi() throws DaoException {
-        deleteTable("taxis");
-        List<Taxi> taxis = createTaxis();
+    public void fulfillTaxis() throws DaoException {
+        taxis = Arrays.asList(new Taxi(), new Taxi(), new Taxi());
         Taxi taxi1 = taxis.get(0);
         Taxi taxi2 = taxis.get(1);
         Taxi taxi3 = taxis.get(2);
-
-        taxi1.setDriver(userDao.findByName("Ivan").get(0));
-        taxi2.setDriver(userDao.findByName("Николай").get(0));
-        taxi3.setDriver(userDao.findByName("Ivan").get(0));
-
         try {
+            taxi1.setDriver(userDao.findByName("Ivan").get(0));
+            taxi2.setDriver(userDao.findByName("Николай").get(0));
+            taxi3.setDriver(userDao.findByName("Ivan").get(0));
+
             taxi1.setCarType(carTypeDao.findByName("Pikap").get(0));
             taxi2.setCarType(carTypeDao.findByName("Sedan").get(0));
             taxi3.setCarType(carTypeDao.findByName("Universal").get(0));
@@ -224,30 +177,11 @@ public class FulfillDatabase {
         taxi3.setCarNumber("AA2345IF");
 
         taxi1.setBusy(true);
-
-        taxiDao.insert(taxi1);
-        taxiDao.insert(taxi2);
-        taxiDao.insert(taxi3);
     }
 
-    @Test
-    public void checkBusy(){
-        try {
-            List<Taxi> taxis = taxiDao.findAllBusyFree(false);
-            for (Taxi taxi: taxis) {
-                taxiDao.turnBusyness(taxi,true);
-                Assert.assertEquals(taxi.getBusy(),true);
-                taxiDao.turnBusyness(taxi,false);
-            }
-        } catch (DaoException e) {
-            LOGGER.log(Level.ERROR,e.getMessage());
-        }
-    }
-
-    @Test
-    public void insertOrders() throws DaoException, ParseException {
-        List<Order> orders = createOrders();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss",Locale.ROOT);
+    public void fulfillOrders() throws ParseException, DaoException {
+        orders = Arrays.asList(new Order(), new Order(), new Order());
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss", Locale.ROOT);
         Order order1 = orders.get(0);
         Order order2 = orders.get(1);
         Order order3 = orders.get(2);
@@ -280,9 +214,94 @@ public class FulfillDatabase {
         order3.setStatus(Status.INWORK);
         order3.setDateTime(dateformat.parse("20-08-2018 15:51:04"));
 
-        orderDao.insert(order1);
-        orderDao.insert(order2);
-        orderDao.insert(order3);
+    }
+
+    public void insertRoles() throws DaoException {
+        roleDao.insert(roles.get(0));
+        roleDao.insert(roles.get(1));
+        roleDao.insert(roles.get(2));
+    }
+
+    @Test
+    public void testFindRoleById() throws NoSuchEntityException, DaoException {
+        Role role = roleDao.findByName("Admin");
+        Assert.assertEquals(roleDao.findById(role.getId()), role);
+    }
+
+    @Test()
+    public void testFindAllRoles() {
+        try {
+            List<Role> list = roleDao.findAll();
+            Assert.assertEquals(3, list.size());
+        } catch (DaoException e) {
+            LOGGER.error("testFindAllRoles not works");
+        }
+    }
+
+    public void insertShares() throws DaoException {
+        shareDao.insert(shares.get(0));
+        shareDao.insert(shares.get(1));
+        shareDao.insert(shares.get(2));
+    }
+
+    public void insertCarTypes() throws DaoException {
+        carTypeDao.insert(carTypes.get(0));
+        carTypeDao.insert(carTypes.get(1));
+        carTypeDao.insert(carTypes.get(2));
+    }
+
+    public void insertUsers() throws DaoException {
+        userDao.insert(users.get(0));
+        userDao.insert(users.get(1));
+        userDao.insert(users.get(2));
+        userDao.insert(users.get(3));
+    }
+
+    @Test
+    public void findByRole() throws NoSuchEntityException, DaoException {
+        List<User> users = userDao.findByRole(roleDao.findByName("Admin"));
+        Assert.assertEquals(users.size(), 1);
+    }
+
+    @Test
+    public void findByPhone() throws NoSuchEntityException, DaoException {
+        List<User> users = userDao.findByPhone("0672184141");
+        Assert.assertEquals(users.get(0).getUserName(), "root");
+    }
+
+    @Test
+    public void updateUsers() throws DaoException {
+        User user = userDao.findByName("Alex").get(0);
+        user.setPhone("0502225547");
+        userDao.update(user);
+    }
+
+
+    public void insertTaxis() throws DaoException {
+        taxiDao.insert(taxis.get(0));
+        taxiDao.insert(taxis.get(1));
+        taxiDao.insert(taxis.get(2));
+    }
+
+    @Test
+    public void checkBusy() {
+        try {
+            List<Taxi> taxis = taxiDao.findAllBusyFree(false);
+            for (Taxi taxi : taxis) {
+                taxiDao.turnBusyness(taxi, true);
+                Assert.assertEquals(taxi.getBusy(), true);
+                taxiDao.turnBusyness(taxi, false);
+            }
+        } catch (DaoException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
+        }
+    }
+
+
+    public void insertOrders() throws DaoException {
+        orderDao.insert(orders.get(0));
+        orderDao.insert(orders.get(1));
+        orderDao.insert(orders.get(2));
 
     }
 
@@ -306,79 +325,64 @@ public class FulfillDatabase {
         orderDao.update(order);
 
         Order updatedOrder = orderDao.findById(order.getId());
-        Assert.assertEquals(updatedOrder.getShares().size(),3);
+        Assert.assertEquals(updatedOrder.getShares().size(), 3);
 
         updatedOrder.getShares().remove(2);
         orderDao.update(updatedOrder);
         Order updatedOrder2 = orderDao.findById(order.getId());
-        Assert.assertEquals(updatedOrder2.getShares().size(),2);
-
-        orderDao.delete(updatedOrder);
+        Assert.assertEquals(updatedOrder2.getShares().size(), 2);
     }
 
-//    @Test
-//    public void deleteUsers() throws NoSuchEntityException, DaoException {
-//        List<User> users = userDao.findAll();
-//        for (User user:users
-//                ) {
-//            userDao.delete(userDao.findById(user.getId()));
-//        }
-//    }
-//
-//    @Test
-//    public void deleteRolesByName() throws NoSuchEntityException, DaoException {
-//        roleDao.delete(roleDao.findByName("Client"));
-//        roleDao.delete(roleDao.findByName("Admin"));
-//        roleDao.delete(roleDao.findByName("Driver"));
-//    }
-//
-//    @Test
-//    public void deleteSharesByName() throws NoSuchEntityException, DaoException {
-//        List<Share> shares = shareDao.findAll();
-//        for (Share share:shares
-//             ) {
-//            shareDao.delete(shareDao.findById(share.getId()));
-//        }
-//    }
-//
-//    @Test
-//    public void deleteCarTypes() throws NoSuchEntityException, DaoException {
-//        List<CarType> types = carTypeDao.findAll();
-//        for (CarType type:types
-//                ) {
-//            carTypeDao.delete(carTypeDao.findById(type.getId()));
-//        }
-//    }
-    @Test
-    public void deleteTaxis() throws NoSuchEntityException, DaoException {
-        List<Taxi> taxis = taxiDao.findAll();
-        for (Taxi taxi:taxis
+
+    //@Test
+    public void testDeleteOrders() throws DaoException {
+        List<Order> orders = orderDao.findAll();
+        for (Order order : orders
                 ) {
-            taxiDao.delete(taxiDao.findById(taxi.getId()));
+            orderDao.delete(order);
         }
     }
-//
-//    @Test
-//    public void fulfillBase() throws DaoException, NoSuchEntityException {
-//
-//        deleteTable("orders_shares");
-//        deleteTable("orders");
-//        deleteTable("taxis");
-//        deleteTable("users");
-//        deleteTable("roles");
-//        deleteTable("car_types");
-//        deleteTable("shares");
-//
-//    }
 
-    private void deleteTable(String tableName) throws DaoException {
-                TransactionManagerImpl.doInTransaction(()-> {
-                    Connection connection = TransactionManagerImpl.getConnection();
-            try (Statement statement = connection.createStatement()) {
-                return statement.executeUpdate("DELETE FROM " + tableName);
-            } catch (SQLException e) {
-                throw new Exception(e.getMessage());
-            }
-        });
+    //@Test
+    public void testDeleteTaxis() throws DaoException {
+        List<Taxi> taxis = taxiDao.findAll();
+        for (Taxi taxi : taxis
+                ) {
+            taxiDao.delete(taxi);
+        }
+    }
+
+    //@Test
+    public void testDeleteUsers() throws DaoException {
+        List<User> users = userDao.findAll();
+        for (User user : users
+                ) {
+            userDao.delete(user);
+        }
+    }
+
+    //@Test
+    public void testDeleteRoles() throws NoSuchEntityException, DaoException {
+        roleDao.delete(roleDao.findByName("Client"));
+        roleDao.delete(roleDao.findByName("Admin"));
+        roleDao.delete(roleDao.findByName("Driver"));
+    }
+
+    //@Test
+    public void testDeleteShares() throws DaoException {
+        List<Share> shares = shareDao.findAll();
+        for (Share share : shares
+                ) {
+            shareDao.delete(share);
+        }
+    }
+
+    //@Test
+    public void testDeleteCarTypes() throws NoSuchEntityException, DaoException {
+        List<CarType> types = carTypeDao.findAll();
+        for (CarType type : types
+                ) {
+            carTypeDao.delete(carTypeDao.findById(type.getId()));
+        }
     }
 }
