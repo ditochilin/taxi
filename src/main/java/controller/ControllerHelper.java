@@ -28,7 +28,9 @@ public class ControllerHelper  {
 
     private ControllerHelper() {
         commands.put("login", new LoginCommand());
-        commands.put("getOrders", new GetOrdersCommand());
+        commands.put("logout", new LogoutCommand());
+        commands.put("registration", new RegistrationCommand());
+//        commands.put("getOrders", new GetOrdersCommand());
         commands.put("editOrder", new EditOrderCommand());
         commands.put("showOrders", new GetOrdersCommand());
         commands.put("changeLocale", new ChangeLocale());

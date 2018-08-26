@@ -8,16 +8,19 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<c:set var="langList" value="${['ru_RU','en_EN']}"/>
-
 <form action="/Controller" method="post">
-    <input type="hidden" name="command" value="changeLocale">
-    <input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">
-    <select name='selectLangs' d onchange="submit(this)">
-        <c:forEach items="${langList}" var="lang">
-            <option value="${lang}"  ${lang == sessionScope.locale ? 'selected' : ''}>${lang}</option>
-        </c:forEach>
-    </select>
+    <p>
+        <input type="hidden" name="command" value="changeLocale">
+        <input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">
+        <select name='selectLangs' onchange="submit(this)">
+            <option style="background-image:url('/images/ru.png');"
+                    value="ru_RU"  ${"ru_RU" == sessionScope.locale ? 'selected' : ''}>Russian
+            </option>
+            <option style="background-image:url('/images/en.png');"
+                    value="en_EN"  ${"en_EN" == sessionScope.locale ? 'selected' : ''}>English
+            </option>
+        </select>
+    </p>
 </form>
 
 <script language="JavaScript" type="text/javascript">

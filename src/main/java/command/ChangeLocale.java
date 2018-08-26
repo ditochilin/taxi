@@ -15,6 +15,6 @@ public class ChangeLocale implements ICommand {
         String lang = request.getParameter("selectLangs");
         request.getSession().setAttribute("locale", lang);
         String fromPage = request.getParameter("fromURI");
-        return  null;
+        return  fromPage;
     }
 }

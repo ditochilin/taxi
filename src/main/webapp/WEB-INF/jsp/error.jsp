@@ -9,11 +9,10 @@
 <body>
     <br/>
     <p>Error!</p>
-    <c:set var="message" value='${requestScope["error"]}' />
-    <p style="color: red"><c:out value="${message}"/></p>
     <br/>
-    <c:set var="description" value='${requestScope["errorDescription"]}' />
-    <p style="color: red; font-size: small"><c:out value="${description}"/></p>
+
+    <c:set var="exception" value="${requestScope['javax.servlet.error.exception']}"/>
+    <p style="color: red; font-size: small"><c:out value='${exception}'/></p>
 
     <p><b>Request URI:</b> ${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}</p>
     <button onclick="history.back()">Back to Previous Page</button>

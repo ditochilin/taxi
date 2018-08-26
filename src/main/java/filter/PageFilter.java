@@ -28,36 +28,35 @@ public class PageFilter implements Filter {
         String command = request.getParameter("command");
         String uri = request.getRequestURI();
         if (command == null) {
-            switch (uri) {
-                case "/":
-                    setAccountPageByRole(request,userName,roleName,Config.ERROR);
-                    break;
-                case "/login":
-                    setAccountPageByRole(request,userName,roleName,Config.LOGIN);
-                    break;
-                case "/registration":
-                    setAccountPageByRole(request,userName,roleName,Config.REGISTRATION);
-                    break;
-                default:
-                    request.setAttribute("redirect", Config.getProperty(Config.MAIN));
-                    break;
-            }
+//            switch (uri) {
+//                case "/":
+//                case "/login":
+//                case "/logout":
+                    setAccountPageByRole(request, userName, roleName, Config.LOGIN);
+//                    break;
+//                case "/registration":
+//                    setAccountPageByRole(request, userName, roleName, Config.REGISTRATION);
+//                    break;
+//                default:
+//                    request.setAttribute("redirect", Config.getProperty(Config.LOGIN));
+//                    break;
+//            }
+        } else {
+            request.setAttribute("redirect", "/Controller");
         }
         if (uri.endsWith(".jsp")) {
             DispatcherType dt = request.getDispatcherType();
             if (dt == DispatcherType.FORWARD || dt == DispatcherType.INCLUDE)
-                //handle dispatcher results
                 filterChain.doFilter(request, servletResponse);
             else
-                ((HttpServletResponse)servletResponse).sendError(404, "Direct access to JSP");
+                ((HttpServletResponse) servletResponse).sendError(404, "Direct access to JSP");
         } else {
-            //let's struts handle the request
             filterChain.doFilter(request, servletResponse);
         }
     }
 
-    private void setAccountPageByRole(HttpServletRequest request, String userName, String roleName, String page){
-        if (userName.isEmpty()) {
+    private void setAccountPageByRole(HttpServletRequest request, String userName, String roleName, String page) {
+        if (userName == null) {
             request.setAttribute("redirect", Config.getProperty(page));
         } else {
             if ("Client".equals(roleName)) {

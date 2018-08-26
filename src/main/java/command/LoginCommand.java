@@ -34,7 +34,9 @@ public class LoginCommand implements ICommand {
                 Role role = userDump.getRole();
                 session.setAttribute("user", userDump.getUserName());
                 session.setAttribute("role", role.getRoleName());
-                session.setAttribute("locale", "en");  // todo :
+                if(session.getAttribute("locale")==null) {
+                    session.setAttribute("locale", "en_En");
+                }
                 return getCorrectPage(role);
             }
         } catch (ServiceException e) {
