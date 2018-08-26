@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Dmitry Tochilin
@@ -6,16 +7,30 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<form method="post" action="${pageContext.request.contextPath}/">
+
+<c:set var="langList" value="${['ru','en']}"/>
+<form action="/Controller" method="post">
     <input type="hidden" name="command" value="changeLocale">
-    <input type="hidden" name="from" value="${pageContext.request.requestURI}">
-    <input type="hidden" name="language" value="en">
-    <input type="image" src="../jsp/images/en.png" border="0" alt="English"/>
+    <input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">
+    <select name='selectLangs' onchange="submit(this)">
+        <c:forEach items="${langList}" var="lang">
+            <option value="${lang}">${lang}</option>
+        </c:forEach>
+    </select>
 </form>
 
-<form method="post" action="${pageContext.request.contextPath}/">
-    <input type="hidden" name="command" value="changeLocale">
-    <input type="hidden" name="from" value="${pageContext.request.requestURI}">
-    <input type="hidden" name="language" value="ru">
-    <input type="image" src="../jsp/images/ru.png" border="0" alt="Русский"/>
-</form>
+<script language="JavaScript" type="text/javascript">
+    function getSelectedValue(select) {
+        var index = select.selectedIndex;
+        if ((index >= 0) && (index < select.length)) {
+            return select.options[index].value;
+        }
+        return '';
+    }
+
+    function submit(select) {
+        if (getSelectedValue(select) != '') {
+            select.form.submit();
+        }
+    }
+</script>

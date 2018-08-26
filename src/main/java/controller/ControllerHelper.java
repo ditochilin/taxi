@@ -31,7 +31,7 @@ public class ControllerHelper  {
         commands.put("getOrders", new GetOrdersCommand());
         commands.put("editOrder", new EditOrderCommand());
         commands.put("showOrders", new GetOrdersCommand());
-        commands.put("changeLocal", new ChangeLocal());
+        commands.put("changeLocale", new ChangeLocale());
     }
 
     public ICommand getCommand(HttpServletRequest request) {

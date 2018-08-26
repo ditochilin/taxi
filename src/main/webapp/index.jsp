@@ -4,8 +4,8 @@
 
 <%--<fmt:setLocale value="${sessionScope.locale}"/>--%>
 <%--<fmt:setBundle basename="locales.lang"/>--%>
-<fmt:setLocale value="${sessionScope.locale}"/>
-<fmt:setBundle basename="navbar"/>
+<%--<fmt:setLocale value="${sessionScope.locale}"/>--%>
+<%--<fmt:setBundle basename="navbar"/>--%>
 
 <html>
 <head>

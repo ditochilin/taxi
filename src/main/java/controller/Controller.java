@@ -1,8 +1,8 @@
 package controller;
 
 import command.ICommand;
-import session.CookieLogic;
-import session.SessionLogic;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.Config;
 import utils.Messenger;
 
@@ -21,6 +21,7 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
 
     private static ControllerHelper controllerHelper = ControllerHelper.getInstance();
+    private static final Logger LOGGER = LogManager.getLogger(Controller.class.getName());
 
     /**
      * Processes requests for both HTTP
@@ -40,14 +41,18 @@ public class Controller extends HttpServlet {
         try {
             ICommand command = controllerHelper.getCommand(request);
             page = command.execute(request, response);
+            LOGGER.info("Servlet forward to page " + page);
         } catch (ServletException e) {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);
         } catch (IOException e) {
             page = catchHandler(e, request, Messenger.IO_EXCEPTION);
         }
-
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-        dispatcher.forward(request, response);
+        if (page != null) {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        } else {
+            response.sendRedirect(request.getHeader("Referer"));
+        }
     }
 
     private String catchHandler(Exception e, HttpServletRequest request, String message) {
