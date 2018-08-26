@@ -15,10 +15,11 @@
 <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 
 <div>
-    <div>привет
+    <div>
+        <fmt:message key="welcome" />
         <%--<h1><fmt:message key="title"/></h1>--%>
     </div>
-    <button class="btn">hello</button>
+    <fmt:message key="hello"/><button class="btn">hello</button>
 </div>
 
 <%--<div><fmt:message key="description"/></div>--%>

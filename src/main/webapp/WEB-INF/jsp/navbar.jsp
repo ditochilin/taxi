@@ -3,7 +3,7 @@
 <%--<%@ taglib prefix="taxiLib" uri="/WEB-INF/tags/requestedViewTag" %>--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<fmt:setLocale scope="session" value="${sessionScope.locale}"/>
+<fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="navbar"/>
 
 <%--<input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">--%>
