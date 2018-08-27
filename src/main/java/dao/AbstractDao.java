@@ -20,7 +20,7 @@ import java.util.List;
 
 public abstract class AbstractDao<T> implements IDao<T> {
 
-    private static final Logger LOGGER = LogManager.getLogger(TransactionManagerImpl.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(AbstractDao.class.getName());
 
     protected Connection getConnection() throws DaoException, IllegalStateException {
         Connection connection = TransactionManagerImpl.getConnection();
@@ -30,19 +30,11 @@ public abstract class AbstractDao<T> implements IDao<T> {
         return connection;
     }
 
-//    protected Connection getSerializableConnection() throws DaoException {
-//        try {
-//            Connection connection = getConnection();
-//            return connection;
-//        } catch (SQLException e) {
-//            throw catchError("Can't create connection", "", e);
-//        }
-//    }
-
-    protected T findById(String sql, String selectedField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException, NoSuchEntityException {
+    protected T findById(String sql, String selectedField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
         List<T> list = findByInTransaction(sql, selectedField, value, extractor, enricher);
         if (list.isEmpty()) {
-            throw new NoSuchEntityException(String.format("Entity by id {%s} not found", value));
+            LOGGER.warn(String.format("Entity by id {%s} not found", value));
+            return null;
         }
         return list.get(0);
     }

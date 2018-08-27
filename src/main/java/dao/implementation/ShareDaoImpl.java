@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
 
-    private static final Logger LOGGER = LogManager.getLogger(RoleDaoImpl.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(ShareDaoImpl.class.getName());
     private static IExtractor<Share> extractor;
     private static IPropSetter<Share> propSetter;
     private static ShareDaoImpl instance;

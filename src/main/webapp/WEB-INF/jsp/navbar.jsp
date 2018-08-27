@@ -23,12 +23,7 @@
                     </a>
                 </c:when>
                 <c:otherwise>
-                    <%--<input type="hidden" name="command" value="login">--%>
-                    <a href="${pageContext.request.contextPath}/login?command=login">
-                        <span></span><fmt:message key="enter"/>
-                    </a>
-                    <%--<input type="hidden" name="command" value="registration">--%>
-                    <a href="${pageContext.request.contextPath}/Controller?command=registration">
+                    <a href="${pageContext.request.contextPath}/Controller?page=REGISTRATION">
                         <span></span><fmt:message key="registration"/>
                     </a>
                 </c:otherwise>

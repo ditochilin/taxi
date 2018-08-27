@@ -12,7 +12,7 @@
     <br/>
 
     <c:set var="exception" value="${requestScope['javax.servlet.error.exception']}"/>
-    <p style="color: red; font-size: small"><c:out value='${exception}'/></p>
+    <p style="color: red; font-size: small"><c:out value='${errorDescription}'/><c:out value='${exception}'/></p>
 
     <p><b>Request URI:</b> ${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}</p>
     <button onclick="history.back()">Back to Previous Page</button>

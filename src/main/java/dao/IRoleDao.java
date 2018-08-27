@@ -3,6 +3,9 @@ package dao;
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
 import entities.Role;
+import entities.User;
+
+import java.util.List;
 
 /**
  * Serve to extend IDao interface for Role entity with additional behavior

@@ -13,6 +13,9 @@
 <div>
     <form action="Controller" method="post">
         <input type="hidden" name="command" value="login">
+        <c:if test="${not empty requestScope.messageBeforeLogin}">
+            <span style="color: red"/><fmt:message key="${messageBeforeLogin}"/>
+        </c:if>
         <table>
             <tr>
                 <th>

@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%--
   Created by IntelliJ IDEA.
   User: Dmitry Tochilin
@@ -6,16 +8,19 @@
   Time: 19:13
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="locale"/>
 <html>
 <head>
-    <title>Order</title>
+    <jsp:include page="/WEB-INF/jsp/header.jsp"/>
+    <title><fmt:message key="makeOrder"/></title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 <input type="hidden" name="command" value="editOrder"/>
 <form method="post" action="Controller" name="editOrder">
     <table>
-        <h3>Edit client's order</h3>
+        </h3><fmt:message key="Edit client's order"/>
         <tr>
             <th>Status</th>
             <th><select name='statusList'>

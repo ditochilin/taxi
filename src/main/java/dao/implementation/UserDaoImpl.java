@@ -6,7 +6,6 @@ import dao.IUserDao;
 import dao.enricher.IEnricher;
 import dao.enricher.UserEnricher;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.extractor.IExtractor;
 import dao.extractor.UserExtractor;
 import dao.propSetter.IPropSetter;
@@ -14,7 +13,6 @@ import dao.propSetter.UserPropSetter;
 import dao.transactionManager.TransactionManagerImpl;
 import entities.Role;
 import entities.User;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,46 +49,46 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao {
 
     @Override
     public List<User> findAll() throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findByInTransaction(FIND_ALL, null, null, extractor, enricher)));
     }
 
     @Override
     public User findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findById(FIND_ALL, "id_user", id, extractor, enricher)));
     }
 
     @Override
     public List<User> findByName(String userName) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findByInTransaction(FIND_ALL, "user_name", userName, extractor, enricher)));
     }
 
     @Override
     public List<User> findByRole(Role role) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findByInTransaction(FIND_ALL, "id_role", role.getId(), extractor, enricher)));
     }
 
     @Override
     public List<User> findByPhone(String phone) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findByInTransaction(FIND_ALL, "phone", phone, extractor, enricher)));
     }
 
     @Override
     public Long insert(User user) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(()->insertInTransaction(user, INSERT, propSetter));
+        return TransactionManagerImpl.doInTransaction(() -> insertInTransaction(user, INSERT, propSetter));
     }
 
     @Override
     public User update(User user) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(()-> updateInTransaction(user, UPDATE, propSetter));
+        return TransactionManagerImpl.doInTransaction(() -> updateInTransaction(user, UPDATE, propSetter));
     }
 
     @Override
     public boolean delete(User user) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(()->deleteInTransaction(user, DELETE));
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(user, DELETE));
     }
 }

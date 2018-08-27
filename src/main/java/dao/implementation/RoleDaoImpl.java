@@ -62,7 +62,7 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
     @Override
     public Role findByName(String roleName) throws DaoException {
         List<Role> roles = TransactionManagerImpl.doInTransaction(() ->
-                findByInTransaction(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL));
+                (findByInTransaction(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL)));
         if (roles.isEmpty()) {
             return null;
         }

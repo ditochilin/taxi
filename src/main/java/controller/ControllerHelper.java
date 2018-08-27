@@ -10,6 +10,7 @@ import utils.Config;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,12 @@ public class ControllerHelper  {
             command = new EmptyCommand();
         }
         return command;
+    }
+
+    public static String getParamiterInUTF8(HttpServletRequest request, String param){
+        String value = request.getParameter(param);
+        byte[] bytes = value.getBytes(StandardCharsets.ISO_8859_1);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public static ControllerHelper getInstance() {

@@ -21,7 +21,7 @@ import java.util.Locale;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FulfillDatabase {
 
-    private static final Logger LOGGER = LogManager.getLogger(TestDAO.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(FulfillDatabase.class.getName());
 
     final ITaxiDao taxiDao = TaxiDaoImpl.getInstance();
     final IUserDao userDao = UserDaoImpl.getInstance();
@@ -224,7 +224,7 @@ public class FulfillDatabase {
 
     @Test
     public void testFindRoleById() throws NoSuchEntityException, DaoException {
-        Role role = roleDao.findByName("Admin");
+        Role role = roleDao.findByName("Client");
         Assert.assertEquals(roleDao.findById(role.getId()), role);
     }
 
@@ -264,7 +264,7 @@ public class FulfillDatabase {
     }
 
     @Test
-    public void findByPhone() throws NoSuchEntityException, DaoException {
+    public void findByPhone() throws DaoException {
         List<User> users = userDao.findByPhone("0672184141");
         Assert.assertEquals(users.get(0).getUserName(), "root");
     }

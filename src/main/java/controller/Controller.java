@@ -36,11 +36,15 @@ public class Controller extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setCharacterEncoding("UTF-8");
         String page = null;
         try {
-            ICommand command = controllerHelper.getCommand(request);
-            page = command.execute(request, response);
+            String pageName = request.getParameter("page");
+            if (pageName != null) {
+                page = Config.getProperty(pageName);
+            } else {
+                ICommand command = controllerHelper.getCommand(request);
+                page = command.execute(request, response);
+            }
             LOGGER.info("Servlet forward to page " + page);
         } catch (ServletException e) {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);

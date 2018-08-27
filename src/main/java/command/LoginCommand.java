@@ -4,6 +4,7 @@ import entities.Role;
 import entities.Status;
 import entities.User;
 import service.IUserService;
+import service.exceptions.IncorrectPassword;
 import service.exceptions.ServiceException;
 import service.implementation.UserService;
 import utils.Config;
@@ -39,12 +40,16 @@ public class LoginCommand implements ICommand {
                 }
                 return getCorrectPage(role);
             }
+        } catch (IncorrectPassword e) {
+            request.setAttribute("messageBeforeLogin", "Incorrect password");
+            return Config.getProperty(Config.LOGIN);
         } catch (ServiceException e) {
             request.setAttribute("errorDescription", e.getMessage());
+            return Config.getProperty(Config.ERROR);
         }
 
-        request.setAttribute("error", Messenger.getProperty(Messenger.LOGIN_ERROR));
-        return Config.getProperty(Config.ERROR);
+        request.setAttribute("messageBeforeLogin", Messenger.getProperty(Messenger.LOGIN_ERROR));
+        return Config.getProperty(Config.LOGIN);
     }
 
     private String getCorrectPage(Role role) {

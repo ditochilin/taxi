@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IUserService;
+import service.exceptions.IncorrectPassword;
 import service.exceptions.ServiceException;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class UserService implements IUserService {
         return instance;
     }
 
-    public User checkUserByPassword(User user) throws ServiceException {
+    public User checkUserByPassword(User user) throws ServiceException, IncorrectPassword {
         String userName = user.getUserName();
         try {
             List<User> users = userDao.findByName(userName);
@@ -47,8 +48,9 @@ public class UserService implements IUserService {
             User userByName = users.get(0);
             if(checkPassword(user, userByName)){
                 return userByName;
+            }else{
+                throw new IncorrectPassword("Password is wrong!");
             }
-            return null;
         } catch (DaoException e) {
             throw new ServiceException(String.format("User $s not found. %s",userName,e.getMessage()),e);
         }
@@ -63,6 +65,36 @@ public class UserService implements IUserService {
             LOGGER.error("Couldn't get clients from database.");
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public boolean suchNameIsPresent(String userName) {
+        try {
+            return !userDao.findByName(userName).isEmpty();
+        } catch (DaoException e) {
+            LOGGER.error("Could not find user by name "+userName,e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addNewUser(User user) {
+        try {
+            return userDao.insert(user) > 0;
+        } catch (DaoException e) {
+            LOGGER.error("Could not create new user:"+user,e.getCause());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean suchPhoneIsPresent(String phone) {
+        try {
+            return !userDao.findByPhone(phone).isEmpty();
+        } catch (DaoException e) {
+            LOGGER.error("Could not check user by phone "+phone,e);
+        }
+        return false;
     }
 
     private boolean checkPassword(User user, User userByName) {

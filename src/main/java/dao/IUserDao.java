@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface IUserDao extends IDao<User> {
 
-    List<User> findByRole(Role role) throws DaoException, NoSuchEntityException;
+    List<User> findByRole(Role role) throws DaoException;
 
-    List<User> findByPhone(String phone) throws DaoException, NoSuchEntityException;
+    List<User> findByPhone(String phone) throws DaoException;
 
     List<User> findByName(String userName) throws DaoException;
 }

@@ -5,20 +5,22 @@
 <fmt:setBundle basename="locale"/>
 <html>
 <head>
-    <title><fmt:message key="registrationOfNewUser"></fmt:message></title>
+    <jsp:include page="/WEB-INF/jsp/header.jsp"/>
+    <title><fmt:message key="registrationOfNewUser"/></title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 <form action="Controller" method="post">
-    <input type="hidden" name="command" value="register">
+    <input type="hidden" name="command" value="registration">
     <table>
         <tr>
             <th>
                 <span/><fmt:message key="role"/>
             </th>
             <th>
-                <select name='selectLangs'>
-                    <option value="Driver"><fmt:message key="driverUser"></option>
-                    <option value="Client"><fmt:message key="client"></option>
+                <select name='role'>
+                    <option value="Driver"><fmt:message key="driverUser"/></option>
+                    <option value="Client"><fmt:message key="client"/></option>
                 </select>
             </th>
         </tr>
@@ -55,8 +57,17 @@
             </th>
         </tr>
         <tr>
+            <c:if test="${not empty requestScope.errors}">
+                <%--<div class="alert alert-danger">--%>
+                    <c:forEach items="${requestScope.errors}" var="error">
+                        <strong><fmt:message key="error"/></strong> <fmt:message key="${error}"/><br>
+                    </c:forEach>
+                <%--</div>--%>
+            </c:if>
+        </tr>
+        <tr>
             <th>
-                <input type="submit" name="submit" value="<fmt:message key="enter" />">
+                <input type="submit" name="submit" value="<fmt:message key="register"/>">
             </th>
         </tr>
     </table>

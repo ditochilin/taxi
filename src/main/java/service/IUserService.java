@@ -1,6 +1,7 @@
 package service;
 
 import entities.User;
+import service.exceptions.IncorrectPassword;
 import service.exceptions.ServiceException;
 
 import java.util.List;
@@ -16,8 +17,13 @@ public interface IUserService {
      * @param user user for check
      * @return  fulfill dummy user with data from database
      */
-    User checkUserByPassword(User user) throws ServiceException;
+    User checkUserByPassword(User user) throws ServiceException, IncorrectPassword;
 
     List<User> getAllClients();
 
+    boolean suchNameIsPresent(String userName);
+
+    boolean addNewUser(User user);
+
+    boolean suchPhoneIsPresent(String phone);
 }
