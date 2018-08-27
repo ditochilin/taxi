@@ -7,6 +7,7 @@
     <meta charset="utf-8">
 </head>
 <body>
+<div class="container">
     <br/>
     <p>Error!</p>
     <br/>
@@ -17,5 +18,6 @@
     <p><b>Request URI:</b> ${pageContext.request.scheme}://${header.host}${pageContext.errorData.requestURI}</p>
     <button onclick="history.back()">Back to Previous Page</button>
     <br/>
+</div>
 </body>
 </html>

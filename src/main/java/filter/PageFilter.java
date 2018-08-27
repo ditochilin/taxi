@@ -28,7 +28,7 @@ public class PageFilter implements Filter {
         String command = request.getParameter("command");
         String uri = request.getRequestURI();
         if (command == null) {
-                    setAccountPageByRole(request, userName, roleName, Config.LOGIN);
+            setAccountPageByRole(request, userName, roleName, Config.LOGIN);
         } else {
             request.setAttribute("redirect", "/Controller");
         }
@@ -45,7 +45,7 @@ public class PageFilter implements Filter {
 
     private void setAccountPageByRole(HttpServletRequest request, String userName, String roleName, String page) {
         if (userName == null) {
-            request.setAttribute("redirect", Config.getProperty(page));
+            request.setAttribute("page", Config.LOGIN);
         } else {
             if ("Client".equals(roleName)) {
                 request.setAttribute("redirect", Config.getProperty(Config.EDIT_ORDER));

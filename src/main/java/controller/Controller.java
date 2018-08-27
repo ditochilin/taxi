@@ -38,10 +38,13 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
         String page = null;
         try {
-            String pageName = request.getParameter("page");
+            String pageName = (String) request.getAttribute("page");
+            String pageNameParam = request.getParameter("page");
             if (pageName != null) {
                 page = Config.getProperty(pageName);
-            } else {
+            }else if(pageNameParam!=null) {
+                page = Config.getProperty(pageNameParam);
+            }else {
                 ICommand command = controllerHelper.getCommand(request);
                 page = command.execute(request, response);
             }

@@ -7,9 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<form action="/Controller" method="post">
-    <p>
+<div style="float: right">
+    <form action="/Controller" method="post">
         <input type="hidden" name="command" value="changeLocale">
         <input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">
         <select name='selectLangs' onchange="submit(this)">
@@ -20,9 +19,8 @@
                     value="en_EN"  ${"en_EN" == sessionScope.locale ? 'selected' : ''}>English
             </option>
         </select>
-    </p>
-</form>
-
+    </form>
+</div>
 <script language="JavaScript" type="text/javascript">
     function getSelectedValue(select) {
         var index = select.selectedIndex;

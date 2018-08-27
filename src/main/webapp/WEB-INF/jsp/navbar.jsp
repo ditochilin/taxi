@@ -7,26 +7,51 @@
 
 <nav>
     <ul>
-        <li>
+        <c:choose>
+            <c:when test="${sessionScope.user != null}">
+                <li>
+                    <c:choose>
+                        <c:when test="${sessionScope.role == 'Admin'}">
+                            <a href="${pageContext.request.contextPath}/Controller?page=ADMIN">
+                                <span><fmt:message key="Admin panel"/></span>
+                            </a>
+                        </c:when>
+                    </c:choose>
+                </li>
+                <li>
+                    <c:choose>
+                        <c:when test="${sessionScope.role == 'Driver' || sessionScope.role == 'Admin'}">
+                            <a href="${pageContext.request.contextPath}/Controller?page=TAXIS">
+                                <span><fmt:message key="vehicles"/></span>
+                            </a>
+                        </c:when>
+                    </c:choose>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/Controller?page=ORDERS">
+                        <span><fmt:message key="orders"/></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/Controller?command=logout">
+                        <span><fmt:message key="logout"/></span>
+                    </a>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li>
+                    <a href="${pageContext.request.contextPath}/Controller?page=REGISTRATION">
+                        <span></span><fmt:message key="registration"/>
+                    </a>
+                </li>
+            </c:otherwise>
+        </c:choose>
+
+        <li style="float: right; color: green">
             <c:choose>
                 <c:when test="${sessionScope.user != null}"><span/><fmt:message
                         key="welcome"/><span>${sessionScope.user}</span></c:when>
                 <c:otherwise></c:otherwise>
-            </c:choose>
-        </li>
-        <li>
-            <c:choose>
-                <c:when test="${sessionScope.user != null}">
-                    <%--<input type="hidden" name="command" value="logout">--%>
-                    <a href="${pageContext.request.contextPath}/Controller?command=logout">
-                        <span></span><fmt:message key="logout"/>
-                    </a>
-                </c:when>
-                <c:otherwise>
-                    <a href="${pageContext.request.contextPath}/Controller?page=REGISTRATION">
-                        <span></span><fmt:message key="registration"/>
-                    </a>
-                </c:otherwise>
             </c:choose>
         </li>
     </ul>

@@ -58,8 +58,10 @@ public class LoginCommand implements ICommand {
                 return Config.getProperty(Config.ORDERS);
             case "Client":
                 return Config.getProperty(Config.EDIT_ORDER);
+            case "Admin":
+                return Config.getProperty(Config.ADMIN);
             default:
-                return Config.getProperty(Config.MAIN);
+                return Config.getProperty(Config.LOGIN);
         }
     }
 

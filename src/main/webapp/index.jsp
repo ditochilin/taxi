@@ -8,9 +8,8 @@
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
 </head>
 <body>
-<jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
-
-<div>
+<div class="container">
+    <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
     <form action="Controller" method="post">
         <input type="hidden" name="command" value="login">
         <c:if test="${not empty requestScope.messageBeforeLogin}">
