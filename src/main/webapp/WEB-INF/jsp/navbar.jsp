@@ -12,7 +12,7 @@
                 <li>
                     <c:choose>
                         <c:when test="${sessionScope.role == 'Admin'}">
-                            <a href="${pageContext.request.contextPath}/Controller?page=ADMIN">
+                            <a href="${pageContext.request.contextPath}/Controller?command=openAdministration">
                                 <span><fmt:message key="Admin panel"/></span>
                             </a>
                         </c:when>
@@ -21,14 +21,14 @@
                 <li>
                     <c:choose>
                         <c:when test="${sessionScope.role == 'Driver' || sessionScope.role == 'Admin'}">
-                            <a href="${pageContext.request.contextPath}/Controller?page=TAXIS">
+                            <a href="${pageContext.request.contextPath}/Controller?command=openListTaxis">
                                 <span><fmt:message key="vehicles"/></span>
                             </a>
                         </c:when>
                     </c:choose>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/Controller?page=ORDERS">
+                    <a href="${pageContext.request.contextPath}/Controller?command=openListOrders">
                         <span><fmt:message key="orders"/></span>
                     </a>
                 </li>
@@ -40,7 +40,7 @@
             </c:when>
             <c:otherwise>
                 <li>
-                    <a href="${pageContext.request.contextPath}/Controller?page=REGISTRATION">
+                    <a href="${pageContext.request.contextPath}/Controller?command=openRegistration">
                         <span></span><fmt:message key="registration"/>
                     </a>
                 </li>
@@ -49,8 +49,7 @@
 
         <li style="float: right; color: green">
             <c:choose>
-                <c:when test="${sessionScope.user != null}"><span/><fmt:message
-                        key="welcome"/><span>${sessionScope.user}</span></c:when>
+                <c:when test="${sessionScope.user != null}"><span/><fmt:message key="welcome"/><span>${sessionScope.user}</span></c:when>
                 <c:otherwise></c:otherwise>
             </c:choose>
         </li>

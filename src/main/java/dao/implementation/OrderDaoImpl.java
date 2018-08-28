@@ -84,6 +84,12 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     }
 
     @Override
+    public List<Order> findByStatus(Status status) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, "status_order", status.name(), extractor, enricher));
+    }
+
+    @Override
     public List<Order> findByDriver(User user) throws DaoException {
         return TransactionManagerImpl.doInTransaction(() ->
                 findByInTransaction(FIND_BY_DRIVER, null, user.getId(), extractor, enricher));

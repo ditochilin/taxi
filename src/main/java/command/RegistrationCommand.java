@@ -31,6 +31,13 @@ public class RegistrationCommand implements ICommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        String action = request.getParameter("action");
+        if (action == null) {
+            return Config.getProperty(Config.REGISTRATION);
+        } else if (action.equals("exit")) {
+            return Config.getProperty(Config.LOGIN);
+        }
+
         String roleName = request.getParameter("role");
         String userName = ControllerHelper.getParamiterInUTF8(request,"login");
         String phone = request.getParameter("phone");

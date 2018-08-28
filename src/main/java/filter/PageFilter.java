@@ -23,38 +23,35 @@ public class PageFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String userName = (String) request.getSession().getAttribute("user");
-        String roleName = (String) request.getSession().getAttribute("role");
 
         String command = request.getParameter("command");
         String uri = request.getRequestURI();
-        if (command == null) {
-            setAccountPageByRole(request, userName, roleName, Config.LOGIN);
+
+        if (userMustBeLogout(userName, command)) {
+            request.setAttribute("redirect",
+                    Config.getProperty(Config.LOGIN));
         } else {
             request.setAttribute("redirect", "/Controller");
         }
+
         if (uri.endsWith(".jsp")) {
             DispatcherType dt = request.getDispatcherType();
-            if (dt == DispatcherType.FORWARD || dt == DispatcherType.INCLUDE)
+            if (dt == DispatcherType.FORWARD || dt == DispatcherType.INCLUDE) {
                 filterChain.doFilter(request, servletResponse);
-            else
+            } else {
                 ((HttpServletResponse) servletResponse).sendError(404, "Direct access to JSP");
+            }
         } else {
             filterChain.doFilter(request, servletResponse);
         }
+
     }
 
-    private void setAccountPageByRole(HttpServletRequest request, String userName, String roleName, String page) {
-        if (userName == null) {
-            request.setAttribute("page", Config.LOGIN);
-        } else {
-            if ("Client".equals(roleName)) {
-                request.setAttribute("redirect", Config.getProperty(Config.EDIT_ORDER));
-            } else if ("Driver".equals(roleName)) {
-                request.setAttribute("redirect", Config.getProperty(Config.ORDERS));
-            } else if ("Admin".equals(roleName)) {
-                request.setAttribute("redirect", Config.getProperty(Config.ADMIN));
-            }
-        }
+    private boolean userMustBeLogout(String userName, String command) {
+        return (command == null || userName==null) &&
+                !"login".equals(command) &&
+                !"registration".equals(command) &&
+                !"openRegistration".equals(command);
     }
 
     @Override

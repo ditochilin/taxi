@@ -20,7 +20,7 @@
             <th>Phone</th>
             <th>Password</th>
         </tr>
-        <c:forEach var="user" items="${users}">
+        <c:forEach var="user" items="${userList}">
             <tr>
                 <td><c:out value="${user.userName}"/></td>
                 <td><c:out value="${user.role}"/></td>

@@ -17,7 +17,6 @@ import java.util.Locale;
 
 public class LoginCommand implements ICommand {
 
-    // todo check if everything has been done
     private static IUserService userService = UserService.getInstance();
 
     @Override
@@ -30,7 +29,6 @@ public class LoginCommand implements ICommand {
         try {
             userDump = userService.checkUserByPassword(userDump);
             HttpSession session = request.getSession(false);
-            // todo:  && session.isNew() ???
             if (userDump != null ) {
                 Role role = userDump.getRole();
                 session.setAttribute("user", userDump.getUserName());
@@ -65,11 +63,4 @@ public class LoginCommand implements ICommand {
         }
     }
 
-    public void prepareBeforeRendering(String page, HttpServletRequest request, HttpServletResponse response) {
-        if(page.equals(Config.getProperty(Config.EDIT_ORDER))){
-            request.setAttribute("statusList",Status.values());
-            request.setAttribute("clientList",userService.getAllClients());
-     //       request.setAttribute("taxiList",taxiService.findFreeTaxis());
-        }
-    }
 }

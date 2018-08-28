@@ -25,7 +25,7 @@
             <th>Cost</th>
             <th>Feed time</th>
         </tr>
-        <c:forEach var="order" items="${orders}">
+        <c:forEach var="order" items="${orderList}">
             <tr>
                 <td><c:out value="${order.status}"/></td>
                 <td><c:out value="${order.dateTime}"/></td>

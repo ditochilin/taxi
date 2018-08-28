@@ -63,8 +63,8 @@ public class UserService implements IUserService {
             return userDao.findByRole(roleClient);
         } catch (DaoException | NoSuchEntityException e) {
             LOGGER.error("Couldn't get clients from database.");
-            return new ArrayList<>();
         }
+        return new ArrayList<>();
     }
 
     @Override

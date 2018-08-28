@@ -302,7 +302,13 @@ public class FulfillDatabase {
         orderDao.insert(orders.get(0));
         orderDao.insert(orders.get(1));
         orderDao.insert(orders.get(2));
+    }
 
+
+    @Test
+    public void testFindCreated() throws DaoException {
+        List<Order> orders = orderDao.findByStatus(Status.CREATED);
+        Assert.assertTrue(orders.size() > 0);
     }
 
     @Test

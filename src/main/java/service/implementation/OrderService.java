@@ -4,6 +4,8 @@ import dao.IOrderDao;
 import dao.exceptions.DaoException;
 import dao.implementation.OrderDaoImpl;
 import entities.Order;
+import entities.Status;
+import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IOrderService;
@@ -29,13 +31,43 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findOrders() {
+    public List<Order> findAll() {
         try {
             return orderDao.findAll();
         } catch (DaoException e) {
-            LOGGER.error("Could not get all orders");
-            return new ArrayList<>();
+            LOGGER.error("Could not get all orders", e.getCause());
         }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<Order> findByClient(User client) {
+        try {
+            return orderDao.findByClient(client);
+        } catch (DaoException e) {
+            LOGGER.error("Could not get orders by client " + client, e.getCause());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<Order> findByDriver(User driver) {
+        try {
+            return orderDao.findByDriver(driver);
+        } catch (DaoException e) {
+            LOGGER.error("Could not get orders by driver " + driver, e.getCause());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<Order> findCreated() {
+        try {
+            return orderDao.findByStatus(Status.CREATED);
+        } catch (DaoException e) {
+            LOGGER.error("Could not get just created orders", e.getCause());
+        }
+        return new ArrayList<>();
     }
 
 }

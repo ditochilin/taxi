@@ -36,18 +36,10 @@ public class Controller extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String page = null;
+        String page = "";
         try {
-            String pageName = (String) request.getAttribute("page");
-            String pageNameParam = request.getParameter("page");
-            if (pageName != null) {
-                page = Config.getProperty(pageName);
-            }else if(pageNameParam!=null) {
-                page = Config.getProperty(pageNameParam);
-            }else {
-                ICommand command = controllerHelper.getCommand(request);
-                page = command.execute(request, response);
-            }
+            ICommand command = controllerHelper.getCommand(request);
+            page = command.execute(request, response);
             LOGGER.info("Servlet forward to page " + page);
         } catch (ServletException e) {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);

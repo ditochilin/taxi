@@ -30,18 +30,29 @@ public class ControllerHelper  {
     private ControllerHelper() {
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
+        commands.put("openRegistration", new OpenRegistrationCommand());
         commands.put("registration", new RegistrationCommand());
         commands.put("editOrder", new EditOrderCommand());
- //       commands.put("showOrders", new GetOrdersCommand());
+        commands.put("openAdministration", new OpenAdministrationCommand());
+        commands.put("openListTaxis", new OpenListTaxisCommand());
+        commands.put("openListOrders", new OpenListOrdersCommand());
         commands.put("changeLocale", new ChangeLocale());
     }
 
     public ICommand getCommand(HttpServletRequest request) {
+        if(ifMakeLogout(request)){
+            return new LogoutCommand();
+        }
         ICommand command = commands.get(request.getParameter("command"));
         if (command == null) {
             command = new EmptyCommand();
         }
         return command;
+    }
+
+    private boolean ifMakeLogout(HttpServletRequest request) {
+        return request.getAttribute("redirect")
+                .equals(Config.getProperty(Config.LOGIN));
     }
 
     public static String getParamiterInUTF8(HttpServletRequest request, String param){

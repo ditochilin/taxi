@@ -1,8 +1,8 @@
 package command;
 
-import dao.exceptions.DaoException;
 import service.IOrderService;
 import service.implementation.OrderService;
+import service.implementation.TaxiService;
 import utils.Config;
 
 import javax.servlet.ServletException;
@@ -10,13 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GetOrdersCommand implements ICommand {
+public class OpenListOrdersCommand implements ICommand {
 
     private static IOrderService orderService = OrderService.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse responce) {
-        request.setAttribute("orders",orderService.findOrders());
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+
+        request.setAttribute("orderList", orderService.findAll());
+
         return Config.getProperty(Config.ORDERS);
     }
 }

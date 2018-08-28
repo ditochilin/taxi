@@ -26,4 +26,5 @@ public interface IUserService {
     boolean addNewUser(User user);
 
     boolean suchPhoneIsPresent(String phone);
+
 }
