@@ -23,7 +23,7 @@ public interface IUserService extends IService<User> {
 
     boolean suchNameIsPresent(String userName);
 
-    boolean addNewUser(User user);
+   // boolean addNewUser(User user);
 
     boolean suchPhoneIsPresent(String phone);
 

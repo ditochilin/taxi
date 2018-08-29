@@ -37,4 +37,9 @@ public class ShareService implements IShareService {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean update(Share entityDTO, Long id) {
+        return false;
+    }
 }

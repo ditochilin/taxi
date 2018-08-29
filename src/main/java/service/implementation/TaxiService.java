@@ -48,6 +48,12 @@ public class TaxiService implements ITaxiService {
     }
 
     @Override
+    public boolean update(Taxi entityDTO, Long id) {
+
+        return false;
+    }
+
+    @Override
     public List<Taxi> getByDriver(User driver) {
         try {
             return taxiDao.findByUser(driver);

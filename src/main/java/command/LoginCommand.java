@@ -62,11 +62,11 @@ public class LoginCommand implements ICommand {
 
     private String doCorrectRedirection(Role role, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (role.getRoleName()) {
-            case "Driver":
+            case "DRIVER":
                 return commandOpenOrders.execute(request, response);
-            case "Client":
+            case "CLIENT":
                 return commandEditOrder.execute(request, response);
-            case "Admin":
+            case "ADMIN":
                 return commandOpenAdmin.execute(request, response);
             default:
                 return Config.getProperty(Config.LOGIN);

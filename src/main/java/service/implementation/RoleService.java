@@ -45,6 +45,11 @@ public class RoleService implements IRoleService {
     }
 
     @Override
+    public boolean update(Role entityDTO, Long id) {
+        return false;
+    }
+
+    @Override
     public Role getByName(String roleName) {
         try {
             return roleDao.findByName(roleName);

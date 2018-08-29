@@ -41,6 +41,11 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public boolean update(Order entityDTO, Long id) {
+        return false;
+    }
+
+    @Override
     public List<Order> getByClient(User client) {
         try {
             return orderDao.findByClient(client);

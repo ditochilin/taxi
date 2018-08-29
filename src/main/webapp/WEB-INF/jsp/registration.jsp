@@ -20,8 +20,8 @@
                 </th>
                 <th>
                     <select name='role'>
-                        <option value="Driver"><fmt:message key="driverUser" bundle="${locale}"/></option>
-                        <option value="Client"><fmt:message key="client" bundle="${locale}"/></option>
+                        <option value="DRIVER"><fmt:message key="driverUser" bundle="${locale}"/></option>
+                        <option value="CLIENT"><fmt:message key="client" bundle="${locale}"/></option>
                     </select>
                 </th>
             </tr>

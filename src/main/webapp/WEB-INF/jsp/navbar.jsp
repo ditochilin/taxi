@@ -10,7 +10,7 @@
             <c:when test="${sessionScope.user != null}">
                 <li>
                     <c:choose>
-                        <c:when test="${sessionScope.role == 'Admin'}">
+                        <c:when test="${sessionScope.role == 'ADMIN'}">
                             <a href="${pageContext.request.contextPath}/Controller?command=openAdministration">
                                 <span><fmt:message key="Admin panel" bundle="${locale}"/></span>
                             </a>
@@ -19,7 +19,7 @@
                 </li>
                 <li>
                     <c:choose>
-                        <c:when test="${sessionScope.role == 'Driver' || sessionScope.role == 'Admin'}">
+                        <c:when test="${sessionScope.role == 'DRIVER' || sessionScope.role == 'ADMIN'}">
                             <a href="${pageContext.request.contextPath}/Controller?command=openListTaxis">
                                 <span><fmt:message key="vehicles" bundle="${locale}"/></span>
                             </a>

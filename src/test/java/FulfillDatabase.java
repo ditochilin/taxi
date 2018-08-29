@@ -66,13 +66,13 @@ public class FulfillDatabase {
 
     public void fulfillRoles() {
         roles = Arrays.asList(new Role(), new Role(), new Role());
-        roles.get(0).setRoleName("Admin");
+        roles.get(0).setRoleName("ADMIN");
         roles.get(0).setDescription("Administrator");
 
-        roles.get(1).setRoleName("Client");
+        roles.get(1).setRoleName("CLIENT");
         roles.get(1).setDescription("Client (buyer)");
 
-        roles.get(2).setRoleName("Driver");
+        roles.get(2).setRoleName("DRIVER");
         roles.get(2).setDescription("Taxi driver");
     }
 
@@ -80,7 +80,7 @@ public class FulfillDatabase {
         users = Arrays.asList(new User(), new User(), new User(), new User());
         User currentUser = users.get(0);
         if (userDao.findByPhone("0672184141").isEmpty()) {
-            currentUser.setRole(roleDao.findByName("Admin"));
+            currentUser.setRole(roleDao.findByName("ADMIN"));
             currentUser.setUserName("root");
             currentUser.setPassword("root");
             currentUser.setPhone("0672184141");
@@ -88,7 +88,7 @@ public class FulfillDatabase {
 
         User currentUser1 = users.get(1);
         if (userDao.findByPhone("0502225547").isEmpty()) {
-            currentUser1.setRole(roleDao.findByName("Client"));
+            currentUser1.setRole(roleDao.findByName("CLIENT"));
             currentUser1.setUserName("Alex");
             currentUser1.setPassword("root");
             currentUser1.setPhone("0502225547");
@@ -96,14 +96,14 @@ public class FulfillDatabase {
 
         User currentUser2 = users.get(2);
         if (userDao.findByPhone("0678124422").isEmpty()) {
-            currentUser2.setRole(roleDao.findByName("Driver"));
+            currentUser2.setRole(roleDao.findByName("DRIVER"));
             currentUser2.setUserName("Ivan");
             currentUser2.setPassword("root");
             currentUser2.setPhone("0678124422");
         }
         User currentUser3 = users.get(3);
         if (userDao.findByPhone("0679514720").isEmpty()) {
-            currentUser3.setRole(roleDao.findByName("Driver"));
+            currentUser3.setRole(roleDao.findByName("DRIVER"));
             currentUser3.setUserName("Николай");
             currentUser3.setPassword("root");
             currentUser3.setPhone("0679514720");
@@ -224,7 +224,7 @@ public class FulfillDatabase {
 
     @Test
     public void testFindRoleById() throws NoSuchEntityException, DaoException {
-        Role role = roleDao.findByName("Client");
+        Role role = roleDao.findByName("CLIENT");
         Assert.assertEquals(roleDao.findById(role.getId()), role);
     }
 
@@ -259,7 +259,7 @@ public class FulfillDatabase {
 
     @Test
     public void findByRole() throws NoSuchEntityException, DaoException {
-        List<User> users = userDao.findByRole(roleDao.findByName("Admin"));
+        List<User> users = userDao.findByRole(roleDao.findByName("ADMIN"));
         Assert.assertEquals(users.size(), 1);
     }
 
@@ -369,9 +369,9 @@ public class FulfillDatabase {
 
     //@Test
     public void testDeleteRoles() throws NoSuchEntityException, DaoException {
-        roleDao.delete(roleDao.findByName("Client"));
-        roleDao.delete(roleDao.findByName("Admin"));
-        roleDao.delete(roleDao.findByName("Driver"));
+        roleDao.delete(roleDao.findByName("CLIENT"));
+        roleDao.delete(roleDao.findByName("ADMIN"));
+        roleDao.delete(roleDao.findByName("DRIVER"));
     }
 
     //@Test

@@ -58,7 +58,7 @@ public class TestDAO {
             List<Role> roles = roleDao.findAll();
             roles.stream().forEach(LOGGER::debug);
 
-            LOGGER.debug("Find by name 'Client':" + roleDao.findByName("Client"));
+            LOGGER.debug("Find by name 'CLIENT':" + roleDao.findByName("CLIENT"));
 
             roleDao.delete(role1);
             roleDao.delete(role2);

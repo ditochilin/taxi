@@ -1,5 +1,7 @@
 package service;
 
+import entities.User;
+
 import java.util.List;
 
 /**
@@ -12,4 +14,5 @@ public interface IService<T> {
 
     List<T> getAll();
 
+    boolean update(T entityDTO, Long id);
 }

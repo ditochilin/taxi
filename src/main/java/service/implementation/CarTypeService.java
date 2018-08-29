@@ -1,10 +1,8 @@
 package service.implementation;
 
 import dao.ICarTypeDao;
-import dao.IOrderDao;
 import dao.exceptions.DaoException;
 import dao.implementation.CarTypeDaoImpl;
-import dao.implementation.OrderDaoImpl;
 import entities.CarType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,5 +36,10 @@ public class CarTypeService implements ICarTypeService {
             LOGGER.error("Could not get all car types", e.getCause());
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean update(CarType entityDTO, Long id) {
+        return false;
     }
 }
