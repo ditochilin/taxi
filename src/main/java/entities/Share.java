@@ -27,12 +27,12 @@ public class Share implements Serializable {
     public Share() {
     }
 
-    public boolean isOn() {
+    public boolean getIsOn() {
         return isOn;
     }
 
-    public void setOn(boolean isOn) {
-        this.isOn = isOn;
+    public void setIsOn(boolean on) {
+        isOn = on;
     }
 
     public Long getId() {

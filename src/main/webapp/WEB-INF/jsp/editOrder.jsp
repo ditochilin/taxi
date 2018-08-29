@@ -21,7 +21,7 @@
     <input type="hidden" name="command" value="editOrder"/>
     <form method="post" action="Controller" name="editOrder">
         <table>
-            </h3><fmt:message key="Edit client's order"/>
+            <p><fmt:message key="Edit client's order"/></p>
             <tr>
                 <th>Status</th>
                 <th><select name='statusList'>
@@ -73,11 +73,15 @@
             </tr>
             <tr>
                 <th>Cost</th>
-                <th><input type="cost" name="cost"></th>
+                <th><input type="number" name="cost"></th>
             </tr>
             <tr>
                 <th>Feed time</th>
                 <th><input type="feedTime" name="feedTime"></th>
+            </tr>
+            <tr>
+                <th>Waiting Time</th>
+                <th><input type="number" name="waitingTime"></th>
             </tr>
         </table>
     </form>

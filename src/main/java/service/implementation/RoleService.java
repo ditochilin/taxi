@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import service.IRoleService;
 import service.exceptions.ServiceException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,16 +35,17 @@ public class RoleService implements IRoleService {
         return instance;
     }
 
-    public List<Role> findAll() throws ServiceException {
+    public List<Role> getAll() {
         try {
             return roleDao.findAll();
         } catch (DaoException e) {
-            throw new ServiceException("Could not get all roles", e);
+            LOGGER.error("Could not get all roles",e.getCause());
         }
+        return new ArrayList<>();
     }
 
     @Override
-    public Role findByName(String roleName) {
+    public Role getByName(String roleName) {
         try {
             return roleDao.findByName(roleName);
         } catch (DaoException | NoSuchEntityException e) {

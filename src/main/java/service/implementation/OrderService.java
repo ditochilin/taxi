@@ -31,7 +31,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<Order> getAll() {
         try {
             return orderDao.findAll();
         } catch (DaoException e) {
@@ -41,7 +41,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findByClient(User client) {
+    public List<Order> getByClient(User client) {
         try {
             return orderDao.findByClient(client);
         } catch (DaoException e) {
@@ -51,7 +51,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findByDriver(User driver) {
+    public List<Order> getByDriver(User driver) {
         try {
             return orderDao.findByDriver(driver);
         } catch (DaoException e) {
@@ -61,7 +61,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> findCreated() {
+    public List<Order> getCreated() {
         try {
             return orderDao.findByStatus(Status.CREATED);
         } catch (DaoException e) {

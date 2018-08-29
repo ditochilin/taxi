@@ -10,15 +10,12 @@ import java.util.List;
  *
  * @author Dmitry Tochilin
  */
-public interface IOrderService {
+public interface IOrderService extends IService<Order> {
 
-    List<Order> findAll();
+    List<Order> getByClient(User user);
 
-    List<Order> findByClient(User user);
+    List<Order> getByDriver(User driver);
 
-    List<Order> findByDriver(User driver);
-
-    List<Order> findCreated();
-
+    List<Order> getCreated();
 
 }

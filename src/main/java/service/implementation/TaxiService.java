@@ -28,7 +28,7 @@ public class TaxiService implements ITaxiService {
     }
 
     @Override
-    public List<Taxi> findFreeTaxis() {
+    public List<Taxi> getFreeTaxis() {
         try {
             return taxiDao.findAllBusyFree(false);
         } catch (DaoException e) {
@@ -38,7 +38,7 @@ public class TaxiService implements ITaxiService {
     }
 
     @Override
-    public List<Taxi> findAll() {
+    public List<Taxi> getAll() {
         try {
             return taxiDao.findAll();
         } catch (DaoException e) {
@@ -48,7 +48,7 @@ public class TaxiService implements ITaxiService {
     }
 
     @Override
-    public List<Taxi> findByDriver(User driver) {
+    public List<Taxi> getByDriver(User driver) {
         try {
             return taxiDao.findByUser(driver);
         } catch (DaoException e) {

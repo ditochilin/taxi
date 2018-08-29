@@ -1,0 +1,25 @@
+package command;
+
+import service.IShareService;
+import service.implementation.ShareService;
+import utils.Config;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class OpenListSharesCommand implements ICommand {
+
+    private static IShareService shareService;
+
+    public OpenListSharesCommand() {
+        shareService = ShareService.getInstance();
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+
+        request.setAttribute("shareList",shareService.getAll());
+        request.setAttribute("itemMenuSelected","shares");
+
+        return Config.getProperty(Config.ADMIN);
+    }
+}

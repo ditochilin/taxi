@@ -130,21 +130,21 @@ public class FulfillDatabase {
 
         Share share1 = shares.get(0);
         share1.setShareName("loyalry_10");
-        share1.setOn(true);
+        share1.setIsOn(true);
         share1.setSum(BigDecimal.valueOf(150));
         share1.setPercent(10);
         share1.setIsLoyalty(true);
 
         Share share2 = shares.get(1);
         share2.setShareName("Share_5");
-        share2.setOn(true);
+        share2.setIsOn(true);
         share2.setSum(BigDecimal.valueOf(100));
         share2.setPercent(5);
         share2.setIsLoyalty(false);
 
         Share share3 = shares.get(2);
         share3.setShareName("Share_15");
-        share3.setOn(true);
+        share3.setIsOn(true);
         share3.setSum(BigDecimal.valueOf(250));
         share3.setPercent(15);
         share3.setIsLoyalty(true);

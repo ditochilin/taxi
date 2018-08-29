@@ -10,7 +10,7 @@ import java.util.List;
  * Service for working with user
  * @author Dmitry Tochilin
  */
-public interface IUserService {
+public interface IUserService extends IService<User> {
 
     /**
      * Check if the user is authenticated

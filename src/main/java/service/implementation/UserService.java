@@ -97,6 +97,16 @@ public class UserService implements IUserService {
         return false;
     }
 
+    @Override
+    public List<User> getAll() {
+        try {
+            return userDao.findAll();
+        } catch (DaoException e) {
+            LOGGER.error("Couldn't get all users from database.");
+        }
+        return new ArrayList<>();
+    }
+
     private boolean checkPassword(User user, User userByName) {
         if(!user.getPassword().equals(userByName.getPassword())){
             LOGGER.log(Level.INFO, String.format("Password is not correct entered for %s", user.getUserName()));

@@ -33,7 +33,11 @@ public class ControllerHelper  {
         commands.put("openRegistration", new OpenRegistrationCommand());
         commands.put("registration", new RegistrationCommand());
         commands.put("editOrder", new EditOrderCommand());
+        commands.put("editUser", new EditUserCommand());
         commands.put("openAdministration", new OpenAdministrationCommand());
+        commands.put("openListUsers", new OpenAdministrationCommand());   // the same with OpenAdministrationCommand()
+        commands.put("openListShares", new OpenListSharesCommand());
+        commands.put("openListCarTypes", new OpenListCarTypesCommand());
         commands.put("openListTaxis", new OpenListTaxisCommand());
         commands.put("openListOrders", new OpenListOrdersCommand());
         commands.put("changeLocale", new ChangeLocale());

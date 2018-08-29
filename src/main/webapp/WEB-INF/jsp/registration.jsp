@@ -3,7 +3,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="locale" var="locale"/>
-<fmt:setBundle basename="buttons" var="buttons"/>
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
@@ -69,9 +68,9 @@
             <tr>
                 <th>
                     <input type="submit" name="action" value="register"
-                           title="<fmt:message key="register" bundle="${buttons}"/>">
+                           title="<fmt:message key="register"/>">
                     <input type="submit" name="action" value="exit"
-                           title="<fmt:message key="exit" bundle="${buttons}"/>">
+                           title="<fmt:message key="exit"/>">
                 </th>
             </tr>
         </table>

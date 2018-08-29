@@ -14,7 +14,7 @@ public class ShareExtractor implements IExtractor<Share> {
         share.setIsLoyalty(resultSet.getBoolean("is_loyalty"));
         share.setSum(resultSet.getBigDecimal("sum"));
         share.setPercent(resultSet.getFloat("percent"));
-        share.setOn(resultSet.getBoolean("is_on"));
+        share.setIsOn(resultSet.getBoolean("is_on"));
         return share;
     }
 }

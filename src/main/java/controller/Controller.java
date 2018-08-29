@@ -55,8 +55,7 @@ public class Controller extends HttpServlet {
     }
 
     private String catchHandler(Exception e, HttpServletRequest request, String message) {
-        //todo delete printStackTrace
-        e.printStackTrace();
+        LOGGER.error(message);
         request.setAttribute("messageError", Messenger.getProperty(message));
         return Config.getProperty(Config.ERROR);
     }

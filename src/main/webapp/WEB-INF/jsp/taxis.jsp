@@ -24,8 +24,8 @@
             <tr>
                 <td><c:out value="${taxi.driver}"/></td>
                 <td><c:out value="${taxi.carType}"/></td>
-                <td><c:out value="${taxi.carNumber}"/></td>
                 <td><c:out value="${taxi.carName}"/></td>
+                <td><c:out value="${taxi.carNumber}"/></td>
                 <td><c:out value="${taxi.busy}"/></td>
             </tr>
         </c:forEach>

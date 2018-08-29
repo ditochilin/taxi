@@ -82,7 +82,7 @@ public class TestDAO {
             share1.setIsLoyalty(true);
             share1.setSum(BigDecimal.valueOf(200));
             share1.setPercent(6.5f);
-            share1.setOn(false);
+            share1.setIsOn(false);
             shareDao.update(share1);
 
             Share shareTemp = shareDao.findById(share1.getId());
@@ -186,11 +186,11 @@ public class TestDAO {
 //            OrderDao.insert(Order3);
 //
 //            User testDriver = userDao.findByPhone("80672229911").get(0);
-//            List<Order> orders  = OrderDao.findByDriver(testDriver);
+//            List<Order> orders  = OrderDao.getByDriver(testDriver);
 //            orders.stream().forEach(LOGGER::debug);
 //
 //            User testClient = userDao.findByPhone("80672224455").get(0);
-//            List<Order> ordersClient  = OrderDao.findByClient(testClient);
+//            List<Order> ordersClient  = OrderDao.getByClient(testClient);
 //            ordersClient.stream().forEach(LOGGER::debug);
 //
 //            Order order = OrderDao.findById(Order1.getId());
@@ -216,21 +216,21 @@ public class TestDAO {
         shares[0].setIsLoyalty(true);
         shares[0].setSum(BigDecimal.valueOf(300));
         shares[0].setPercent(5.5f);
-        shares[0].setOn(false);
+        shares[0].setIsOn(false);
         shareDao.insert(shares[0]);
 
         shares[1].setShareName("Loyalty_3.5");
         shares[1].setIsLoyalty(true);
         shares[1].setSum(BigDecimal.valueOf(190));
         shares[1].setPercent(3.5f);
-        shares[1].setOn(true);
+        shares[1].setIsOn(true);
         shareDao.insert(shares[1]);
 
         shares[2].setShareName("Share_1.5");
         shares[2].setIsLoyalty(false);
         shares[2].setSum(BigDecimal.valueOf(150));
         shares[2].setPercent(1.5f);
-        shares[2].setOn(true);
+        shares[2].setIsOn(true);
         shareDao.insert(shares[2]);
     }
 

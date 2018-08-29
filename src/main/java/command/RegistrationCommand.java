@@ -51,7 +51,7 @@ public class RegistrationCommand implements ICommand {
             return Config.getProperty(Config.REGISTRATION);
         }
 
-        if (!userService.addNewUser(new User(phone, password, userName, roleService.findByName(roleName)))) {
+        if (!userService.addNewUser(new User(phone, password, userName, roleService.getByName(roleName)))) {
             return Config.getProperty(Config.ERROR);
         }
 

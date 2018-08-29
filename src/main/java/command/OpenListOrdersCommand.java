@@ -17,7 +17,7 @@ public class OpenListOrdersCommand implements ICommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        request.setAttribute("orderList", orderService.findAll());
+        request.setAttribute("orderList", orderService.getAll());
 
         return Config.getProperty(Config.ORDERS);
     }

@@ -10,12 +10,10 @@ import java.util.List;
  *
  * @author Dmitry Tochilin
  */
-public interface ITaxiService {
+public interface ITaxiService extends IService<Taxi> {
 
-    List<Taxi> findFreeTaxis();
+    List<Taxi> getFreeTaxis();
 
-    List<Taxi> findAll();
-
-    List<Taxi> findByDriver(User driver);
+    List<Taxi> getByDriver(User driver);
 
 }

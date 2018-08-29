@@ -16,7 +16,7 @@ public class OpenListTaxisCommand implements ICommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        request.setAttribute("taxiList",taxiService.findAll());
+        request.setAttribute("taxiList",taxiService.getAll());
 
         return Config.getProperty(Config.TAXIS);
     }

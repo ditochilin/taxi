@@ -1,6 +1,7 @@
 package command;
 
 import entities.Status;
+import utils.Config;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ public class EditOrderCommand implements ICommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("statusList", Status.values());
-        return null;
+
+        return Config.getProperty(Config.EDIT_ORDER);
     }
 }
