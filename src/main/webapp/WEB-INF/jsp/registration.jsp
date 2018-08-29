@@ -19,7 +19,7 @@
                     <span/><fmt:message key="role" bundle="${locale}"/>
                 </th>
                 <th>
-                    <select name='role'>
+                    <select name='roleName'>
                         <option value="DRIVER"><fmt:message key="driverUser" bundle="${locale}"/></option>
                         <option value="CLIENT"><fmt:message key="client" bundle="${locale}"/></option>
                     </select>
@@ -30,7 +30,7 @@
                     <span><fmt:message key="login" bundle="${locale}"/></span>
                 </th>
                 <th>
-                    <input type="text" name="login"/>
+                    <input type="text" name="userName"/>
                 </th>
             </tr>
             <tr>

@@ -14,5 +14,5 @@ public interface IService<T> {
 
     List<T> getAll();
 
-    boolean update(T entityDTO, Long id);
+    boolean update(T entityDTO, Long id) throws Exception;
 }

@@ -20,13 +20,6 @@
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 
     <c:set var="isThisEdition" value="${not empty userDTO}"/>
-    <p style="color: red">
-        <c:if test="${not empty requestScope.errorMessage}">
-            <strong><fmt:message key="error" bundle="${locale}"/></strong> <fmt:message
-                key="${requestScope.errorMessage}"
-                bundle="${locale}"/><br>
-        </c:if>
-    </p>
 
     <form method="post" action="Controller" name="saveUser">
         <input type="hidden" name="command" value="saveUser"/>
@@ -51,7 +44,7 @@
                             <c:forEach var="roleItem" items="${roleList}">
                                 <c:choose>
                                     <c:when test="${roleItem eq userDTO.role}">
-                                        <option value="${userDTO.role}"
+                                        <option value="${userDTO.role.roleName}"
                                                 selected>${userDTO.role.roleName}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -63,7 +56,7 @@
                         <c:when test="${not empty roleList}">
                             <option selected disabled>select role</option>
                             <c:forEach var="role" items="${roleList}">
-                                <option value="${role}">${role.roleName}</option>
+                                <option value="${role.roleName}">${role.roleName}</option>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
@@ -88,6 +81,24 @@
                             <c:if test="${isThisEdition}}"> value="${userDTO.password}"</c:if>
                     />
                 </th>
+            </tr>
+            <tr>
+                <th>
+                    <span><fmt:message key="confirmPassword" bundle="${locale}"/></span>
+                </th>
+                <th>
+                    <input type="password" name="confirmPassword"/>
+                </th>
+            </tr>
+            <tr>
+            <tr>
+                <c:if test="${not empty requestScope.errors}">
+                    <c:forEach items="${requestScope.errors}" var="error">
+                        <strong><fmt:message key="error" bundle="${locale}"/></strong> <fmt:message key="${error}"
+                                                                                                    bundle="${locale}"/><br>
+                    </c:forEach>
+                </c:if>
+            </tr>
             </tr>
             <tr>
                 <th>

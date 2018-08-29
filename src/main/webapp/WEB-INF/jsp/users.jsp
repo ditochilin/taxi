@@ -5,10 +5,11 @@
 <fmt:setBundle basename="locale" var="locale"/>
 
 <div>
-    <c:if test="${not empty requestScope.operationMessage}">
-        <strong><fmt:message key="operationMessage" bundle="${locale}"/></strong> <fmt:message key="${requestScope.operationMessage}"
-                                                                                    bundle="${locale}"/><br>
-    </c:if>
+    <p style="color: red">
+        <c:if test="${not empty requestScope.messageBeforeLogin}">
+            <span><fmt:message key="${messageBeforeLogin}"/></span>
+        </c:if>
+    </p>
     <span><fmt:message key="List of users" bundle="${locale}"/></span>
     <form name="addUser" method="post">
         <input type="hidden" name="command" value="editUser"/>

@@ -117,7 +117,7 @@ public class UserService /*extends AbstractService<User>*/ implements IUserServi
     }
 
     @Override
-    public boolean update(User entityDTO, Long id) {
+    public boolean update(User entityDTO, Long id) throws Exception {
         try {
             if (isEntityDTONew(entityDTO, id)) {
                 userDao.insert(entityDTO);
@@ -126,9 +126,9 @@ public class UserService /*extends AbstractService<User>*/ implements IUserServi
             }
             return true;
         } catch (DaoException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            LOGGER.error("Couldn't get update/insert entity database.");
+            LOGGER.error("Couldn't get update/insert entity database. "+e.getCause());
+            throw new Exception(e);
         }
-        return false;
     }
 
     private boolean isEntityDTONew(User userDTO, Long id) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
