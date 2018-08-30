@@ -13,14 +13,14 @@
                 <td><c:out value="${carType.typeName}"/></td>
                 <td><c:out value="${carType.price}"/></td>
                 <td>
-                    <form name="carTypeEdit" method="post">
+                    <form action="/Controller" name="carTypeEdit" method="post">
                         <input type="hidden" name="command" value="editCarType"/>
                         <input type="hidden" name="carTypeId" value="${carType.id}"/>
                         <button type="submit" class="smallbutton">
                             <fmt:message key="editBtn"/>
                         </button>
                     </form>
-                    <form name="carTypeRemove" method="post">
+                    <form action="/Controller" name="carTypeRemove" method="post">
                         <input type="hidden" name="command" value="removeCarType"/>
                         <input type="hidden" name="carTypeId" value="${carType.id}"/>
                         <button type="submit" class="smallbutton">

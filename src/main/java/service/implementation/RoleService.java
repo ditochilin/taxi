@@ -7,6 +7,7 @@ import dao.implementation.RoleDaoImpl;
 import entities.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.AbstractService;
 import service.IRoleService;
 import service.exceptions.ServiceException;
 
@@ -18,13 +19,14 @@ import java.util.List;
  *
  * @author Dmitry Tochilin
  */
-public class RoleService implements IRoleService {
+public class RoleService extends AbstractService<Role> implements IRoleService {
 
     private static final Logger LOGGER = LogManager.getLogger(RoleService.class.getName());
     private static IRoleDao roleDao;
     private static RoleService instance;
 
     private RoleService() {
+        dao = RoleDaoImpl.getInstance();
         roleDao = RoleDaoImpl.getInstance();
     }
 
@@ -45,8 +47,23 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public boolean update(Role entityDTO, Long id) {
+    public boolean update(Role entityDTO, Long id, StringBuilder msg) {
         return false;
+    }
+
+    @Override
+    public Role getById(Long id) {
+        return null;
+    }
+
+    @Override
+    public void remove(Long id) throws Exception {
+        try {
+            roleDao.delete(id);
+        } catch (DaoException e) {
+            LOGGER.error("Could not remove user.", e.getCause());
+            throw new Exception(e);
+        }
     }
 
     @Override

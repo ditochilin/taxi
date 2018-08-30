@@ -11,22 +11,23 @@ import entities.User;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.AbstractService;
 import service.IUserService;
 import service.exceptions.IncorrectPassword;
 import service.exceptions.ServiceException;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService /*extends AbstractService<User>*/ implements IUserService {
+public class UserService extends AbstractService<User> implements IUserService {
 
     private static final Logger LOGGER = LogManager.getLogger(UserService.class.getName());
     private static UserService instance;
-    private static IUserDao userDao;
     private static IRoleDao roleDao;
+    private static IUserDao userDao;
 
     private UserService() {
+        dao = UserDaoImpl.getInstance();
         userDao = UserDaoImpl.getInstance();
         roleDao = RoleDaoImpl.getInstance();
     }
@@ -69,24 +70,19 @@ public class UserService /*extends AbstractService<User>*/ implements IUserServi
     }
 
     @Override
-    public boolean suchNameIsPresent(String userName) {
+    public List<User> getUsersByName(String userName) {
         try {
-            return !userDao.findByName(userName).isEmpty();
+            return userDao.findByName(userName);
         } catch (DaoException e) {
             LOGGER.error("Could not find user by name " + userName, e);
         }
-        return false;
+        return new ArrayList<>();
     }
 
-//    @Override
-//    public boolean addNewUser(User user) {
-//        try {
-//            return userDao.insert(user) > 0;
-//        } catch (DaoException e) {
-//            LOGGER.error("Could not create new user:"+user,e.getCause());
-//        }
-//        return false;
-//    }
+    @Override
+    public boolean suchNameIsPresent(String userName) {
+        return !getUsersByName(userName).isEmpty();
+    }
 
     @Override
     public boolean suchPhoneIsPresent(String phone) {
@@ -109,35 +105,42 @@ public class UserService /*extends AbstractService<User>*/ implements IUserServi
     @Override
     public List<User> getAll() {
         try {
-            return userDao.findAll();
-        } catch (DaoException e) {
+            return getAllEntities();
+        } catch (Exception e) {
             LOGGER.error("Couldn't get all users from database.");
         }
         return new ArrayList<>();
     }
 
     @Override
-    public boolean update(User entityDTO, Long id) throws Exception {
+    public boolean update(User entityDTO, Long id, StringBuilder msg) {
         try {
-            if (isEntityDTONew(entityDTO, id)) {
-                userDao.insert(entityDTO);
-            } else {
-                userDao.update(entityDTO);
-            }
+            updateEntity(entityDTO, id, msg);
             return true;
-        } catch (DaoException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            LOGGER.error("Couldn't get update/insert entity database. "+e.getCause());
+        } catch (Exception e) {
+            LOGGER.error("Could not update/insert user.", e.getCause());
+        }
+        return false;
+    }
+
+    @Override
+    public User getById(Long id) {
+        try {
+            return getEntityById(id);
+        } catch (Exception e) {
+            LOGGER.error("Couldn't get all users from database.", e.getCause());
+        }
+        return null;
+    }
+
+    @Override
+    public void remove(Long id) throws Exception {
+        try {
+            userDao.delete(id);
+        } catch (DaoException e) {
+            LOGGER.error("Could not remove user.", e.getCause());
             throw new Exception(e);
         }
     }
 
-    private boolean isEntityDTONew(User userDTO, Long id) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Class clazz = userDTO.getClass();
-        Long idCurrent = (Long) clazz.getMethod("getId").invoke(userDTO);
-        if (idCurrent == null && id != null) {
-            clazz.getMethod("setId", Long.class).invoke(userDTO, id);
-            return false;
-        }
-        return true;
-    }
 }

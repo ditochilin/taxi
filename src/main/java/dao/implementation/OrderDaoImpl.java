@@ -67,8 +67,13 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
 
     @Override
     public Order findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->
-                findById(FIND_ALL, "id_order", id, extractor, enricher));
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Order> orders = findBy(FIND_ALL, "id_order", id, extractor, enricher);
+            if (orders.isEmpty()) {
+                return null;
+            }
+            return orders.get(0);
+        });
     }
 
     @Override
@@ -99,11 +104,11 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     public Long insert(Order order) throws DaoException {
         Long id = TransactionManagerImpl.doInTransaction(() -> {
                     checkOrderBeforeInsert(order);
+                    Taxi taxi = order.getTaxi();
                     Long id_order = insertInTransaction(order, INSERT, propSetter);
                     if (!order.getShares().isEmpty()) {
                         updateShares(order);
                     }
-                    Taxi taxi = order.getTaxi();
                     if (taxi != null) {
                         taxiDao.turnBusynessInTransaction(taxi, order.getStatus().equals(Status.INWORK));
                     }
@@ -131,11 +136,11 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     @Override
     public Order update(Order order) throws DaoException {
         Order newOrder = TransactionManagerImpl.doInTransaction(() -> {
+            Taxi taxi = order.getTaxi();
             Order updatedOrder = updateInTransaction(order, UPDATE, propSetter);
             if (!order.getShares().isEmpty()) {
                 updateShares(order);
             }
-            Taxi taxi = order.getTaxi();
             if (taxi != null) {
                 taxiDao.turnBusynessInTransaction(taxi, order.getStatus().equals(Status.INWORK));
             }
@@ -146,33 +151,31 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     }
 
     private void updateShares(Order order) throws DaoException {
-        deleteShares(order);
+        deleteShares(order.getId());
         insertShares(order);
     }
 
     @Override
-    public boolean delete(Order order) throws DaoException {
+    public boolean delete(Long id) throws DaoException {
         boolean success = TransactionManagerImpl.doInTransaction(() -> {
-            deleteShares(order);
-            if (order.getTaxi() != null) {
-                taxiDao.turnBusynessInTransaction(order.getTaxi(), false);
-            }
-            return deleteInTransaction(order, DELETE);
+            Order order = findById(id);
+            taxiDao.turnBusynessInTransaction(order.getTaxi(), false);
+            deleteShares(id);
+            return deleteInTransaction(id, DELETE);
         });
-        LOGGER.log(Level.INFO, "Order has been deleted: " + order);
+        LOGGER.log(Level.INFO, "Order has been deleted, id: " + id);
         return success;
     }
 
     /**
      * delete related with order rows in transit orders_shares table
      *
-     * @param order - order for clear
+     * @param id - id of order for clear
      */
-    private void deleteShares(Order order) throws DaoException {
-        if (order.getShares().isEmpty()) {
+    private void deleteShares(Long id) throws DaoException {
+        if (id == null) {
             return;
         }
-        Long id = order.getId();
         try (PreparedStatement statement =
                      createStatement(getConnection(), DELETE_TRANSIT_SHAREORDER, "id_order", id)
         ) {

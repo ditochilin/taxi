@@ -2,8 +2,8 @@ package dao;
 
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
+import entities.CarType;
 import entities.Role;
-import entities.User;
 
 import java.util.List;
 

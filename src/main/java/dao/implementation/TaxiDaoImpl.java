@@ -59,8 +59,13 @@ public class TaxiDaoImpl extends AbstractDao<Taxi> implements ITaxiDao {
 
     @Override
     public Taxi findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
-                findById(FIND_ALL, "id_taxi", id, extractor, enricher)));
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Taxi> taxis = findBy(FIND_ALL, "id_taxi", id, extractor, enricher);
+            if (taxis.isEmpty()) {
+                return null;
+            }
+            return taxis.get(0);
+        });
     }
 
     @Override
@@ -86,12 +91,15 @@ public class TaxiDaoImpl extends AbstractDao<Taxi> implements ITaxiDao {
     }
 
     @Override
-    public boolean delete(Taxi taxi) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(taxi, DELETE));
+    public boolean delete(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(id, DELETE));
     }
 
     @Override
     public Taxi turnBusynessInTransaction(Taxi taxi, boolean busy) throws DaoException {
+        if(taxi==null){
+            return null;
+        }
         taxi.setBusy(busy);
         return updateInTransaction(taxi, UPDATE, propSetter);
     }

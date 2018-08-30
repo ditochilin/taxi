@@ -9,4 +9,7 @@ import java.util.List;
  */
 public interface IShareService extends IService<Share> {
 
+    boolean suchShareIsPresent(String shareName);
+
+    boolean ifLoyaltyDoesAlreadyExist();
 }

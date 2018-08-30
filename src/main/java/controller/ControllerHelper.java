@@ -30,18 +30,27 @@ public class ControllerHelper  {
     private ControllerHelper() {
         commands.put("login", new LoginCommand());
         commands.put("logout", new LogoutCommand());
+        commands.put("changeLocale", new ChangeLocale());
         commands.put("openRegistration", new OpenRegistrationCommand());
         commands.put("registration", new RegistrationCommand());
+
+        commands.put("openListOrders", new OpenListOrdersCommand());
         commands.put("editOrder", new EditOrderCommand());
-        commands.put("editUser", new EditUserCommand());
-        commands.put("saveUser", new SaveUserCommand());
+
         commands.put("openAdministration", new OpenAdministrationCommand());
         commands.put("openListUsers", new OpenAdministrationCommand());   // the same with OpenAdministrationCommand()
+        commands.put("editUser", new EditUserCommand());
+        commands.put("removeUser", new RemoveUserCommand());
+        commands.put("saveUser", new SaveUserCommand());
+
         commands.put("openListShares", new OpenListSharesCommand());
+        commands.put("editShare", new EditShareCommand());
+        //commands.put("removeShare", new RemoveShareCommand());
+        commands.put("saveShare", new SaveShareCommand());
+
         commands.put("openListCarTypes", new OpenListCarTypesCommand());
+
         commands.put("openListTaxis", new OpenListTaxisCommand());
-        commands.put("openListOrders", new OpenListOrdersCommand());
-        commands.put("changeLocale", new ChangeLocale());
     }
 
     public ICommand getCommand(HttpServletRequest request) {
@@ -60,7 +69,7 @@ public class ControllerHelper  {
                 .equals(Config.getProperty(Config.LOGIN));
     }
 
-    public static String getParamiterInUTF8(HttpServletRequest request, String param){
+    public static String getParameterInUTF8(HttpServletRequest request, String param){
         String value = request.getParameter(param);
         byte[] bytes = value.getBytes(StandardCharsets.ISO_8859_1);
         return new String(bytes, StandardCharsets.UTF_8);

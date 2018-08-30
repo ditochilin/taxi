@@ -2,6 +2,7 @@ package dao;
 
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
+import entities.CarType;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ import java.util.List;
  */
 public interface IDao<T> {
 
-    T findById(Long id) throws DaoException, NoSuchEntityException;
-
     List<T> findAll() throws DaoException;
+
+    T findById(Long id) throws DaoException, NoSuchEntityException;
 
     Long insert(T newEntity) throws DaoException;
 
     T update(T entity) throws DaoException;
 
-    boolean delete(T entity) throws DaoException;
+    boolean delete(Long id) throws DaoException;
 }

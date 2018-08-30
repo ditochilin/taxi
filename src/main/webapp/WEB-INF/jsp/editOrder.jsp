@@ -19,7 +19,7 @@
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
     <input type="hidden" name="command" value="editOrder"/>
-    <form method="post" action="Controller" name="editOrder">
+    <form method="post" action="/Controller" name="editOrder">
         <table>
             <p><fmt:message key="Edit client's order"/></p>
             <tr>

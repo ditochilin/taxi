@@ -21,9 +21,11 @@ public interface IUserService extends IService<User> {
 
     List<User> getAllClients();
 
+    List<User> getUsersByName(String name);
+
     boolean suchNameIsPresent(String userName);
 
-   // boolean addNewUser(User user);
+   // boolean updateUser(User user);
 
     boolean suchPhoneIsPresent(String phone);
 

@@ -49,14 +49,14 @@ public class LoginCommand implements ICommand {
                 return doCorrectRedirection(role, request, response);
             }
         } catch (IncorrectPassword e) {
-            request.setAttribute("messageBeforeLogin", "Incorrect password");
+            request.setAttribute("resultMessage", "Incorrect password");
             return Config.getProperty(Config.LOGIN);
         } catch (ServiceException | ServletException | IOException e) {
             request.setAttribute("errorDescription", e.getMessage());
             return Config.getProperty(Config.ERROR);
         }
 
-        request.setAttribute("messageBeforeLogin", Messenger.getProperty(Messenger.LOGIN_ERROR));
+        request.setAttribute("resultMessage", Messenger.getProperty(Messenger.LOGIN_ERROR));
         return Config.getProperty(Config.LOGIN);
     }
 

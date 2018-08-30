@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
  */
 public class Config {
 
+    public static final String EDIT_SHARE = "EDIT_SHARE";
     private static final ResourceBundle resource  = ResourceBundle.getBundle("config");
     public static final String EDIT_USER = "EDIT_USER";
     public static final String ADMIN = "ADMIN";

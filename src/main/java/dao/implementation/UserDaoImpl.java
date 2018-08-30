@@ -11,6 +11,7 @@ import dao.extractor.UserExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.UserPropSetter;
 import dao.transactionManager.TransactionManagerImpl;
+import entities.CarType;
 import entities.Role;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
@@ -55,8 +56,13 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao {
 
     @Override
     public User findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> (
-                findById(FIND_ALL, "id_user", id, extractor, enricher)));
+        return TransactionManagerImpl.doInTransaction(() -> {
+                    List<User> users = findBy(FIND_ALL, "id_user", id, extractor, enricher);
+                    if(users.isEmpty()){
+                        return null;
+                    }
+                    return users.get(0);
+                });
     }
 
     @Override
@@ -88,7 +94,7 @@ public class UserDaoImpl extends AbstractDao<User> implements IUserDao {
     }
 
     @Override
-    public boolean delete(User user) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(user, DELETE));
+    public boolean delete(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(id, DELETE));
     }
 }

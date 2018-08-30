@@ -40,14 +40,14 @@
                 <td><c:out value="${order.feedTime}"/></td>
                 <td><c:out value="${order.waitingTime}"/></td>
                 <td>
-                    <form name="orderEdit" method="post">
+                    <form action="/Controller" name="orderEdit" method="post">
                         <input type="hidden" name="command" value="editOrder"/>
                         <input type="hidden" name="orderId" value="${order.id}"/>
                         <button type="submit" class="smallbutton">
                             <fmt:message key="editBtn" bundle="${locale}"/>
                         </button>
                     </form>
-                    <form name="orderRemove" method="post">
+                    <form action="/Controller" name="orderRemove" method="post">
                         <input type="hidden" name="command" value="removeOrder"/>
                         <input type="hidden" name="orderId" value="${order.id}"/>
                         <button type="submit" class="smallbutton">

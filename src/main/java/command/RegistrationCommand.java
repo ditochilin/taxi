@@ -1,5 +1,6 @@
 package command;
 
+import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.Config;
@@ -14,7 +15,7 @@ import java.io.IOException;
  *
  * @author Dmitry Tochilin
  */
-public class RegistrationCommand implements ICommand {
+public class RegistrationCommand extends AbstractCommand<User> implements ICommand {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationCommand.class.getName());
 
@@ -30,7 +31,7 @@ public class RegistrationCommand implements ICommand {
         }
 
         try {
-            return CommonMethods.addNewUser(request, response,
+            return updateUser(request, response,
                     new RegistrationCommand(),
                     new OpenLoginPageCommand());
         } catch (ServletException | IOException e) {

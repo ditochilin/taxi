@@ -52,7 +52,7 @@ public class TestDAO {
                 LOGGER.debug("Not found");
             }
             LOGGER.debug("Try to delete by id: " + role3.getId());
-            roleDao.delete(role3);
+            roleDao.delete(role3.getId());
 
             LOGGER.debug("Get all:");
             List<Role> roles = roleDao.findAll();
@@ -60,8 +60,8 @@ public class TestDAO {
 
             LOGGER.debug("Find by name 'CLIENT':" + roleDao.findByName("CLIENT"));
 
-            roleDao.delete(role1);
-            roleDao.delete(role2);
+            roleDao.delete(role1.getId());
+            roleDao.delete(role2.getId());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -94,7 +94,7 @@ public class TestDAO {
                 LOGGER.debug("Not found");
             }
             LOGGER.debug("Try to delete by id: " + share3.getId());
-            shareDao.delete(share3);
+            shareDao.delete(share3.getId());
 
 
             LOGGER.debug("Get all:");
@@ -105,8 +105,8 @@ public class TestDAO {
             List<Share> shareList = shareDao.findSharesByOrder(new Order());
             Assert.assertEquals(shareList.size(), 0);
 
-            shareDao.delete(share1);
-            shareDao.delete(share2);
+            shareDao.delete(share1.getId());
+            shareDao.delete(share2.getId());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -257,7 +257,7 @@ public class TestDAO {
                 LOGGER.debug("Not found");
             }
             LOGGER.debug("Try to delete by id: " + carType3.getId());
-            carTypeDao.delete(carType3);
+            carTypeDao.delete(carType3.getId());
 
 
             LOGGER.debug("Get all:");
@@ -266,8 +266,8 @@ public class TestDAO {
 
             LOGGER.debug("Find by name 'Sedan':" + carTypeDao.findByName("Sedan"));
 
-            carTypeDao.delete(carType1);
-            carTypeDao.delete(carType2);
+            carTypeDao.delete(carType1.getId());
+            carTypeDao.delete(carType2.getId());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -485,31 +485,31 @@ public class TestDAO {
 
     private void deleteRoles(List<Role> roles) throws DaoException {
         for (Role role : roles) {
-            roleDao.delete(role);
+            roleDao.delete(role.getId());
         }
     }
 
     private void deleteCarTypes(List<CarType> carTypes) throws DaoException {
         for (CarType carType : carTypes) {
-            carTypeDao.delete(carType);
+            carTypeDao.delete(carType.getId());
         }
     }
 
     private void deleteUsers(List<User> users) throws DaoException {
         for (User user : users) {
-            userDao.delete(user);
+            userDao.delete(user.getId());
         }
     }
 
     private void deleteTaxis(List<Taxi> taxis) throws DaoException {
         for (Taxi taxi : taxis) {
-            taxiDao.delete(taxi);
+            taxiDao.delete(taxi.getId());
         }
     }
 
     private void deleteShares(List<Share> shares) throws DaoException {
         for (Share share : shares) {
-            shareDao.delete(share);
+            shareDao.delete(share.getId());
         }
     }
 

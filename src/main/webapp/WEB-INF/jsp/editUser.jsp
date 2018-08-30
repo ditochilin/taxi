@@ -21,18 +21,22 @@
 
     <c:set var="isThisEdition" value="${not empty userDTO}"/>
 
-    <form method="post" action="Controller" name="saveUser">
+    <form method="post" action="/Controller" name="saveUser">
         <input type="hidden" name="command" value="saveUser"/>
-        <p><fmt:message key="Edit client's order"/></p>
+        <p><fmt:message key="Edit user" bundle="${locale}"/></p>
         <table>
             <c:if test="${isThisEdition eq true}">
                 <input type="hidden" name="userId" value="${userDTO.id}"/>
             </c:if>
-
             <tr>
                 <th><fmt:message key="User's name" bundle="${locale}"/></th>
                 <th><input type="text" name="userName"
-                        <c:if test="${isThisEdition}}"> value="${userDTO.userName}"</c:if>
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                value="${userDTO.userName}"
+                            </c:when>
+                            <c:otherwise>placeholder="name"</c:otherwise>
+                        </c:choose>
                 />
                 </th>
             </tr>
@@ -70,7 +74,7 @@
                 <th><fmt:message key="phone" bundle="${locale}"/></th>
                 <th>
                     <input type="tel" name="phone"
-                            <c:if test="${isThisEdition}}"> value="${userDTO.phone}"</c:if>
+                            <c:if test="${isThisEdition}"> value="${userDTO.phone}"</c:if>
                     />
                 </th>
             </tr>
@@ -78,7 +82,7 @@
                 <th><fmt:message key="password" bundle="${locale}"/></th>
                 <th>
                     <input type="password" name="password"
-                            <c:if test="${isThisEdition}}"> value="${userDTO.password}"</c:if>
+                            <c:if test="${isThisEdition}"> value="${userDTO.password}"</c:if>
                     />
                 </th>
             </tr>

@@ -4,19 +4,16 @@ import dao.AbstractDao;
 import dao.IShareDao;
 import dao.enricher.IEnricher;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.extractor.IExtractor;
 import dao.extractor.ShareExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.SharePropSetter;
 import dao.transactionManager.TransactionManagerImpl;
-import entities.Share;
 import entities.Order;
-import org.apache.logging.log4j.Level;
+import entities.Share;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,30 +53,50 @@ public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
 
     @Override
     public List<Share> findAll() throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
+        return TransactionManagerImpl.doInTransaction(() -> (
                 findByInTransaction(FIND_ALL, null, null, extractor, IEnricher.NULL)));
     }
 
     @Override
-    public Share findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->(
-                findById(FIND_ALL, "id_share", id, extractor, IEnricher.NULL)));
+    public List<Share> findByName(String name) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->
+                findBy(FIND_ALL, "share_name", name, extractor, IEnricher.NULL)
+        );
     }
 
     @Override
-    public List<Share> findSharesByOrder(Order Order) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->{
-        List<Share> shares = new ArrayList<>();
-        try (PreparedStatement statement = createStatement(getConnection(), FIND_BY_ORDER, null, Order.getId());
-             ResultSet resultSet = statement.executeQuery()) {
-             while (resultSet.next()) {
-                Share share = extractor.extractEntityData(resultSet);
-                shares.add(share);
-             }
+    public boolean findLoyalty() throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> {
+                    List<Share> shares = findBy(FIND_ALL, "isLoyalty", true, extractor, IEnricher.NULL);
+                    return shares.isEmpty();
+            });
+    }
 
-        } catch (SQLException e) {
-            LOGGER.warn("Could not get shares for order: " + Order);
-        }
+    @Override
+    public Share findById(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Share> shares = findBy(FIND_ALL, "id_share", id, extractor, IEnricher.NULL);
+            if (shares.isEmpty()) {
+                return null;
+            }
+            return shares.get(0);
+        });
+    }
+
+    @Override
+    public List<Share> findSharesByOrder(Order order) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Share> shares = new ArrayList<>();
+            try (PreparedStatement statement = createStatement(getConnection(), FIND_BY_ORDER, null, order.getId());
+                 ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Share share = extractor.extractEntityData(resultSet);
+                    shares.add(share);
+                }
+
+            } catch (SQLException e) {
+                LOGGER.warn("Could not get shares for order: " + order);
+            }
             return shares;
         });
     }
@@ -95,7 +112,7 @@ public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
     }
 
     @Override
-    public boolean delete(Share share) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(share, DELETE));
+    public boolean delete(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(id, DELETE));
     }
 }

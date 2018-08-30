@@ -30,13 +30,12 @@ public abstract class AbstractDao<T> implements IDao<T> {
         return connection;
     }
 
-    protected T findById(String sql, String selectedField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
+    protected List<T> findBy(String sql, String selectedField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
         List<T> list = findByInTransaction(sql, selectedField, value, extractor, enricher);
         if (list.isEmpty()) {
-            LOGGER.warn(String.format("Entity by id {%s} not found", value));
-            return null;
+            LOGGER.warn(String.format("Entity by {%s} {%s} not found", selectedField, value));
         }
-        return list.get(0);
+        return list;
     }
 
     protected List<T> findByInTransaction(String sql, String selectionField, Object value, IExtractor<T> extractor, IEnricher<T> enricher) throws DaoException {
@@ -91,21 +90,15 @@ public abstract class AbstractDao<T> implements IDao<T> {
         }
     }
 
-    protected boolean deleteInTransaction(T entity, String sql) throws DaoException, InvocationTargetException, IllegalAccessException {
-        if(entity == null){
+    protected boolean deleteInTransaction(Long id, String sql) throws DaoException {
+        if(id == null){
             return false;
         }
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
-            try {
-                Long id = (Long) entity.getClass().getMethod("getId").invoke(entity);
-                statement.setLong(1, id);
-            }catch (NoSuchMethodException e){
-                LOGGER.error(String.format("Entity {%s} does not have getId()",entity));
-                return false;
-            }
+            statement.setLong(1, id);
             boolean result = statement.executeUpdate() > 0;
             if(result){
-                LOGGER.log(Level.INFO, String.format("Entity {%s} was deleted from db",entity));
+                LOGGER.log(Level.INFO, String.format("Entity id=%s was deleted from db",id));
             }
             return result;
         } catch (SQLException e) {
@@ -172,5 +165,4 @@ public abstract class AbstractDao<T> implements IDao<T> {
         LOGGER.error(message);
         return new DaoException(message, e);
     }
-
 }

@@ -4,14 +4,13 @@ import dao.AbstractDao;
 import dao.IRoleDao;
 import dao.enricher.IEnricher;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.extractor.IExtractor;
 import dao.extractor.RoleExtractor;
 import dao.propSetter.IPropSetter;
 import dao.propSetter.RolePropSetter;
 import dao.transactionManager.TransactionManagerImpl;
+import entities.CarType;
 import entities.Role;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,18 +54,24 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
 
     @Override
     public Role findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->
-                findById(FIND_ALL, "id_role", id, extractor, IEnricher.NULL));
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Role> roles = findBy(FIND_ALL, "id_role", id, extractor, IEnricher.NULL);
+            if(roles.isEmpty()){
+                return null;
+            }
+            return roles.get(0);
+        });
     }
 
     @Override
     public Role findByName(String roleName) throws DaoException {
-        List<Role> roles = TransactionManagerImpl.doInTransaction(() ->
-                (findByInTransaction(FIND_ALL, "role_name", roleName.toUpperCase(), extractor, IEnricher.NULL)));
-        if (roles.isEmpty()) {
-            return null;
-        }
-        return roles.get(0);
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<Role> roles = findBy(FIND_ALL, "role_name", roleName, extractor, IEnricher.NULL);
+            if(roles.isEmpty()){
+                return null;
+            }
+            return roles.get(0);
+        });
     }
 
     @Override
@@ -80,8 +85,8 @@ public class RoleDaoImpl extends AbstractDao<Role> implements IRoleDao {
     }
 
     @Override
-    public boolean delete(Role role) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(role, DELETE));
+    public boolean delete(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(id, DELETE));
     }
 
 

@@ -24,9 +24,13 @@ public class TransactionManagerImpl {
 
     private static TransactionManagerImpl instance;
     private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
+    private static ThreadLocal<Integer> depth = new ThreadLocal<>();
     private static final IConnectionPool CONNECTION_POOL = new ConnectionPoolImpl();
     private static final Logger LOGGER = LogManager.getLogger(TransactionManagerImpl.class.getName());
 
+    static{
+        depth.set(0);
+    }
     private TransactionManagerImpl() {
     }
 
@@ -44,14 +48,17 @@ public class TransactionManagerImpl {
      *                   be rethrown in execution stack
      */
     public static <T> T doInTransaction(Callable<T> unitOfWork) throws DaoException {
-        Connection connection = CONNECTION_POOL.newConnection();
-        connectionHolder.set(connection);
+        Connection connection = getConnection();
+        depth.set(depth.get()+1);
         LOGGER.debug(String.format("Get connection: %s from pool and set to Thread: %s", connection, Thread.currentThread()));
         try {
             T result = unitOfWork.call();
             LOGGER.debug(String.format("Do unit of work. result: %s", unitOfWork));
-            connection.commit();
-            LOGGER.debug("Commit success.");
+            depth.set(depth.get()-1);
+            if(depth.get()==0) {
+                connection.commit();
+                LOGGER.debug("Commit success.");
+            }
             return result;
         } catch (Exception e) {
             try {
@@ -62,10 +69,11 @@ public class TransactionManagerImpl {
             LOGGER.warn("Rollback success.");
             throw new DaoException("rollback transaction during " + unitOfWork, e);
         } finally {
-            // todo check connection.setAutoCommit(true)  ?
-            JdbcUtils.closeQuietly(connection);
-            LOGGER.debug(String.format("Close connection success. Unset connection %s from Thread: %s", connection, Thread.currentThread()));
-            connectionHolder.remove();
+            if(depth.get()==0) {
+                JdbcUtils.closeQuietly(connection);
+                LOGGER.debug(String.format("Close connection success. Unset connection %s from Thread: %s", connection, Thread.currentThread()));
+                connectionHolder.remove();
+            }
         }
     }
 
@@ -78,6 +86,7 @@ public class TransactionManagerImpl {
         Connection connection = connectionHolder.get();
         if (connection == null){
             connection = CONNECTION_POOL.newConnection();
+            connectionHolder.set(connection);
         }
         return connection;
     }

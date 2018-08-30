@@ -1,8 +1,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="locale" var="locale"/>
 
 <div>
-    <span><fmt:message key="List of shares"/></span>
+    <p style="color: red">
+        <c:if test="${not empty resultMessage}">
+            <span><fmt:message key="${resultMessage}"/></span>
+        </c:if>
+    </p>
+    <span><fmt:message key="List of shares" bundle="${locale}"/></span>
+    <form action="/Controller" name="addShare" method="post">
+        <input type="hidden" name="command" value="editShare"/>
+        <button type="submit" class="smallbutton">
+            <fmt:message key="addBtn" bundle="${locale}"/>
+        </button>
+    </form>
     <table border="1">
         <tr>
             <th>Share</th>
@@ -19,18 +33,18 @@
                 <td><c:out value="${share.sum}"/></td>
                 <td><c:out value="${share.percent}"/></td>
                 <td>
-                    <form name="shareEdit" method="post">
+                    <form action="/Controller" name="shareEdit" method="post">
                         <input type="hidden" name="command" value="editShare"/>
                         <input type="hidden" name="shareId" value="${share.id}"/>
                         <button type="submit" class="smallbutton">
-                            <fmt:message key="editBtn"/>
+                            <fmt:message key="editBtn" bundle="${locale}"/>
                         </button>
                     </form>
-                    <form name="shareRemove" method="post">
+                    <form action="/Controller" name="shareRemove" method="post">
                         <input type="hidden" name="command" value="removeShare"/>
                         <input type="hidden" name="shareId" value="${share.id}"/>
                         <button type="submit" class="smallbutton">
-                            <fmt:message key="removeBtn"/>
+                            <fmt:message key="removeBtn" bundle="${locale}"/>
                         </button>
                     </form>
                 </td>

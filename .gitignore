@@ -1,5 +1,6 @@
 .idea/
 log/
+lib/
 out/
 target/
 *.log

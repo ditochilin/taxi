@@ -1,6 +1,6 @@
 package command;
 
-import dao.IDao;
+import controller.ControllerHelper;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,35 +14,49 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
-public class SaveUserCommand implements ICommand {
+public class SaveUserCommand extends AbstractCommand<User> implements ICommand {
 
     private static final Logger LOGGER = LogManager.getLogger(SaveUserCommand.class.getName());
+    private static IUserService userService;
+
+    public SaveUserCommand() {
+        service = UserService.getInstance();
+        userService = UserService.getInstance();
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            return CommonMethods.addNewUser(request, response,
-                    new EditUserCommand(),
-                    new OpenAdministrationCommand());
+                return updateUser(request,response,
+                        new EditUserCommand(),
+                        new OpenAdministrationCommand());
         } catch (ServletException | IOException e) {
-            LOGGER.error("Could not execute command to add/update user!",e.getCause());
+            LOGGER.error("Could not execute command to add/update user!", e.getCause());
         }
         return Config.getProperty(Config.ADMIN);
-//        String id = request.getParameter("userId");
-//        String userName = request.getParameter("userName");
-//        String roleName = request.getParameter("roleName");
-//        String phone = request.getParameter("phone");
-//        String password = request.getParameter("password");
-//
-//        User userDTO = new User(phone, password, userName, roleService.getByName(roleName));
-//        if(!userService.update(userDTO, Long.getLong(id))){
-//            request.setAttribute("errorMessage", "User has not been added! Please, check all fields.");
-//            return new EditUserCommand().execute(request, response);
-//        }
-//
-//        request.setAttribute("operationMessage", "User has been added successfully!");
-//        return new OpenAdministrationCommand().execute(request, response);
+    }
+
+    static Set<String> checkUserFieldsErrors(String id, String userName, String phone, String password, String confirmPassword) {
+        Set<String> errors = new HashSet<>();
+        if (userService.suchNameIsPresent(userName) && id.isEmpty()) {
+            errors.add("User with name " + userName + " is present already!");
+        }
+        if (userService.suchPhoneIsPresent(phone) && id.isEmpty()) {
+            errors.add("User with phone " + phone + " is present already!");
+        }
+        if (password.length() < 4) {
+            errors.add("Password is too short! Must be not less then 4 signs.");
+        }
+        if (!password.equals(confirmPassword)) {
+            errors.add("Password are not equal!");
+        }
+        if (!AbstractCommand.patternPhone.matcher(phone).matches()) {
+            errors.add("Phone numbber is not correct!");
+        }
+        return errors;
     }
 }

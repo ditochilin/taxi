@@ -4,7 +4,6 @@ import dao.AbstractDao;
 import dao.ICarTypeDao;
 import dao.enricher.IEnricher;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.extractor.CarTypeExtractor;
 import dao.extractor.IExtractor;
 import dao.propSetter.CarTypePropSetter;
@@ -43,8 +42,13 @@ public class CarTypeDaoImpl extends AbstractDao<CarType> implements ICarTypeDao 
 
     @Override
     public CarType findById(Long id) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->
-                findById(FIND_ALL, "id_car_type", id, extractor, IEnricher.NULL));
+        return TransactionManagerImpl.doInTransaction(() -> {
+            List<CarType> carTypes = findBy(FIND_ALL, "id_car_type", id, extractor, IEnricher.NULL);
+            if(carTypes.isEmpty()){
+                return null;
+            }
+            return carTypes.get(0);
+        });
     }
 
     @Override
@@ -70,7 +74,7 @@ public class CarTypeDaoImpl extends AbstractDao<CarType> implements ICarTypeDao 
     }
 
     @Override
-    public boolean delete(CarType carType) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(carType, DELETE));
+    public boolean delete(Long id) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() -> deleteInTransaction(id, DELETE));
     }
 }

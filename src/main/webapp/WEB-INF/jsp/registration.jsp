@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
-    <form action="Controller" method="post">
+    <form action="/Controller" method="post">
         <input type="hidden" name="command" value="registration">
         <table>
             <tr>

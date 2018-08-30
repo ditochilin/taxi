@@ -265,7 +265,7 @@ public class FulfillDatabase {
 
     @Test
     public void findByPhone() throws DaoException {
-        List<User> users = userDao.findByPhone("0672184141");
+        List<User> users = userDao.findByPhone("+380672184141");
         Assert.assertEquals(users.get(0).getUserName(), "root");
     }
 
@@ -345,7 +345,7 @@ public class FulfillDatabase {
         List<Order> orders = orderDao.findAll();
         for (Order order : orders
                 ) {
-            orderDao.delete(order);
+            orderDao.delete(order.getId());
         }
     }
 
@@ -354,7 +354,7 @@ public class FulfillDatabase {
         List<Taxi> taxis = taxiDao.findAll();
         for (Taxi taxi : taxis
                 ) {
-            taxiDao.delete(taxi);
+            taxiDao.delete(taxi.getId());
         }
     }
 
@@ -363,15 +363,15 @@ public class FulfillDatabase {
         List<User> users = userDao.findAll();
         for (User user : users
                 ) {
-            userDao.delete(user);
+            userDao.delete(user.getId());
         }
     }
 
     //@Test
     public void testDeleteRoles() throws NoSuchEntityException, DaoException {
-        roleDao.delete(roleDao.findByName("CLIENT"));
-        roleDao.delete(roleDao.findByName("ADMIN"));
-        roleDao.delete(roleDao.findByName("DRIVER"));
+        roleDao.delete(roleDao.findByName("CLIENT").getId());
+        roleDao.delete(roleDao.findByName("ADMIN").getId());
+        roleDao.delete(roleDao.findByName("DRIVER").getId());
     }
 
     //@Test
@@ -379,7 +379,7 @@ public class FulfillDatabase {
         List<Share> shares = shareDao.findAll();
         for (Share share : shares
                 ) {
-            shareDao.delete(share);
+            shareDao.delete(share.getId());
         }
     }
 
@@ -388,7 +388,7 @@ public class FulfillDatabase {
         List<CarType> types = carTypeDao.findAll();
         for (CarType type : types
                 ) {
-            carTypeDao.delete(carTypeDao.findById(type.getId()));
+            carTypeDao.delete(carTypeDao.findById(type.getId()).getId());
         }
     }
 }

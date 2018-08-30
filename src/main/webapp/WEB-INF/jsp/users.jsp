@@ -6,12 +6,13 @@
 
 <div>
     <p style="color: red">
-        <c:if test="${not empty requestScope.messageBeforeLogin}">
-            <span><fmt:message key="${messageBeforeLogin}"/></span>
+        <c:if test="${not empty resultMessage}">
+            <span><fmt:message key="${resultMessage}"/></span>
         </c:if>
     </p>
+
     <span><fmt:message key="List of users" bundle="${locale}"/></span>
-    <form name="addUser" method="post">
+    <form action="/Controller" name="addUser" method="post">
         <input type="hidden" name="command" value="editUser"/>
         <button type="submit" class="smallbutton">
             <fmt:message key="addBtn" bundle="${locale}"/>
@@ -27,18 +28,18 @@
         <c:forEach var="user" items="${userList}">
             <tr>
                 <td><c:out value="${user.userName}"/></td>
-                <td><c:out value="${user.role}"/></td>
+                <td><c:out value="${user.role.roleName}"/></td>
                 <td><c:out value="${user.phone}"/></td>
                 <td><c:out value="${user.password}"/></td>
                 <td>
-                    <form name="userEdit" method="post">
+                    <form action="/Controller" name="userEdit" method="post">
                         <input type="hidden" name="command" value="editUser"/>
                         <input type="hidden" name="userId" value="${user.id}"/>
                         <button type="submit" class="smallbutton">
                             <fmt:message key="editBtn" bundle="${locale}"/>
                         </button>
                     </form>
-                    <form name="userRemove" method="post">
+                    <form action="/Controller" name="userRemove" method="post">
                         <input type="hidden" name="command" value="removeUser"/>
                         <input type="hidden" name="userId" value="${user.id}"/>
                         <button type="submit" class="smallbutton">
