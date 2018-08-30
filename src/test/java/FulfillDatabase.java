@@ -213,6 +213,8 @@ public class FulfillDatabase {
         order3.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(1));
         order3.setStatus(Status.INWORK);
         order3.setDateTime(dateformat.parse("20-08-2018 15:51:04"));
+        order3.setShares(Arrays.asList(shareDao.findByName("Share_15").get(0),
+                                        shareDao.findByName("loyalry_10").get(0)));
 
     }
 
@@ -340,7 +342,7 @@ public class FulfillDatabase {
     }
 
 
-    //@Test
+    @Test
     public void testDeleteOrders() throws DaoException {
         List<Order> orders = orderDao.findAll();
         for (Order order : orders
