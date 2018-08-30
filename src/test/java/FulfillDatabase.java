@@ -79,34 +79,34 @@ public class FulfillDatabase {
     public void fulfillUsers() throws NoSuchEntityException, DaoException {
         users = Arrays.asList(new User(), new User(), new User(), new User());
         User currentUser = users.get(0);
-        if (userDao.findByPhone("0672184141").isEmpty()) {
+        if (userDao.findByPhone("+380672184141").isEmpty()) {
             currentUser.setRole(roleDao.findByName("ADMIN"));
             currentUser.setUserName("root");
             currentUser.setPassword("root");
-            currentUser.setPhone("0672184141");
+            currentUser.setPhone("+380672184141");
         }
 
         User currentUser1 = users.get(1);
-        if (userDao.findByPhone("0502225547").isEmpty()) {
+        if (userDao.findByPhone("+380502225547").isEmpty()) {
             currentUser1.setRole(roleDao.findByName("CLIENT"));
             currentUser1.setUserName("Alex");
             currentUser1.setPassword("root");
-            currentUser1.setPhone("0502225547");
+            currentUser1.setPhone("+380502225547");
         }
 
         User currentUser2 = users.get(2);
-        if (userDao.findByPhone("0678124422").isEmpty()) {
+        if (userDao.findByPhone("+380678124422").isEmpty()) {
             currentUser2.setRole(roleDao.findByName("DRIVER"));
             currentUser2.setUserName("Ivan");
             currentUser2.setPassword("root");
-            currentUser2.setPhone("0678124422");
+            currentUser2.setPhone("+380678124422");
         }
         User currentUser3 = users.get(3);
-        if (userDao.findByPhone("0679514720").isEmpty()) {
+        if (userDao.findByPhone("+380679514720").isEmpty()) {
             currentUser3.setRole(roleDao.findByName("DRIVER"));
             currentUser3.setUserName("Николай");
             currentUser3.setPassword("root");
-            currentUser3.setPhone("0679514720");
+            currentUser3.setPhone("+380679514720");
         }
     }
 
@@ -191,6 +191,7 @@ public class FulfillDatabase {
         order1.setClient(userDao.findByName("Alex").get(0));
         order1.setDistance(2645);
         order1.setFeedTime(dateformat.parse("24-08-2018 14:05:00"));
+        order2.setStatus(Status.CREATED);
 
         order2.setStartPoint("Zodchih 5");
         order2.setEndPoint("Rudenko 7");
@@ -274,7 +275,7 @@ public class FulfillDatabase {
     @Test
     public void updateUsers() throws DaoException {
         User user = userDao.findByName("Alex").get(0);
-        user.setPhone("0502225547");
+        user.setPhone("+380502225547");
         userDao.update(user);
     }
 
@@ -306,17 +307,10 @@ public class FulfillDatabase {
         orderDao.insert(orders.get(2));
     }
 
-
-    @Test
-    public void testFindCreated() throws DaoException {
-        List<Order> orders = orderDao.findByStatus(Status.CREATED);
-        Assert.assertTrue(orders.size() > 0);
-    }
-
     @Test
     public void testUpdateOrder() throws NoSuchEntityException, DaoException {
-        Order order = orderDao.findByClient(userDao.findByPhone("0502225547").get(0)).get(0);
-        Taxi taxi = taxiDao.findByUser(userDao.findByPhone("0679514720").get(0)).get(0);
+        Order order = orderDao.findByClient(userDao.findByPhone("+380502225547").get(0)).get(0);
+        Taxi taxi = taxiDao.findByUser(userDao.findByPhone("+380679514720").get(0)).get(0);
         order.setTaxi(taxi);
         orderDao.update(order);
         Order updatedOrder = orderDao.findById(order.getId());
@@ -325,7 +319,7 @@ public class FulfillDatabase {
 
     @Test
     public void testSharesInOrder() throws NoSuchEntityException, DaoException {
-        Order order = orderDao.findByClient(userDao.findByPhone("0502225547").get(0)).get(0);
+        Order order = orderDao.findByClient(userDao.findByPhone("+380502225547").get(0)).get(0);
 
         List<Share> shares = shareDao.findAll();
         order.setShares(shares);
@@ -341,6 +335,11 @@ public class FulfillDatabase {
         Assert.assertEquals(updatedOrder2.getShares().size(), 2);
     }
 
+    @Test
+    public void ztestFindCreated() throws DaoException {
+        List<Order> orders = orderDao.findByStatus(Status.INWORK);
+        Assert.assertTrue(orders.size() > 0);
+    }
 
     @Test
     public void testDeleteOrders() throws DaoException {
