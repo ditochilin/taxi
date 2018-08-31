@@ -2,6 +2,7 @@ package service;
 
 import entities.Order;
 import entities.User;
+import service.exceptions.ServiceException;
 
 import java.util.List;
 
@@ -12,10 +13,10 @@ import java.util.List;
  */
 public interface IOrderService extends IService<Order> {
 
-    List<Order> getByClient(User user);
+    List<Order> getByClient(User user) throws ServiceException;
 
-    List<Order> getByDriver(User driver);
+    List<Order> getByDriver(User driver) throws ServiceException;
 
-    List<Order> getCreated();
+    List<Order> getCreated() throws ServiceException;
 
 }

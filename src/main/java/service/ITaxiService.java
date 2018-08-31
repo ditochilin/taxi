@@ -2,6 +2,7 @@ package service;
 
 import entities.Taxi;
 import entities.User;
+import service.exceptions.ServiceException;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ import java.util.List;
  */
 public interface ITaxiService extends IService<Taxi> {
 
-    List<Taxi> getFreeTaxis();
+    List<Taxi> getFreeTaxis() throws ServiceException;
 
-    List<Taxi> getByDriver(User driver);
+    List<Taxi> getByDriver(User driver) throws ServiceException;
 
 }

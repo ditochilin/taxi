@@ -12,6 +12,11 @@
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
     <span><fmt:message key="ListOfVehicles" bundle="${locale}"/></span>
+    <p style="color: red">
+        <c:if test="${not empty resultMessage}">
+            <span><fmt:message key="${resultMessage}"/></span>
+        </c:if>
+    </p>
     <table border="1">
         <tr>
             <th>Driver</th>

@@ -11,7 +11,6 @@ import service.AbstractService;
 import service.IRoleService;
 import service.exceptions.ServiceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,55 +36,35 @@ public class RoleService extends AbstractService<Role> implements IRoleService {
         return instance;
     }
 
-    public List<Role> getAll() {
-        try {
-            return roleDao.findAll();
-        } catch (DaoException e) {
-            LOGGER.error("Could not get all roles",e.getCause());
-        }
-        return new ArrayList<>();
+    public List<Role> getAll() throws ServiceException {
+        return getAllEntities();
     }
 
     @Override
-    public boolean update(Role entityDTO, Long id, StringBuilder msg) {
-        return false;
+    public boolean update(Role entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
+
     }
 
     @Override
-    public Role getById(Long id) {
-        return null;
+    public Role getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            roleDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
 
     @Override
-    public Role getByName(String roleName) {
+    public Role getByName(String roleName) throws ServiceException {
         try {
             return roleDao.findByName(roleName);
         } catch (DaoException | NoSuchEntityException e) {
-            LOGGER.error(e.getMessage());
+            catchServiceException(e, "Could not find role by name: " + roleName);
         }
         return null;
     }
 
-
-    public Role create(String name, String description) throws ServiceException {
-        Role role = new Role();
-        role.setRoleName(name);
-        role.setDescription(description);
-        try {
-            roleDao.insert(role);
-        } catch (DaoException e) {
-            throw new ServiceException("Could not insert new role", e);
-        }
-        return role;
-    }
 }

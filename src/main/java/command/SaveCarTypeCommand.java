@@ -5,6 +5,7 @@ import entities.CarType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.ICarTypeService;
+import service.exceptions.ServiceException;
 import service.implementation.CarTypeService;
 import utils.Config;
 
@@ -27,7 +28,7 @@ public class SaveCarTypeCommand extends AbstractCommand<CarType> implements ICom
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             String idParam = request.getParameter("carTypeId");
             String typeName = ControllerHelper.getParameterInUTF8(request, "typeName");
@@ -50,7 +51,7 @@ public class SaveCarTypeCommand extends AbstractCommand<CarType> implements ICom
 
     }
 
-    private Set<String> checkCarTypeFieldsErrors(String id, String typeName, BigDecimal price) {
+    private Set<String> checkCarTypeFieldsErrors(String id, String typeName, BigDecimal price) throws ServiceException {
         Set<String> errors = new HashSet<>();
         if (carTypeService.suchCarTypeIsPresent(typeName) && id.isEmpty()) {
             errors.add("CarType with name " + typeName + " is present already!");

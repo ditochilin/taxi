@@ -3,6 +3,7 @@ package command;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.exceptions.ServiceException;
 import service.implementation.UserService;
 import utils.Config;
 
@@ -25,7 +26,7 @@ public class RegistrationCommand extends AbstractCommand<User> implements IComma
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         String action = request.getParameter("action");
         if (action == null ||

@@ -70,31 +70,31 @@ public class UserService extends AbstractService<User> implements IUserService {
     }
 
     @Override
-    public List<User> getUsersByName(String userName) {
+    public List<User> getUsersByName(String userName) throws ServiceException {
         try {
             return userDao.findByName(userName);
         } catch (DaoException e) {
-            LOGGER.error("Could not find user by name " + userName, e);
+            catchServiceException(e, "Could not find user by name :" + userName);
         }
         return new ArrayList<>();
     }
 
     @Override
-    public boolean suchNameIsPresent(String userName)  {
+    public boolean suchNameIsPresent(String userName) throws ServiceException {
         try {
             return !getUsersByName(userName).isEmpty();
-        }catch (Exception e){
-            LOGGER.error(e.getCause());
+        } catch (Exception e) {
+            catchServiceException(e, "Could not define presentation of user by name :" + userName);
         }
         return false;
     }
 
     @Override
-    public boolean suchPhoneIsPresent(String phone) {
+    public boolean suchPhoneIsPresent(String phone) throws ServiceException {
         try {
             return !userDao.findByPhone(phone).isEmpty();
         } catch (DaoException e) {
-            LOGGER.error("Could not check user by phone " + phone, e);
+            catchServiceException(e, "Could not check user by phone " + phone);
         }
         return false;
     }
@@ -108,44 +108,23 @@ public class UserService extends AbstractService<User> implements IUserService {
     }
 
     @Override
-    public List<User> getAll() {
-        try {
-            return getAllEntities();
-        } catch (Exception e) {
-            LOGGER.error("Couldn't get all users from database.");
-        }
-        return new ArrayList<>();
+    public List<User> getAll() throws ServiceException {
+        return getAllEntities();
     }
 
     @Override
-    public boolean update(User entityDTO, Long id, StringBuilder msg) throws Exception {
-        try {
-            updateEntity(entityDTO, id, msg);
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Could not update/insert user.", e.getCause());
-            throw e;
-        }
+    public boolean update(User entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
     }
 
     @Override
-    public User getById(Long id) {
-        try {
-            return getEntityById(id);
-        } catch (Exception e) {
-            LOGGER.error("Couldn't get all users from database.", e.getCause());
-        }
-        return null;
+    public User getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            userDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
-
 }

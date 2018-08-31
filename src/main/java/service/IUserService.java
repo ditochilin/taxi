@@ -8,25 +8,27 @@ import java.util.List;
 
 /**
  * Service for working with user
+ *
  * @author Dmitry Tochilin
  */
 public interface IUserService extends IService<User> {
 
     /**
      * Check if the user is authenticated
+     *
      * @param user user for check
-     * @return  fulfill dummy user with data from database
+     * @return fulfill dummy user with data from database
      */
     User checkUserByPassword(User user) throws ServiceException, IncorrectPassword;
 
     List<User> getAllClients();
 
-    List<User> getUsersByName(String name);
+    List<User> getUsersByName(String name) throws ServiceException;
 
-    boolean suchNameIsPresent(String userName);
+    boolean suchNameIsPresent(String userName) throws ServiceException;
 
-   // boolean updateUser(User user);
+    // boolean updateUser(User user);
 
-    boolean suchPhoneIsPresent(String phone);
+    boolean suchPhoneIsPresent(String phone) throws ServiceException;
 
 }

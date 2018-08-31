@@ -1,15 +1,14 @@
 package command;
 
 import controller.ControllerHelper;
-import entities.Share;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IRoleService;
 import service.IService;
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.RoleService;
-import service.implementation.ShareService;
 import service.implementation.UserService;
 
 import javax.servlet.ServletException;
@@ -45,7 +44,7 @@ public abstract class AbstractCommand<T> {
                                          Long id,
                                          HttpServletRequest request, HttpServletResponse response,
                                          ICommand commandForReturning,
-                                         ICommand commandForSuccess) throws ServletException, IOException {
+                                         ICommand commandForSuccess) throws ServletException, IOException, ServiceException {
         StringBuilder msg = new StringBuilder();
         //  union two acts in one common catch
         try{
@@ -73,7 +72,7 @@ public abstract class AbstractCommand<T> {
      */
     protected String updateUser( HttpServletRequest request, HttpServletResponse response,
                                  ICommand commandForReturning,
-                                 ICommand commandForSuccess) throws ServletException, IOException {
+                                 ICommand commandForSuccess) throws ServletException, IOException, ServiceException {
         String idParam = request.getParameter("userId");
         String roleName = request.getParameter("roleName");
         String userName = ControllerHelper.getParameterInUTF8(request, "userName");
@@ -113,6 +112,7 @@ public abstract class AbstractCommand<T> {
                 errors.add("Phone number is not correct!");
             }
         }catch (Exception e){
+            errors.add(e.getMessage());
             LOGGER.error(e.getCause());
         }
         return errors;

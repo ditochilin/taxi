@@ -3,6 +3,7 @@ package command;
 import entities.CarType;
 import service.ICarTypeService;
 import service.IShareService;
+import service.exceptions.ServiceException;
 import service.implementation.CarTypeService;
 import utils.Config;
 
@@ -20,7 +21,7 @@ public class OpenListCarTypesCommand implements ICommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         request.setAttribute("carTypeList",carTypeService.getAll());
         request.setAttribute("itemMenuSelected","carTypes");
 

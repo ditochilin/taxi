@@ -3,6 +3,7 @@ package command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.UserService;
 import utils.Config;
 
@@ -17,7 +18,7 @@ public class RemoveUserCommand implements ICommand {
     private static final Logger LOGGER = LogManager.getLogger(RemoveUserCommand.class.getName());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         try {
             userService.remove(Long.valueOf(request.getParameter("userId")));

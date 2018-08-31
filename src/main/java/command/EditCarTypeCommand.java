@@ -3,6 +3,7 @@ package command;
 import entities.CarType;
 import service.ICarTypeService;
 import service.IShareService;
+import service.exceptions.ServiceException;
 import service.implementation.CarTypeService;
 import service.implementation.ShareService;
 import utils.Config;
@@ -17,7 +18,7 @@ public class EditCarTypeCommand implements ICommand {
     private static ICarTypeService carTypeService = CarTypeService.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         String carTypeId = request.getParameter("carTypeId");
         if(carTypeId!= null && !carTypeId.isEmpty()){
             request.setAttribute("shareDTO", carTypeService.getById(Long.valueOf(carTypeId)));

@@ -38,6 +38,7 @@ public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
     private static final String INSERT = "INSERT INTO shares (share_name, is_loyalty, sum, percent, is_on) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE shares SET share_name = ?, is_loyalty = ?, sum = ?, percent = ?, is_on = ? WHERE id_share = ?";
     private static final String DELETE = "DELETE FROM shares WHERE id_share = ?";
+    private static final String IF_LOYALTY_IS_PRESENT = "SELECT id_share FROM shares WHERE is_loyalty = true AND share_name <> ?";
 
     private ShareDaoImpl() {
         extractor = new ShareExtractor();
@@ -64,12 +65,25 @@ public class ShareDaoImpl extends AbstractDao<Share> implements IShareDao {
         );
     }
 
+    /**
+     * It's imposable to have two and more loyalties in database.
+     * Checks if are any shares with checked is_loyalty=true, besides @param share
+     *
+     * @param shareName - share's name, that must be ignored, when checking
+     * @return  // if true - will disable adding new share loyalty
+     * @throws DaoException
+     */
     @Override
-    public boolean findLoyalty() throws DaoException {
+    public boolean ifLoyaltyIsPresent(String shareName) throws DaoException {
         return TransactionManagerImpl.doInTransaction(() -> {
-                    List<Share> shares = findBy(FIND_ALL, "isLoyalty", true, extractor, IEnricher.NULL);
-                    return shares.isEmpty();
-            });
+            try (PreparedStatement statement = createStatement(getConnection(), IF_LOYALTY_IS_PRESENT, null, shareName);
+                 ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            } catch (SQLException e) {
+                catchError("Could not define if loyalty is.", IF_LOYALTY_IS_PRESENT, e);
+            }
+            return true;
+        });
     }
 
     @Override

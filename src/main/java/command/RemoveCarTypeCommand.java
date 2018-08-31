@@ -3,6 +3,7 @@ package command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.ICarTypeService;
+import service.exceptions.ServiceException;
 import service.implementation.CarTypeService;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ public class RemoveCarTypeCommand implements ICommand {
 
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             carTypeService.remove(Long.valueOf(request.getParameter("carTypeId")));
         } catch (Exception e) {

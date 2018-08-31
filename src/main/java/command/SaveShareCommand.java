@@ -5,6 +5,7 @@ import entities.Share;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IShareService;
+import service.exceptions.ServiceException;
 import service.implementation.ShareService;
 import utils.Config;
 
@@ -27,7 +28,7 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         try {
             String idParam = request.getParameter("shareId");
@@ -57,22 +58,26 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
 
     private Set<String> checkShareFieldsErrors(String id, String shareName, Boolean isLoyalty, BigDecimal sum, Float percent) {
         Set<String> errors = new HashSet<>();
-        if (shareService.suchShareIsPresent(shareName) && id.isEmpty()) {
-            errors.add("Share with name " + shareName + " is present already!");
-        }
+        try {
+            if (shareService.suchShareIsPresent(shareName) && id.isEmpty()) {
+                errors.add("Share with name " + shareName + " is present already!");
+            }
 
-        if (isLoyalty && shareService.ifLoyaltyDoesAlreadyExist() ) {
-            errors.add("Loyalty program is present already! May be the only Loyalty share.");
-        }
+            if (isLoyalty && shareService.ifLoyaltyDoesAlreadyExist(shareName)) {
+                errors.add("Loyalty program is present already! May be the only Loyalty share.");
+            }
 
-        if (sum.compareTo(BigDecimal.valueOf(0)) == -1) {
-            errors.add("Sum should be positive.");
-        }
+            if (sum.compareTo(BigDecimal.valueOf(0)) == -1) {
+                errors.add("Sum should be positive.");
+            }
 
-        if (!inRange(0,100, percent)) {
-            errors.add("Percent should be in a range: [0..100]!");
+            if (!inRange(0, 100, percent)) {
+                errors.add("Percent should be in a range: [0..100]!");
+            }
+        }catch (Exception e){
+            errors.add(e.getMessage());
+            LOGGER.error(e.getCause());
         }
-
         return errors;
     }
 }

@@ -1,6 +1,7 @@
 package command;
 
 import service.IOrderService;
+import service.exceptions.ServiceException;
 import service.implementation.OrderService;
 import service.implementation.TaxiService;
 import utils.Config;
@@ -15,7 +16,7 @@ public class OpenListOrdersCommand implements ICommand {
     private static IOrderService orderService = OrderService.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         request.setAttribute("orderList", orderService.getAll());
 

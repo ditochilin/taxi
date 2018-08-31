@@ -1,6 +1,7 @@
 package command;
 
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.UserService;
 import utils.Config;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ public class OpenAdministrationCommand implements ICommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         request.setAttribute("userList",userService.getAll());
         request.setAttribute("itemMenuSelected","users");

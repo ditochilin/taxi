@@ -1,16 +1,14 @@
 package service.implementation;
 
 import dao.ICarTypeDao;
-import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.implementation.CarTypeDaoImpl;
 import entities.CarType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AbstractService;
 import service.ICarTypeService;
+import service.exceptions.ServiceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CarTypeService extends AbstractService<CarType> implements ICarTypeService {
@@ -32,52 +30,32 @@ public class CarTypeService extends AbstractService<CarType> implements ICarType
     }
 
     @Override
-    public List<CarType> getAll() {
-        try {
-            return carTypeDao.findAll();
-        } catch (DaoException e) {
-            LOGGER.error("Could not get all car types", e.getCause());
-        }
-        return new ArrayList<>();
+    public List<CarType> getAll() throws ServiceException {
+        return getAllEntities();
     }
 
     @Override
-    public boolean update(CarType entityDTO, Long id, StringBuilder msg) throws Exception {
-        try {
-            updateEntity(entityDTO, id, msg);
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Could not update/insert car type.", e.getCause());
-            throw e;
-        }
+    public boolean update(CarType entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
     }
 
     @Override
-    public CarType getById(Long id) {
-        try {
-            return carTypeDao.findById(id);
-        } catch (DaoException | NoSuchEntityException e) {
-            LOGGER.error("Could not get all car types by id: "+id, e.getCause());
-        }
-        return null;
+    public CarType getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            carTypeDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
 
     @Override
-    public boolean suchCarTypeIsPresent(String typeName) {
+    public boolean suchCarTypeIsPresent(String typeName) throws ServiceException {
         try {
             return !carTypeDao.findByName(typeName).isEmpty();
-        }catch (Exception e){
-            LOGGER.error(e.getCause());
+        } catch (Exception e) {
+            catchServiceException(e, "Could not find car type by name:  " + typeName);
         }
         return false;
     }

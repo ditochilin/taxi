@@ -1,6 +1,7 @@
 package command;
 
 import dao.exceptions.DaoException;
+import service.exceptions.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public interface ICommand {
      * @throws ServletException
      * @throws IOException
      */
-    String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+    String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException;
 
 }
 

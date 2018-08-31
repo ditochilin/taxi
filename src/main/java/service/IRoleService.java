@@ -10,8 +10,6 @@ import service.exceptions.ServiceException;
  */
 public interface IRoleService extends IService<Role> {
 
-    Role create(String name, String description) throws ServiceException;
-
-    Role getByName(String roleName);
+    Role getByName(String roleName) throws ServiceException;
 
 }

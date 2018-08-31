@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AbstractService;
 import service.IOrderService;
+import service.exceptions.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,33 +34,24 @@ public class OrderService extends AbstractService<Order> implements IOrderServic
     }
 
     @Override
-    public List<Order> getAll() {
-        try {
-            return orderDao.findAll();
-        } catch (DaoException e) {
-            LOGGER.error("Could not get all orders", e.getCause());
-        }
-        return new ArrayList<>();
+    public List<Order> getAll() throws ServiceException {
+        return getAllEntities();
     }
 
     @Override
-    public boolean update(Order entityDTO, Long id, StringBuilder msg) {
-        return false;
+    public boolean update(Order entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
     }
 
     @Override
-    public Order getById(Long id) {
-        return null;
+    public Order getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            orderDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
 
     @Override

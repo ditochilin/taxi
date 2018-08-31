@@ -2,15 +2,14 @@ package service.implementation;
 
 import dao.IShareDao;
 import dao.exceptions.DaoException;
-import dao.exceptions.NoSuchEntityException;
 import dao.implementation.ShareDaoImpl;
 import entities.Share;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AbstractService;
 import service.IShareService;
+import service.exceptions.ServiceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShareService extends AbstractService<Share> implements IShareService {
@@ -32,62 +31,43 @@ public class ShareService extends AbstractService<Share> implements IShareServic
     }
 
     @Override
-    public List<Share> getAll() {
-        try {
-            return shareDao.findAll();
-        } catch (DaoException e) {
-            LOGGER.error("Could not get all shares",e.getCause());
-        }
-        return new ArrayList<>();
+    public List<Share> getAll() throws ServiceException {
+        return getAllEntities();
+
     }
 
     @Override
-    public boolean update(Share entityDTO, Long id, StringBuilder msg) throws Exception {
-        try {
-            updateEntity(entityDTO, id, msg);
-            return true;
-        } catch (Exception e) {
-            LOGGER.error("Could not update/insert share.", e.getCause());
-            throw e;
-        }
+    public boolean update(Share entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
     }
 
     @Override
-    public Share getById(Long id) {
-        try {
-            return shareDao.findById(id);
-        } catch (DaoException | NoSuchEntityException e) {
-            LOGGER.error("Could not get all share by id: "+id, e.getCause());
-        }
-        return null;
+    public Share getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            shareDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
 
     @Override
-    public boolean suchShareIsPresent(String shareName) {
+    public boolean suchShareIsPresent(String shareName) throws ServiceException {
         try {
             return !shareDao.findByName(shareName).isEmpty();
         } catch (DaoException e) {
-            LOGGER.error("No share found bt name :"+shareName, e.getCause());
+            catchServiceException(e, "Could not find share by name: " + shareName);
         }
         return false;
     }
 
     @Override
-    public boolean ifLoyaltyDoesAlreadyExist() {
+    public boolean ifLoyaltyDoesAlreadyExist(String shareName) throws ServiceException {
         try {
-            return shareDao.findLoyalty();
+            return shareDao.ifLoyaltyIsPresent(shareName);
         } catch (DaoException e) {
-            LOGGER.error(e.getCause());
+            catchServiceException(e, "Could not check loyalty");
         }
         return false;
     }

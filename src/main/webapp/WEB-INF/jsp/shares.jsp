@@ -5,12 +5,12 @@
 <fmt:setBundle basename="locale" var="locale"/>
 
 <div>
+    <span><fmt:message key="List of shares" bundle="${locale}"/></span>
     <p style="color: red">
         <c:if test="${not empty resultMessage}">
             <span><fmt:message key="${resultMessage}"/></span>
         </c:if>
     </p>
-    <span><fmt:message key="List of shares" bundle="${locale}"/></span>
     <form action="/Controller" name="addShare" method="post">
         <input type="hidden" name="command" value="editShare"/>
         <button type="submit" class="smallbutton">

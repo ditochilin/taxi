@@ -3,6 +3,7 @@ package controller;
 import command.ICommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.exceptions.ServiceException;
 import utils.Config;
 import utils.Messenger;
 
@@ -45,6 +46,8 @@ public class Controller extends HttpServlet {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);
         } catch (IOException e) {
             page = catchHandler(e, request, Messenger.IO_EXCEPTION);
+        } catch (ServiceException e) {
+            page = catchHandler(e, request, e.getMessage());
         }
         if (page != null) {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);

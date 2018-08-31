@@ -60,7 +60,7 @@ public class LoginCommand implements ICommand {
         return Config.getProperty(Config.LOGIN);
     }
 
-    private String doCorrectRedirection(Role role, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private String doCorrectRedirection(Role role, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ServiceException {
         switch (role.getRoleName()) {
             case "DRIVER":
                 return commandOpenOrders.execute(request, response);

@@ -2,6 +2,7 @@ package command;
 
 import service.IRoleService;
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.RoleService;
 import service.implementation.UserService;
 import utils.Config;
@@ -15,7 +16,7 @@ public class EditUserCommand implements ICommand {
     private static IUserService userService = UserService.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         String userId = request.getParameter("userId");
         if(userId!= null && !userId.isEmpty()){

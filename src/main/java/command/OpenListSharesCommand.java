@@ -1,6 +1,7 @@
 package command;
 
 import service.IShareService;
+import service.exceptions.ServiceException;
 import service.implementation.ShareService;
 import utils.Config;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ public class OpenListSharesCommand implements ICommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         request.setAttribute("shareList",shareService.getAll());
         request.setAttribute("itemMenuSelected","shares");

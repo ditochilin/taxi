@@ -1,6 +1,7 @@
 package service;
 
 import entities.CarType;
+import service.exceptions.ServiceException;
 
 import java.util.List;
 
@@ -11,6 +12,6 @@ import java.util.List;
  */
 public interface ICarTypeService extends IService<CarType> {
 
-    boolean suchCarTypeIsPresent(String typeName);
+    boolean suchCarTypeIsPresent(String typeName) throws ServiceException;
 
 }

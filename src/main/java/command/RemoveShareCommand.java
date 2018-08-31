@@ -3,6 +3,7 @@ package command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IShareService;
+import service.exceptions.ServiceException;
 import service.implementation.ShareService;
 
 import javax.servlet.ServletException;
@@ -16,11 +17,12 @@ public class RemoveShareCommand implements ICommand {
     private static final Logger LOGGER = LogManager.getLogger(RemoveShareCommand.class.getName());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
+
         try {
             shareService.remove(Long.valueOf(request.getParameter("shareId")));
-        } catch (Exception e) {
-            LOGGER.error(e.getCause());
+        }catch (ServiceException e){
+            request.setAttribute("resultMessage", "You can't remove this share!");
         }
 
         return new OpenListSharesCommand().execute(request,response);

@@ -4,15 +4,13 @@ import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.IUserService;
+import service.exceptions.ServiceException;
 import service.implementation.UserService;
-import utils.Config;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SaveUserCommand extends AbstractCommand<User> implements ICommand {
 
@@ -25,15 +23,10 @@ public class SaveUserCommand extends AbstractCommand<User> implements ICommand {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
-        try {
-                return updateUser(request,response,
-                        new EditUserCommand(),
-                        new OpenAdministrationCommand());
-        } catch (ServletException | IOException e) {
-            LOGGER.error("Could not execute command to add/update user!", e.getCause());
-        }
-        return Config.getProperty(Config.ADMIN);
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServiceException, IOException {
+        return updateUser(request, response,
+                new EditUserCommand(),
+                new OpenAdministrationCommand());
     }
 
 }

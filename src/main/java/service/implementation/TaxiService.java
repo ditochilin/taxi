@@ -1,6 +1,5 @@
 package service.implementation;
 
-import dao.AbstractDao;
 import dao.ITaxiDao;
 import dao.exceptions.DaoException;
 import dao.implementation.TaxiDaoImpl;
@@ -10,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.AbstractService;
 import service.ITaxiService;
+import service.exceptions.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,52 +35,42 @@ public class TaxiService extends AbstractService<Taxi> implements ITaxiService {
     }
 
     @Override
-    public List<Taxi> getFreeTaxis() {
+    public List<Taxi> getFreeTaxis() throws ServiceException {
         try {
             return taxiDao.findAllBusyFree(false);
         } catch (DaoException e) {
-            LOGGER.error("Could not get free taxis",e.getCause());
+            catchServiceException(e, "Could not get free taxis");
         }
         return new ArrayList<>();
     }
 
     @Override
-    public List<Taxi> getAll() {
-        try {
-            return taxiDao.findAll();
-        } catch (DaoException e) {
-            LOGGER.error("Could not get all taxis",e.getCause());
-        }
-        return new ArrayList<>();
+    public List<Taxi> getAll() throws ServiceException {
+        return getAllEntities();
     }
 
     @Override
-    public boolean update(Taxi entityDTO, Long id, StringBuilder msg) {
-//todo
-        return false;
+    public boolean update(Taxi entityDTO, Long id, StringBuilder msg) throws ServiceException {
+        updateEntity(entityDTO, id, msg);
+        return true;
     }
 
     @Override
-    public Taxi getById(Long id) {
-        return null;
+    public Taxi getById(Long id) throws ServiceException {
+        return getEntityById(id);
     }
 
     @Override
-    public void remove(Long id) throws Exception {
-        try {
-            taxiDao.delete(id);
-        } catch (DaoException e) {
-            LOGGER.error("Could not remove user.", e.getCause());
-            throw new Exception(e);
-        }
+    public void remove(Long id) throws ServiceException {
+        removeEntity(id);
     }
 
     @Override
-    public List<Taxi> getByDriver(User driver) {
+    public List<Taxi> getByDriver(User driver) throws ServiceException {
         try {
             return taxiDao.findByUser(driver);
         } catch (DaoException e) {
-            LOGGER.error("Could not get taxis by driver {"+driver+"}",e.getCause());
+            catchServiceException(e, "Could not get taxis by driver {" + driver + "}");
         }
         return new ArrayList<>();
     }
