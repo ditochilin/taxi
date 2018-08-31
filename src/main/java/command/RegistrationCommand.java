@@ -3,6 +3,7 @@ package command;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import service.implementation.UserService;
 import utils.Config;
 
 import javax.servlet.ServletException;
@@ -18,6 +19,10 @@ import java.io.IOException;
 public class RegistrationCommand extends AbstractCommand<User> implements ICommand {
 
     private static final Logger LOGGER = LogManager.getLogger(RegistrationCommand.class.getName());
+
+    public RegistrationCommand() {
+        service = UserService.getInstance();
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

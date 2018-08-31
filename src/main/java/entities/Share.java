@@ -19,19 +19,37 @@ public class Share implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String shareName;
-    private boolean isLoyalty;
-    private boolean isOn;
+    private Boolean isLoyalty;
+    private Boolean isOn;
     private BigDecimal sum;
-    private float percent;
+    private Float percent;
 
-    public Share() {
+    public Share(Long id, String shareName, Boolean isLoyalty, Boolean isOn, BigDecimal sum, Float percent) {
+        this.id = id;
+        this.shareName = shareName;
+        this.isLoyalty = isLoyalty;
+        this.isOn = isOn;
+        this.sum = sum;
+        this.percent = percent;
     }
 
-    public boolean getIsOn() {
+    public Share(String shareName, boolean isLoyalty, boolean isOn, BigDecimal sum, float percent) {
+        this.shareName = shareName;
+        this.isLoyalty = isLoyalty;
+        this.isOn = isOn;
+        this.sum = sum;
+        this.percent = percent;
+    }
+
+    public Share() {
+
+    }
+
+    public Boolean getIsOn() {
         return isOn;
     }
 
-    public void setIsOn(boolean on) {
+    public void setIsOn(Boolean on) {
         isOn = on;
     }
 
@@ -51,11 +69,11 @@ public class Share implements Serializable {
         this.shareName = shareName;
     }
 
-    public boolean getIsLoyalty() {
+    public Boolean getIsLoyalty() {
         return isLoyalty;
     }
 
-    public void setIsLoyalty(boolean isLoyalty) {
+    public void setIsLoyalty(Boolean isLoyalty) {
         this.isLoyalty = isLoyalty;
     }
 
@@ -67,11 +85,11 @@ public class Share implements Serializable {
         this.sum = sum;
     }
 
-    public float getPercent() {
+    public Float getPercent() {
         return percent;
     }
 
-    public void setPercent(float percent) {
+    public void setPercent(Float percent) {
         this.percent = percent;
     }
 

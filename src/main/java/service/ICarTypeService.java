@@ -11,5 +11,6 @@ import java.util.List;
  */
 public interface ICarTypeService extends IService<CarType> {
 
+    boolean suchCarTypeIsPresent(String typeName);
 
 }

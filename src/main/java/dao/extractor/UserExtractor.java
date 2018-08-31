@@ -9,11 +9,11 @@ public class UserExtractor implements IExtractor<User> {
 
     @Override
     public User extractEntityData(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId(resultSet.getLong("id_user"));
-        user.setPhone(resultSet.getString("phone"));
-        user.setPassword(resultSet.getString("password"));
-        user.setUserName(resultSet.getString("user_name"));
+        User user = new User(
+                resultSet.getLong("id_user"),
+                resultSet.getString("phone"),
+                resultSet.getString("password"),
+                resultSet.getString("user_name"));
         return user;
     }
 

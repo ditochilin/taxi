@@ -45,10 +45,13 @@ public class ControllerHelper  {
 
         commands.put("openListShares", new OpenListSharesCommand());
         commands.put("editShare", new EditShareCommand());
-        //commands.put("removeShare", new RemoveShareCommand());
+        commands.put("removeShare", new RemoveShareCommand());
         commands.put("saveShare", new SaveShareCommand());
 
         commands.put("openListCarTypes", new OpenListCarTypesCommand());
+        commands.put("editCarType", new EditCarTypeCommand());
+        commands.put("saveCarType", new SaveCarTypeCommand());
+        commands.put("removeCarType", new RemoveCarTypeCommand());
 
         commands.put("openListTaxis", new OpenListTaxisCommand());
     }

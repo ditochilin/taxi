@@ -16,7 +16,7 @@ public abstract class ConnectionWrapper implements Connection {
 
     public void close() throws SQLException {
         checkOpen();
-     ///   open = false;
+        open = false;
         // Template method pattern  in realized method not realized is called
         doClose();
        // connection = null;
@@ -41,7 +41,7 @@ public abstract class ConnectionWrapper implements Connection {
     }
 
     @Override
-    public boolean isClosed() throws SQLException {
+    public boolean isClosed() {
         return !open;
     }
 
@@ -58,7 +58,7 @@ public abstract class ConnectionWrapper implements Connection {
     }
 
     @Override
-    public boolean isReadOnly() throws SQLException {
+    public boolean isReadOnly() {
         return false;
     }
 

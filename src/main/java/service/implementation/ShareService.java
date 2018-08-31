@@ -2,6 +2,7 @@ package service.implementation;
 
 import dao.IShareDao;
 import dao.exceptions.DaoException;
+import dao.exceptions.NoSuchEntityException;
 import dao.implementation.ShareDaoImpl;
 import entities.Share;
 import org.apache.logging.log4j.LogManager;
@@ -41,12 +42,23 @@ public class ShareService extends AbstractService<Share> implements IShareServic
     }
 
     @Override
-    public boolean update(Share entityDTO, Long id, StringBuilder msg) {
-        return false;
+    public boolean update(Share entityDTO, Long id, StringBuilder msg) throws Exception {
+        try {
+            updateEntity(entityDTO, id, msg);
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("Could not update/insert share.", e.getCause());
+            throw e;
+        }
     }
 
     @Override
     public Share getById(Long id) {
+        try {
+            return shareDao.findById(id);
+        } catch (DaoException | NoSuchEntityException e) {
+            LOGGER.error("Could not get all share by id: "+id, e.getCause());
+        }
         return null;
     }
 

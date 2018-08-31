@@ -48,8 +48,6 @@ public class ConnectionPoolImpl implements IConnectionPool {
             @Override
             public void doClose() throws SQLException {
                 try {
-                    connection.setAutoCommit(true);
-                    //connection.setTransactionIsolation();
                     connectionQueue.put(connection);
                 } catch (Exception e) {
                     throw new DaoException("Could not return connection in the pool", e);
@@ -76,12 +74,12 @@ public class ConnectionPoolImpl implements IConnectionPool {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(jdbcUrl, login, password);
-                connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             } catch (SQLException | ClassNotFoundException e) {
                 throw new DaoException("Could not get connection from driver for : " + jdbcUrl, e);
             }
         }
         try {
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new DaoException("Could not set Autocommit = false", e);

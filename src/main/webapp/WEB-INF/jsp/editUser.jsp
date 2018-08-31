@@ -18,6 +18,7 @@
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
+    <jsp:include page="navbarAdmin.jsp"/>
 
     <c:set var="isThisEdition" value="${not empty userDTO}"/>
 
@@ -52,7 +53,7 @@
                                                 selected>${userDTO.role.roleName}</option>
                                     </c:when>
                                     <c:otherwise>
-                                        <option value="${roleItem}">${roleItem.roleName}</option>
+                                        <option value="${roleItem.roleName}">${roleItem.roleName}</option>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>

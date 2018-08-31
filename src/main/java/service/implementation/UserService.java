@@ -80,8 +80,13 @@ public class UserService extends AbstractService<User> implements IUserService {
     }
 
     @Override
-    public boolean suchNameIsPresent(String userName) {
-        return !getUsersByName(userName).isEmpty();
+    public boolean suchNameIsPresent(String userName)  {
+        try {
+            return !getUsersByName(userName).isEmpty();
+        }catch (Exception e){
+            LOGGER.error(e.getCause());
+        }
+        return false;
     }
 
     @Override
@@ -113,14 +118,14 @@ public class UserService extends AbstractService<User> implements IUserService {
     }
 
     @Override
-    public boolean update(User entityDTO, Long id, StringBuilder msg) {
+    public boolean update(User entityDTO, Long id, StringBuilder msg) throws Exception {
         try {
             updateEntity(entityDTO, id, msg);
             return true;
         } catch (Exception e) {
             LOGGER.error("Could not update/insert user.", e.getCause());
+            throw e;
         }
-        return false;
     }
 
     @Override

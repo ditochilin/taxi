@@ -43,7 +43,7 @@ public abstract class AbstractService<T> implements IService<T> {
             }
         } catch (DaoException e) {
             LOGGER.error("Couldn't get update/insert entity database. " + e.getCause());
-            throw new Exception(e);
+            throw new Exception(e.getCause());
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractService<T> implements IService<T> {
         Long idCurrent = null;
         try {
             idCurrent = (Long) clazz.getMethod("getId").invoke(entityDTO);
-            if (idCurrent == null) {
+            if (idCurrent == null || idCurrent == 0) {
                 clazz.getMethod("setId", Long.class).invoke(entityDTO, id);
                 return true;
             }

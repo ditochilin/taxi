@@ -18,6 +18,7 @@
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
+    <jsp:include page="navbarAdmin.jsp"/>
 
     <c:set var="isThisEdition" value="${not empty shareDTO}"/>
 
@@ -44,7 +45,11 @@
                 <th><fmt:message key="isLoyalty" bundle="${locale}"/></th>
                 <th>
                     <input type="checkbox" name="isLoyalty"
-                            <c:if test="${isThisEdition}"> value="${shareDTO.isLoyalty}"</c:if>
+                            <c:if test="${isThisEdition}">
+                                <c:choose>
+                                    <c:when test="${shareDTO.isLoyalty}"> checked="checked" </c:when>
+                                </c:choose>
+                            </c:if>
                     />
                 </th>
             </tr>
@@ -52,7 +57,11 @@
                 <th><fmt:message key="isOnOff" bundle="${locale}"/></th>
                 <th>
                     <input type="checkbox" name="isOnOff"
-                            <c:if test="${isThisEdition}"> value="${shareDTO.isOnOff}"</c:if>
+                            <c:if test="${isThisEdition}">
+                                <c:choose>
+                                    <c:when test="${shareDTO.isOn}"> checked="checked" </c:when>
+                                </c:choose>
+                            </c:if>
                     />
                 </th>
             </tr>

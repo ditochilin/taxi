@@ -30,24 +30,25 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            String id = request.getParameter("shareId");
+            String idParam = request.getParameter("shareId");
             String shareName = ControllerHelper.getParameterInUTF8(request, "shareName");
-            Boolean isLoyalty = Boolean.getBoolean(request.getParameter("isLoyalty"));
-            Boolean isOnOff = Boolean.getBoolean(request.getParameter("isOnOff"));
+            Boolean isLoyalty = "on".equals(request.getParameter("isLoyalty"));
+            Boolean isOnOff = "on".equals(request.getParameter("isOnOff"));
             BigDecimal sum = BigDecimal.valueOf(Long.valueOf(request.getParameter("sum")));
             Float percent = Float.valueOf(request.getParameter("percent"));
 
-            Set<String> errors = checkShareFieldsErrors(id, shareName, isLoyalty, sum, percent);
+            Set<String> errors = checkShareFieldsErrors(idParam, shareName, isLoyalty, sum, percent);
+            Long id = (idParam==null)?Long.valueOf(0):Long.valueOf(idParam);
 
-            return doUpdateEntity(new Share(),
+            return doUpdateEntity(new Share(id, shareName,isLoyalty,isOnOff,sum,percent),
                     errors,
                     id,
                     request,
                     response,
-                    new EditUserCommand(),
-                    new OpenAdministrationCommand());
+                    new EditShareCommand(),
+                    new OpenListSharesCommand());
         } catch (ServletException | IOException e) {
-            LOGGER.error("Could not execute command to add/update user!",e.getCause());
+            LOGGER.error("Could not execute command to add/update share!",e.getCause());
         }
         return Config.getProperty(Config.ADMIN);
 
@@ -68,7 +69,7 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
             errors.add("Sum should be positive.");
         }
 
-        if (inRange(0,100, percent)) {
+        if (!inRange(0,100, percent)) {
             errors.add("Percent should be in a range: [0..100]!");
         }
 

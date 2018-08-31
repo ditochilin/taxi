@@ -18,6 +18,8 @@
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
+
+
     <input type="hidden" name="command" value="editOrder"/>
     <form method="post" action="/Controller" name="editOrder">
         <table>
@@ -83,6 +85,8 @@
                 <th>Waiting Time</th>
                 <th><input type="number" name="waitingTime"></th>
             </tr>
+
+
         </table>
     </form>
 </div>

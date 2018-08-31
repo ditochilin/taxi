@@ -28,9 +28,6 @@ public class TransactionManagerImpl {
     private static final IConnectionPool CONNECTION_POOL = new ConnectionPoolImpl();
     private static final Logger LOGGER = LogManager.getLogger(TransactionManagerImpl.class.getName());
 
-    static{
-        depth.set(0);
-    }
     private TransactionManagerImpl() {
     }
 
@@ -41,6 +38,16 @@ public class TransactionManagerImpl {
         return instance;
     }
 
+    private static void incDepth(ThreadLocal<Integer> depth){
+        Integer prevDepth = depth.get();
+        depth.set((prevDepth==null?0:prevDepth)+1);
+    }
+
+    private static void decDepth(ThreadLocal<Integer> depth){
+        Integer prevDepth = depth.get();
+        depth.set((prevDepth==null?0:prevDepth)-1);
+    }
+
     /**
      * @param unitOfWork a transmitted method
      * @return result of transmitted method
@@ -49,12 +56,12 @@ public class TransactionManagerImpl {
      */
     public static <T> T doInTransaction(Callable<T> unitOfWork) throws DaoException {
         Connection connection = getConnection();
-        depth.set(depth.get()+1);
+        incDepth(depth);
         LOGGER.debug(String.format("Get connection: %s from pool and set to Thread: %s", connection, Thread.currentThread()));
         try {
             T result = unitOfWork.call();
             LOGGER.debug(String.format("Do unit of work. result: %s", unitOfWork));
-            depth.set(depth.get()-1);
+            decDepth(depth);
             if(depth.get()==0) {
                 connection.commit();
                 LOGGER.debug("Commit success.");
@@ -63,16 +70,17 @@ public class TransactionManagerImpl {
         } catch (Exception e) {
             try {
                 connection.rollback();
+                depth.set(0);  // if rollback, then reset connection!
+                LOGGER.warn("Rollback success.",e.getCause());
             } catch (SQLException e1) {
                 LOGGER.error("Could not rollback transaction. "+e1.getMessage());
             }
-            LOGGER.warn("Rollback success.");
             throw new DaoException("rollback transaction during " + unitOfWork, e);
         } finally {
             if(depth.get()==0) {
                 JdbcUtils.closeQuietly(connection);
-                LOGGER.debug(String.format("Close connection success. Unset connection %s from Thread: %s", connection, Thread.currentThread()));
                 connectionHolder.remove();
+                LOGGER.debug(String.format("Close connection success. Unset connection %s from Thread: %s", connection, Thread.currentThread()));
             }
         }
     }

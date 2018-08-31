@@ -20,6 +20,12 @@ public class CarType implements Serializable {
     public CarType() {
     }
 
+    public CarType(Long id, String typeName, BigDecimal price) {
+        this.id = id;
+        this.typeName = typeName;
+        this.price = price;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }

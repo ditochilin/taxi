@@ -77,7 +77,10 @@ public class FulfillDatabase {
     }
 
     public void fulfillUsers() throws NoSuchEntityException, DaoException {
-        users = Arrays.asList(new User(), new User(), new User(), new User());
+        users = Arrays.asList(new User(),
+                new User(),
+                new User(),
+                new User());
         User currentUser = users.get(0);
         if (userDao.findByPhone("+380672184141").isEmpty()) {
             currentUser.setRole(roleDao.findByName("ADMIN"));
@@ -126,27 +129,29 @@ public class FulfillDatabase {
     }
 
     public void fulfillShares() {
-        shares = Arrays.asList(new Share(), new Share(), new Share());
+        shares = Arrays.asList(new Share(),
+                               new Share(),
+                               new Share());
 
         Share share1 = shares.get(0);
         share1.setShareName("loyalry_10");
         share1.setIsOn(true);
         share1.setSum(BigDecimal.valueOf(150));
-        share1.setPercent(10);
+        share1.setPercent(10f);
         share1.setIsLoyalty(true);
 
         Share share2 = shares.get(1);
         share2.setShareName("Share_5");
         share2.setIsOn(true);
         share2.setSum(BigDecimal.valueOf(100));
-        share2.setPercent(5);
+        share2.setPercent(5f);
         share2.setIsLoyalty(false);
 
         Share share3 = shares.get(2);
         share3.setShareName("Share_15");
         share3.setIsOn(true);
         share3.setSum(BigDecimal.valueOf(250));
-        share3.setPercent(15);
+        share3.setPercent(15f);
         share3.setIsLoyalty(true);
 
     }
@@ -339,6 +344,13 @@ public class FulfillDatabase {
     public void ztestFindCreated() throws DaoException {
         List<Order> orders = orderDao.findByStatus(Status.INWORK);
         Assert.assertTrue(orders.size() > 0);
+    }
+
+    @Test
+    public void testLogin() throws DaoException {
+        User logUser = userDao.findByName("root").get(0);
+        List<User> users = userDao.findAll();
+        List<Share> shares = shareDao.findAll();
     }
 
     @Test

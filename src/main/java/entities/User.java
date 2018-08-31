@@ -17,19 +17,36 @@ public class User implements Serializable {
     private String userName;
     private Role role;
 
-    public User() {
+    public User(Long id, String phone, String password, String userName, Role role) {
+        this.id = id;
+        this.phone = phone;
+        this.password = password;
+        this.userName = userName;
+        this.role = role;
     }
 
-    public User(String name, String password) {
-        this.userName = name;
-        this.password = password;
-    }
 
     public User(String phone, String password, String userName, Role role) {
         this.phone = phone;
         this.password = password;
         this.userName = userName;
         this.role = role;
+    }
+
+    public User(long id, String phone, String password, String userName) {
+        this.id = id;
+        this.phone = phone;
+        this.password = password;
+        this.userName = userName;
+    }
+
+    public User(String userName, String password) {
+        this.password = password;
+        this.userName = userName;
+    }
+
+    public User() {
+
     }
 
     public Long getId() {
@@ -73,7 +90,7 @@ public class User implements Serializable {
     }
 
     public Long getRoleId() {
-        if(role==null){
+        if (role == null) {
             return null;
         }
         return role.getId();
@@ -98,7 +115,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User[ userName=" + userName +" ]";
+        return "User[ userName=" + userName + " ]";
     }
 
 }
