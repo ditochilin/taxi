@@ -32,11 +32,11 @@
                                 <c:forEach var="statusItem" items="${statusList}">
                                     <c:choose>
                                         <c:when test="${statusItem eq orderDTO.status}">
-                                            <option value="${orderDTO.status.statusName}"
-                                                    selected>${orderDTO.status.statusName}</option>
+                                            <option value="${orderDTO.status}"
+                                                    selected>${orderDTO.status}</option>
                                         </c:when>
                                         <c:otherwise>
-                                            <option value="${statusItem.statusName}">${statusItem.statusName}</option>
+                                            <option value="${statusItem}">${statusItem}</option>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -44,7 +44,7 @@
                             <c:when test="${not empty statusList}">
                                 <option selected disabled>select status</option>
                                 <c:forEach var="status" items="${statusList}">
-                                    <option value="${status.statusName}">${status.statusName}</option>
+                                    <option value="${status}">${status}</option>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
@@ -53,7 +53,7 @@
                         </c:choose>
                     </select>
                 </th>
-            <tr>
+            </tr>
 
             <tr>
                 <th><fmt:message key="dateTime" bundle="${locale}"/></th>
@@ -179,20 +179,20 @@
 
             <tr>
                 <th><fmt:message key="endPoint" bundle="${locale}"/></th>
-                <input type="text" name="endPoint"
+                <th><input type="text" name="endPoint"
                         <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
                         <c:if test="${isThisEdition}"> value="${orderDTO.endPoint}"</c:if>
                 />
-                <th>
                 </th>
             </tr>
 
             <tr>
                 <th><fmt:message key="distance" bundle="${locale}"/></th>
-                <input type="number" name="distance"
+                <th><input type="number" name="distance"
                         <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                         <c:if test="${isThisEdition}"> value="${orderDTO.distance}"</c:if>
                 />
+                </th>
             </tr>
 
             <tr>
@@ -205,10 +205,10 @@
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="loyaltyItem" items="${loyaltyList}">
                                     <c:choose>
-                                        <c:when test="${loyaltyItem eq orderDTO.loyalty}">
+                                        <c:when test="${loyaltyItem eq loyalty}">
                                             <!-- todo check if work and what is sending -->
-                                            <option value="${orderDTO.loyalty.id}"
-                                                    selected>${orderDTO.loyalty.shareName}</option>
+                                            <option value="${loyalty.id}"
+                                                    selected>${loyalty.shareName}</option>
                                         </c:when>
                                         <c:otherwise>
                                             <option value="${loyaltyItem.id}">${loyaltyItem.shareName}</option>
@@ -240,10 +240,10 @@
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="shareItem" items="${shareList}">
                                     <c:choose>
-                                        <c:when test="${shareItem eq orderDTO.share}">
+                                        <c:when test="${shareItem eq share}">
                                             <!-- todo check if work and what is sending -->
-                                            <option value="${orderDTO.share.id}"
-                                                    selected>${orderDTO.share.shareName}</option>
+                                            <option value="${share.id}"
+                                                    selected>${share.shareName}</option>
                                         </c:when>
                                         <c:otherwise>
                                             <option value="${shareItem.id}">${shareItem.shareName}</option>
@@ -267,17 +267,19 @@
 
             <tr>
                 <th><fmt:message key="discount" bundle="${locale}"/></th>
-                <input type="number" name="discount"
+                <th><input type="number" name="discount"
                         <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                         <c:if test="${isThisEdition}"> value="${orderDTO.discount}"</c:if>
                 />
+                </th>
             </tr>
 
             <tr>
                 <th><fmt:message key="cost" bundle="${locale}"/></th>
-                <input type="number" name="cost" disabled
+                <th><input type="number" name="cost" disabled
                         <c:if test="${isThisEdition}"> value="${orderDTO.cost}"</c:if>
                 />
+                </th>
             </tr>
 
             <tr>
@@ -292,10 +294,11 @@
 
             <tr>
                 <th><fmt:message key="waitingTime" bundle="${locale}"/></th>
-                <input type="number" name="waitingTime"
+                <th><input type="number" name="waitingTime"
                         <c:if test="${sessionScope.role eq 'CLIENT'}"> disabled</c:if>
                         <c:if test="${isThisEdition}"> value="${orderDTO.waitingTime}"</c:if>
                 />
+                </th>
             </tr>
 
             <tr>

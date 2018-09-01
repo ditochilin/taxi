@@ -12,6 +12,20 @@
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 
+    <p style="color: red">
+        <c:if test="${not empty resultMessage}">
+            <span><fmt:message key="${resultMessage}"/></span>
+        </c:if>
+    </p>
+
+    <span><fmt:message key="List of orders" bundle="${locale}"/></span>
+    <form action="/Controller" name="addOrder" method="post">
+        <input type="hidden" name="command" value="editOrder"/>
+        <button type="submit" class="smallbutton">
+            <fmt:message key="addBtn" bundle="${locale}"/>
+        </button>
+    </form>
+
     <table border="1">
         <tr>
             <th><fmt:message key="status" bundle="${locale}"/></th>
@@ -32,8 +46,8 @@
             <tr>
                 <td><c:out value="${order.status}"/></td>
                 <td><c:out value="${order.dateTime}"/></td>
-                <td><c:out value="${order.client}"/></td>
-                <td><c:out value="${order.carType}"/></td>
+                <td><c:out value="${order.client.userName}"/></td>
+                <td><c:out value="${order.carType.typeName}"/></td>
                 <td><c:out value="${order.taxi}"/></td>
                 <td><c:out value="${order.startPoint}"/></td>
                 <td><c:out value="${order.endPoint}"/></td>
