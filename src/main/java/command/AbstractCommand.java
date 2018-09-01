@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import service.IRoleService;
 import service.IService;
 import service.IUserService;
+import service.exceptions.EmptyException;
 import service.exceptions.ServiceException;
 import service.implementation.RoleService;
 import service.implementation.UserService;
@@ -49,14 +50,15 @@ public abstract class AbstractCommand<T> {
         //  union two acts in one common catch
         try{
             if (!errors.isEmpty()) {
-                throw new Exception();
+                throw new EmptyException();
             }
             service.update(
                     entity,
                     id,
                     msg);
         } catch (Exception e){
-            if(e.getCause()!=null) {
+            // if not EmptyException than exceptions from update() are waited to get
+            if(!(e instanceof EmptyException)) {
                 errors.add(String.valueOf(e.getCause()));
             }
             request.setAttribute("errors", errors);

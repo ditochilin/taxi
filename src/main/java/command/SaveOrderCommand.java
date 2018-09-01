@@ -28,6 +28,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
     private static IShareService shareService;
 
     public SaveOrderCommand() {
+        service = OrderService.getInstance();
         orderService = OrderService.getInstance();
         userService = UserService.getInstance();
         carTypeService = CarTypeService.getInstance();
@@ -56,11 +57,11 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         return Config.getProperty(Config.ORDERS);
     }
 
-    // todo : make patter Builder
+    // todo : make pattern Builder
     private static Order buildOrder(HttpServletRequest request, Set<String> errors) throws ServiceException {
 
         Long id = getLongParameter(request,"orderId");
-        Status status = Status.valueOf(request.getParameter("statusName"));
+        String status = request.getParameter("statusName");
         String dateOrder = request.getParameter("dateOrder");
         String timeOrder = request.getParameter("timeOrder");
         Long clientId = getLongParameter(request,"clientId");
@@ -72,16 +73,17 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         Long loyaltyId = getLongParameter(request,"loyaltyId");
         Long shareId = getLongParameter(request,"shareId");
 
-        Integer discount = Integer.valueOf(request.getParameter("discount"));
+        Integer discount = getIntegerParameter(request, "discount");
 
 //        //auto counted
 //        BigDecimal cost = BigDecimal.valueOf(Long.valueOf(request.getParameter("cost")));
 
         String dateFeed = request.getParameter("dateFeed");
         String timeFeed = request.getParameter("timeFeed");
-        Integer waitingTime = Integer.valueOf(request.getParameter("waitingTime"));
+        Integer waitingTime = getIntegerParameter(request, "waitingTime");
 
         Order orderDTO = new Order();
+
         checkOrderFieldsErrorsAndFulFill(orderDTO, id, status,
                 dateOrder, timeOrder, clientId, carTypeId,
                 startPoint, endPoint,
@@ -93,32 +95,47 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
     }
 
     private static Long getLongParameter(HttpServletRequest request, String name){
-        String value = request.getParameter("clientId");
-        if(value==null){
+        String value = request.getParameter(name);
+        if(value==null || value.isEmpty()){
             return null;
         }
         return Long.valueOf(value);
     }
 
+    private static Integer getIntegerParameter(HttpServletRequest request, String name){
+        String value = request.getParameter(name);
+        if(value==null || value.isEmpty()){
+            return null;
+        }
+        return Integer.valueOf(value);
+    }
+
     private static void addShares(Order orderDTO, Long... sharesIds) throws ServiceException {
         for (Long shareId : sharesIds) {
             if (shareId != null) {
-                orderDTO.getShares().add(
+                orderDTO.addShare(
                         shareService.getById(shareId)
                 );
             }
         }
     }
 
-    private static void checkOrderFieldsErrorsAndFulFill(Order orderDTO, Long id, Status status, String dateOrder, String timeOrder,
+    private static void checkOrderFieldsErrorsAndFulFill(Order orderDTO, Long id, String status, String dateOrder, String timeOrder,
                                                          Long clientId, Long carTypeId, String startPoint,
                                                          String endPoint, Long taxiId, Integer discount,
                                                          String dateFeed, String timeFeed, Integer waitingTime, Set<String> errors) {
+        if(status==null) {
+            orderDTO.setStatus(Status.CREATED);
+        }else{
+            orderDTO.setStatus(Status.valueOf(status));
+        }
+
         if (id == null) {
             orderDTO.setStatus(Status.CREATED);
-        } else if (taxiId != null && Status.CREATED.equals(status)) {
+        } else if (taxiId != null && Status.CREATED.equals(orderDTO.getStatus())) {
             orderDTO.setStatus(Status.INWORK);
         }
+        orderDTO.setId(id);
 
         SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss", Locale.ROOT);
         Date newDateTime = new Date();
@@ -175,15 +192,14 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             orderDTO.setEndPoint(endPoint);
         }
 
-        if (discount < 0) {
+        boolean discountIsPresent = Optional.ofNullable(discount).isPresent();
+        if (discountIsPresent && discount< 0) {
             errors.add("Discount must be positive!");
-        } else if (discount > 0) {
+        } else if (discountIsPresent) {
             orderDTO.setDiscount(discount);
         }
 
-        if (dateFeed.isEmpty() || timeFeed.isEmpty()) {
-            errors.add("Feed time must be!");
-        } else {
+        if (dateFeed.length() > 0 && timeFeed.length() > 0) {
             try {
                 Date newFeedTime = dateformat.parse(dateFeed + " " + timeFeed+":00");
                 orderDTO.setFeedTime(newFeedTime);
@@ -192,9 +208,10 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             }
         }
 
-        if (waitingTime < 0) {
+        boolean waitingTimeIsPresent = Optional.ofNullable(waitingTime).isPresent();
+        if (waitingTimeIsPresent && waitingTime < 0) {
             errors.add("Waiting time must be positive!");
-        } else if (waitingTime > 0) {
+        } else if (waitingTimeIsPresent) {
             orderDTO.setWaitingTime(waitingTime);
         }
     }

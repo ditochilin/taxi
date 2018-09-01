@@ -38,7 +38,7 @@ public abstract class AbstractService<T> implements IService<T> {
         try {
             if (isEntityDTONew(entityDTO, id)) {
                 dao.insert(entityDTO);
-                msg.append("Successful registration!");
+                msg.append("Successful addition!");
             } else {
                 dao.update(entityDTO);
                 msg.append("Successful update!");

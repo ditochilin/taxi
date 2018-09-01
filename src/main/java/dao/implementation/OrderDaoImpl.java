@@ -149,7 +149,7 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
                 updateShares(order);
             }
             if (taxi != null) {
-                taxiDao.turnBusynessInTransaction(taxi, order.getStatus().equals(Status.INWORK));
+                taxiDao.turnBusynessInTransaction(taxi, Status.INWORK.equals(order.getStatus()));
             }
             return updatedOrder;
         });

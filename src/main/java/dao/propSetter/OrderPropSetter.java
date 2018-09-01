@@ -21,8 +21,8 @@ public class OrderPropSetter implements IPropSetter<Order> {
             setDateTimeForSQL(statement,1, order.getDateTime());
             statement.setString(2, order.getStartPoint());
             statement.setString(3, order.getEndPoint());
-            statement.setInt(4, order.getDistance());
-            statement.setBigDecimal(5, order.getCost());
+            setValueOrNull(statement,4, order.getDistance());
+            setValueOrNull(statement,5, order.getCost());
             setDateTimeForSQL(statement,6, order.getFeedTime());
             String statusString = "";
             Status status = order.getStatus();

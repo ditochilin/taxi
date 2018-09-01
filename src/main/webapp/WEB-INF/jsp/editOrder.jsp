@@ -60,11 +60,13 @@
                 <th>
                     <input type="text" name="dateOrder" placeholder="dd-MM-yyyy"
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}" pattern="dd-MM-yyyy" />" </c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}"
+                                                                                  pattern="dd-MM-yyyy"/>" </c:if>
                     />
-                    <input type="text" name="timeOrder"  placeholder="HH:mm:ss"
+                    <input type="text" name="timeOrder" placeholder="HH:mm:ss"
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}" pattern="HH:mm:ss" />" </c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}"
+                                                                                  pattern="HH:mm:ss"/>" </c:if>
 
                     />
                 </th>
@@ -76,6 +78,7 @@
                     <select name='clientId'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                     >
+                        <option selected value="${null}">empty client</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="clientItem" items="${clientList}">
@@ -91,14 +94,10 @@
                                 </c:forEach>
                             </c:when>
                             <c:when test="${not empty clientList}">
-                                <option selected disabled>select client</option>
                                 <c:forEach var="clientItem" items="${clientList}">
                                     <option value="${clientItem.id}">${clientItem.userName}</option>
                                 </c:forEach>
                             </c:when>
-                            <c:otherwise>
-                                <option selected disabled>no client</option>
-                            </c:otherwise>
                         </c:choose>
                     </select>
                 </th>
@@ -110,6 +109,7 @@
                     <select name='carTypeId'
                             <c:if test="${sessionScope.role eq 'DRIVER'}"> hidden </c:if>
                     >
+                        <option selected value="${null}">empty car type</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="carTypeItem" items="${carTypeList}">
@@ -125,14 +125,10 @@
                                 </c:forEach>
                             </c:when>
                             <c:when test="${not empty carTypeList}">
-                                <option selected disabled>select carType</option>
                                 <c:forEach var="carTypeItem" items="${carTypeList}">
                                     <option value="${carTypeItem.id}">${carTypeItem.typeName}</option>
                                 </c:forEach>
                             </c:when>
-                            <c:otherwise>
-                                <option selected disabled>no carType</option>
-                            </c:otherwise>
                         </c:choose>
                     </select>
                 </th>
@@ -144,28 +140,41 @@
                     <select name='taxiId'
                             <c:if test="${sessionScope.role eq 'CLIENT'}"> disabled</c:if>
                     >
+                        <option selected value="${null}">empty taxi</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
-                                <c:forEach var="taxiItem" items="${taxiList}">
-                                    <c:choose>
-                                        <c:when test="${taxiItem eq orderDTO.taxi}">
-                                            <option value="${orderDTO.taxi.id}"
-                                                    selected>${orderDTO.taxi}</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${taxiItem.id}">${taxiItem}</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </c:when>
-                            <c:when test="${not empty taxiList}">
-                                <option selected disabled>select taxi</option>
-                                <c:forEach var="taxi" items="${taxiList}">
-                                    <option value="${taxi.id}">${taxi}</option>
-                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${not empty taxiList}">
+                                        <c:forEach var="taxiItem" items="${taxiList}">
+                                            <c:choose>
+                                                <c:when test="${taxiItem eq orderDTO.taxi}">
+                                                    <option value="${orderDTO.taxi.id}"
+                                                            selected>${orderDTO.taxi}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="${taxiItem.id}">${taxiItem}</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${not empty orderDTO.taxi}">
+                                                <option value="${orderDTO.taxi.id}"
+                                                        selected>${orderDTO.taxi}</option>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
-                                <option selected disabled>no taxi</option>
+                                <c:choose>
+                                    <c:when test="${not empty taxiList}">
+                                        <c:forEach var="taxi" items="${taxiList}">
+                                            <option value="${taxi.id}">${taxi}</option>
+                                        </c:forEach>
+                                    </c:when>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </select>
@@ -206,12 +215,12 @@
                     <select name='loyaltyId'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                     >
+                        <option selected value="${null}">empty loyalty</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="loyaltyItem" items="${loyaltyList}">
                                     <c:choose>
                                         <c:when test="${loyaltyItem eq loyalty}">
-                                            <!-- todo check if work and what is sending -->
                                             <option value="${loyalty.id}"
                                                     selected>${loyalty.shareName}</option>
                                         </c:when>
@@ -221,14 +230,10 @@
                                     </c:choose>
                                 </c:forEach>
                             </c:when>
-                            <c:when test="${not empty loyaltyList}">
-                                <option selected disabled>select loyalty</option>
+                            <c:otherwise>
                                 <c:forEach var="loyaltyItem" items="${loyaltyList}">
                                     <option value="${loyaltyItem.id}">${loyaltyItem.shareName}</option>
                                 </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <option selected disabled>no loyalty</option>
                             </c:otherwise>
                         </c:choose>
                     </select>
@@ -241,12 +246,12 @@
                     <select name='shareId'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                     >
+                        <option selected value="${null}">empty share</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="shareItem" items="${shareList}">
                                     <c:choose>
                                         <c:when test="${shareItem eq share}">
-                                            <!-- todo check if work and what is sending -->
                                             <option value="${share.id}"
                                                     selected>${share.shareName}</option>
                                         </c:when>
@@ -256,14 +261,10 @@
                                     </c:choose>
                                 </c:forEach>
                             </c:when>
-                            <c:when test="${not empty shareList}">
-                                <option selected disabled>select share</option>
+                            <c:otherwise>
                                 <c:forEach var="shareItem" items="${shareList}">
                                     <option value="${shareItem.id}">${shareItem.shareName}</option>
                                 </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <option selected disabled>no share</option>
                             </c:otherwise>
                         </c:choose>
                     </select>
@@ -292,11 +293,13 @@
                 <th>
                     <input type="text" name="dateFeed" placeholder="dd-MM-yyyy"
                             <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}" pattern="dd-MM-yyyy" />" </c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}"
+                                                                                  pattern="dd-MM-yyyy"/>" </c:if>
                     />
                     <input type="text" name="timeFeed" placeholder="HH:ss"
                             <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}" pattern="HH:mm" />" </c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}"
+                                                                                  pattern="HH:mm"/>" </c:if>
 
                     />
                 </th>

@@ -35,6 +35,7 @@ public class Order implements Serializable {
     private List<Share> shares;
 
     public Order() {
+        this.shares = new ArrayList<>();
     }
 
     public Order(Long id, Date dateTime, String startPoint, String endPoint,
