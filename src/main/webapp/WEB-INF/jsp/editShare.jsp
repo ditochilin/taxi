@@ -84,7 +84,6 @@
             <tr>
                 <jsp:include page="errorsStack.jsp"/>
             </tr>
-            </tr>
             <tr>
                 <th>
                     <input type="submit" name="saveShare"

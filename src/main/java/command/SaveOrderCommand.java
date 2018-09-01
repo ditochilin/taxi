@@ -58,7 +58,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
     }
 
     // todo : make pattern Builder
-    private static Order buildOrder(HttpServletRequest request, Set<String> errors) throws ServiceException {
+    private static Order buildOrder(HttpServletRequest request, Set<String> errors) {
 
         Long id = getLongParameter(request,"orderId");
         String status = request.getParameter("statusName");
@@ -75,39 +75,16 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
 
         Integer discount = getIntegerParameter(request, "discount");
 
-//        //auto counted
-//        BigDecimal cost = BigDecimal.valueOf(Long.valueOf(request.getParameter("cost")));
-
         String dateFeed = request.getParameter("dateFeed");
         String timeFeed = request.getParameter("timeFeed");
         Integer waitingTime = getIntegerParameter(request, "waitingTime");
 
-        Order orderDTO = new Order();
 
-        checkOrderFieldsErrorsAndFulFill(orderDTO, id, status,
+        return checkOrderFieldsErrorsAndFulFill(id, status,
                 dateOrder, timeOrder, clientId, carTypeId,
                 startPoint, endPoint,
-                taxiId, discount, dateFeed, timeFeed, waitingTime, errors);
+                taxiId, discount, dateFeed, timeFeed, waitingTime,  loyaltyId, shareId, errors);
 
-        addShares(orderDTO, loyaltyId, shareId);
-
-        return orderDTO;
-    }
-
-    private static Long getLongParameter(HttpServletRequest request, String name){
-        String value = request.getParameter(name);
-        if(value==null || value.isEmpty()){
-            return null;
-        }
-        return Long.valueOf(value);
-    }
-
-    private static Integer getIntegerParameter(HttpServletRequest request, String name){
-        String value = request.getParameter(name);
-        if(value==null || value.isEmpty()){
-            return null;
-        }
-        return Integer.valueOf(value);
     }
 
     private static void addShares(Order orderDTO, Long... sharesIds) throws ServiceException {
@@ -120,10 +97,11 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         }
     }
 
-    private static void checkOrderFieldsErrorsAndFulFill(Order orderDTO, Long id, String status, String dateOrder, String timeOrder,
+    private static Order checkOrderFieldsErrorsAndFulFill(Long id, String status, String dateOrder, String timeOrder,
                                                          Long clientId, Long carTypeId, String startPoint,
                                                          String endPoint, Long taxiId, Integer discount,
-                                                         String dateFeed, String timeFeed, Integer waitingTime, Set<String> errors) {
+                                                         String dateFeed, String timeFeed, Integer waitingTime, Long loyaltyId, Long shareId, Set<String> errors) {
+        Order orderDTO = new Order();
         if(status==null) {
             orderDTO.setStatus(Status.CREATED);
         }else{
@@ -153,7 +131,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             errors.add("Client must be in order!");
         } else {
             try {
-                orderDTO.setClient(userService.getById(Long.valueOf(clientId)));
+                orderDTO.setClient(userService.getById(clientId));
             } catch (ServiceException e) {
                 errors.add("Could not get client by id: " + clientId);
             }
@@ -163,7 +141,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             errors.add("CarType must be in order!");
         } else {
             try {
-                orderDTO.setCarType(carTypeService.getById(Long.valueOf(carTypeId)));
+                orderDTO.setCarType(carTypeService.getById(carTypeId));
             } catch (ServiceException e) {
                 errors.add("Could not get client by id: " + clientId);
             }
@@ -174,7 +152,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             errors.add("Taxi must be in order!");
         } else if (taxiId != null) {
             try {
-                orderDTO.setTaxi(taxiService.getById(Long.valueOf(taxiId)));
+                orderDTO.setTaxi(taxiService.getById(taxiId));
             } catch (ServiceException e) {
                 errors.add("Could not get client by id: " + clientId);
             }
@@ -214,5 +192,13 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         } else if (waitingTimeIsPresent) {
             orderDTO.setWaitingTime(waitingTime);
         }
+
+        try {
+            addShares(orderDTO, loyaltyId, shareId);
+        } catch (ServiceException e) {
+            errors.add("Could not add shares in order: "+id+". "+e.getCause());
+        }
+
+        return orderDTO;
     }
 }

@@ -120,9 +120,26 @@ public abstract class AbstractCommand<T> {
         return errors;
     }
 
+    protected static Long getLongParameter(HttpServletRequest request, String name){
+        String value = request.getParameter(name);
+        if(value==null || value.isEmpty()){
+            return null;
+        }
+        return Long.valueOf(value);
+    }
+
+    protected static Integer getIntegerParameter(HttpServletRequest request, String name){
+        String value = request.getParameter(name);
+        if(value==null || value.isEmpty()){
+            return null;
+        }
+        return Integer.valueOf(value);
+    }
+
     // Returns true if x is in range [low..high], else false
     protected static boolean inRange(float low, float high, float x)
     {
         return ((x-high)*(x-low) <= 0);
     }
 }
+

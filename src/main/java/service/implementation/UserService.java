@@ -69,6 +69,18 @@ public class UserService extends AbstractService<User> implements IUserService {
         return new ArrayList<>();
     }
 
+
+    @Override
+    public List<User> getAllDrivers() {
+        try {
+            Role roleDriver = roleDao.findByName("DRIVER");
+            return userDao.findByRole(roleDriver);
+        } catch (DaoException | NoSuchEntityException e) {
+            LOGGER.error("Couldn't get drivers from database.");
+        }
+        return new ArrayList<>();
+    }
+
     @Override
     public List<User> getUsersByName(String userName) throws ServiceException {
         try {

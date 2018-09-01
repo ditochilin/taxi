@@ -9,6 +9,7 @@ public class Config {
 
     public static final String EDIT_SHARE = "EDIT_SHARE";
     public static final String EDIT_CARTYPE = "EDIT_CARTYPE";
+    public static final String EDIT_TAXI = "EDIT_TAXI";
     private static final ResourceBundle resource  = ResourceBundle.getBundle("config");
     public static final String EDIT_USER = "EDIT_USER";
     public static final String ADMIN = "ADMIN";

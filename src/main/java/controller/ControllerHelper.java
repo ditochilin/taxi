@@ -56,6 +56,10 @@ public class ControllerHelper  {
         commands.put("removeCarType", new RemoveCarTypeCommand());
 
         commands.put("openListTaxis", new OpenListTaxisCommand());
+        commands.put("editTaxi", new EditTaxiCommand());
+        commands.put("removeTaxi", new RemoveTaxiCommand());
+        commands.put("saveTaxi", new SaveTaxiCommand());
+
     }
 
     public ICommand getCommand(HttpServletRequest request) {

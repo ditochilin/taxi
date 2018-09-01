@@ -14,9 +14,9 @@
 
     <c:set var="isThisEdition" value="${not empty orderDTO}"/>
 
+    <p><fmt:message key="Edit client's order" bundle="${locale}"/></p>
     <form method="post" action="/Controller" name="saveOrder">
         <input type="hidden" name="command" value="saveOrder"/>
-        <p><fmt:message key="Edit client's order" bundle="${locale}"/></p>
         <c:if test="${isThisEdition eq true}">
             <input type="hidden" name="orderId" value="${orderDTO.id}"/>
         </c:if>

@@ -6,24 +6,33 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="vehicles"/></title>
+    <title><fmt:message key="vehicles" bundle="${locale}"/></title>
 </head>
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
+
     <span><fmt:message key="ListOfVehicles" bundle="${locale}"/></span>
     <p style="color: red">
         <c:if test="${not empty resultMessage}">
             <span><fmt:message key="${resultMessage}"/></span>
         </c:if>
     </p>
+
+    <form action="/Controller" name="addTaxi" method="post">
+        <input type="hidden" name="command" value="editTaxi"/>
+        <button type="submit" class="smallbutton">
+            <fmt:message key="addBtn" bundle="${locale}"/>
+        </button>
+    </form>
+
     <table border="1">
         <tr>
-            <th>Driver</th>
-            <th>Car type</th>
-            <th>Car name</th>
-            <th>Number</th>
-            <th>Busy</th>
+            <th><fmt:message key="driver" bundle="${locale}"/></th>
+            <th><fmt:message key="carType" bundle="${locale}"/></th>
+            <th><fmt:message key="carName" bundle="${locale}"/></th>
+            <th><fmt:message key="number" bundle="${locale}"/></th>
+            <th><fmt:message key="busy" bundle="${locale}"/></th>
         </tr>
         <c:forEach var="taxi" items="${taxiList}">
             <tr>
@@ -32,6 +41,22 @@
                 <td><c:out value="${taxi.carName}"/></td>
                 <td><c:out value="${taxi.carNumber}"/></td>
                 <td><c:out value="${taxi.busy}"/></td>
+                <td>
+                    <form action="/Controller" name="taxiEdit" method="post">
+                        <input type="hidden" name="command" value="editTaxi"/>
+                        <input type="hidden" name="taxiId" value="${taxi.id}"/>
+                        <button type="submit" class="smallbutton">
+                            <fmt:message key="editBtn" bundle="${locale}"/>
+                        </button>
+                    </form>
+                    <form action="/Controller" name="taxiRemove" method="post">
+                        <input type="hidden" name="command" value="removeTaxi"/>
+                        <input type="hidden" name="taxiId" value="${taxi.id}"/>
+                        <button type="submit" class="smallbutton">
+                            <fmt:message key="removeBtn" bundle="${locale}"/>
+                        </button>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
     </table>

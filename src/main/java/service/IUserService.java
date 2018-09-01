@@ -31,4 +31,5 @@ public interface IUserService extends IService<User> {
 
     boolean suchPhoneIsPresent(String phone) throws ServiceException;
 
+    List<User> getAllDrivers();
 }
