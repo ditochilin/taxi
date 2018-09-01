@@ -36,6 +36,8 @@ public class ControllerHelper  {
 
         commands.put("openListOrders", new OpenListOrdersCommand());
         commands.put("editOrder", new EditOrderCommand());
+        commands.put("removeOrder", new RemoveOrderCommand());
+        commands.put("saveOrder", new SaveOrderCommand());
 
         commands.put("openAdministration", new OpenAdministrationCommand());
         commands.put("openListUsers", new OpenAdministrationCommand());   // the same with OpenAdministrationCommand()

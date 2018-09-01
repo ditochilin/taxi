@@ -22,9 +22,9 @@ public interface IPropSetter<T> {
         }
     }
 
-    default void setValueOrNull(PreparedStatement statement, int parameterIndex, Long id) throws SQLException {
+    default void setValueOrNull(PreparedStatement statement, int parameterIndex, Number id) throws SQLException {
         if (id != null) {
-            statement.setLong(parameterIndex, id);
+            statement.setLong(parameterIndex, id.longValue());
         } else {
             statement.setNull(parameterIndex, Types.BIGINT);
         }

@@ -1,6 +1,8 @@
 package dao.implementation;
 
-import dao.*;
+import dao.AbstractDao;
+import dao.IOrderDao;
+import dao.ITaxiDao;
 import dao.enricher.IEnricher;
 import dao.enricher.OrderEnricher;
 import dao.exceptions.DaoException;
@@ -29,27 +31,26 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     private static IExtractor<Order> extractor;
     private static IPropSetter<Order> propSetter;
     private static IEnricher<Order> enricher;
-    private static IUserDao userDao;
     private static ITaxiDao taxiDao;
-    private static IShareDao shareDao;
 
     //SQL
-    private static final String FIND_ALL = "SELECT order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, id_user, id_taxi, id_order FROM orders";
-    private static final String FIND_BY_DRIVER = "SELECT order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, orders.id_user, orders.id_taxi, id_order FROM orders" +
+    private static final String FIND_ALL = "SELECT order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, discount, id_user, id_taxi, id_car_type, id_order FROM orders";
+    private static final String FIND_BY_DRIVER = "SELECT order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, discount, orders.id_user, orders.id_taxi, orders.id_car_type, id_order FROM orders" +
             " INNER JOIN taxis ON taxis.id_taxi = orders.id_taxi AND taxis.id_user = ?";
-    private static final String INSERT = "INSERT INTO orders (order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, id_user, id_taxi) VALUES(?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE orders SET order_date=?, start_point=?, end_point=?, distance=?, cost=?, feed_time=?, status_order=?, waiting_time=?, id_user=?, id_taxi=? WHERE id_order = ?";
+    private static final String INSERT = "INSERT INTO orders (order_date, start_point, end_point, distance, cost, feed_time, status_order, waiting_time, discount, id_user, id_taxi, id_car_type) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE orders SET order_date=?, start_point=?, end_point=?, distance=?, cost=?, feed_time=?, status_order=?, waiting_time=?, discount=?, id_user=?, id_taxi=?, id_car_type=? WHERE id_order = ?";
     private static final String DELETE = "DELETE FROM orders WHERE id_order = ?";
     private static final String DELETE_TRANSIT_SHAREORDER = "DELETE FROM orders_shares";
     private static final String INSERT_TRANSIT_SHARES = "INSERT INTO orders_shares (id_order, id_share) VALUES ";
 
     private OrderDaoImpl() {
-        userDao = UserDaoImpl.getInstance();
         taxiDao = TaxiDaoImpl.getInstance();
-        shareDao = ShareDaoImpl.getInstance();
         extractor = new OrderExtractor();
         propSetter = new OrderPropSetter();
-        enricher = new OrderEnricher(userDao, taxiDao, shareDao);
+        enricher = new OrderEnricher(UserDaoImpl.getInstance(),
+                taxiDao,
+                ShareDaoImpl.getInstance(),
+                CarTypeDaoImpl.getInstance());
     }
 
     public static OrderDaoImpl getInstance() {
@@ -92,6 +93,12 @@ public class OrderDaoImpl extends AbstractDao<Order> implements IOrderDao {
     public List<Order> findByStatus(Status status) throws DaoException {
         return TransactionManagerImpl.doInTransaction(() ->
                 findByInTransaction(FIND_ALL, "status_order", status.name(), extractor, enricher));
+    }
+
+    @Override
+    public List<Order> findByCarType(CarType carType) throws DaoException {
+        return TransactionManagerImpl.doInTransaction(() ->
+                findByInTransaction(FIND_ALL, "id_car_type", carType.getId(), extractor, enricher));
     }
 
     @Override

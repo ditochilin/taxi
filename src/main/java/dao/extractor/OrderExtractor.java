@@ -1,7 +1,7 @@
 package dao.extractor;
 
-import entities.Status;
 import entities.Order;
+import entities.Status;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,16 +10,18 @@ public class OrderExtractor implements IExtractor<Order> {
 
     @Override
     public Order extractEntityData(ResultSet resultSet) throws SQLException {
-        Order Order = new Order();
-        Order.setId(resultSet.getLong("id_order"));
-        Order.setDateTime(resultSet.getTimestamp("order_date"));
-        Order.setStartPoint(resultSet.getString("start_point"));
-        Order.setEndPoint(resultSet.getString("end_point"));
-        Order.setDistance(resultSet.getInt("distance"));
-        Order.setCost(resultSet.getBigDecimal("cost"));
-        Order.setFeedTime(resultSet.getTimestamp("feed_time"));
-        Order.setStatus(Status.valueOf(resultSet.getString("status_order")));
-        Order.setWaitingTime(resultSet.getInt("waiting_time"));
+        Order Order = new Order(
+                resultSet.getLong("id_order"),
+                resultSet.getTimestamp("order_date"),
+                resultSet.getString("start_point"),
+                resultSet.getString("end_point"),
+                resultSet.getInt("distance"),
+                resultSet.getBigDecimal("cost"),
+                resultSet.getTimestamp("feed_time"),
+                Status.valueOf(resultSet.getString("status_order")),
+                resultSet.getInt("waiting_time"),
+                resultSet.getInt("discount")
+        );
         return Order;
     }
 }

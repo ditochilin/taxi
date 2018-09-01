@@ -13,7 +13,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="makeOrder"/></title>
+    <title><fmt:message key="Edit user"/></title>
 </head>
 <body>
 <div class="container">
@@ -25,10 +25,10 @@
     <form method="post" action="/Controller" name="saveUser">
         <input type="hidden" name="command" value="saveUser"/>
         <p><fmt:message key="Edit user" bundle="${locale}"/></p>
+        <c:if test="${isThisEdition eq true}">
+            <input type="hidden" name="userId" value="${userDTO.id}"/>
+        </c:if>
         <table>
-            <c:if test="${isThisEdition eq true}">
-                <input type="hidden" name="userId" value="${userDTO.id}"/>
-            </c:if>
             <tr>
                 <th><fmt:message key="User's name" bundle="${locale}"/></th>
                 <th><input type="text" name="userName"
@@ -95,7 +95,7 @@
                     <input type="password" name="confirmPassword"/>
                 </th>
             </tr>
-            <tr>
+
             <tr>
                 <c:if test="${not empty requestScope.errors}">
                     <c:forEach items="${requestScope.errors}" var="error">
@@ -104,7 +104,7 @@
                     </c:forEach>
                 </c:if>
             </tr>
-            </tr>
+
             <tr>
                 <th>
                     <input type="submit" name="saveUser"

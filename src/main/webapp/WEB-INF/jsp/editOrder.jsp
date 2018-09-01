@@ -1,92 +1,309 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Dmitry Tochilin
-  Date: 21.08.2018
-  Time: 19:13
-  To change this template use File | Settings | File Templates.
---%>
 <fmt:setLocale value="${sessionScope.locale}"/>
-<fmt:setBundle basename="locale"/>
+<fmt:setBundle basename="locale" var="locale"/>
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="makeOrder"/></title>
+    <title><fmt:message key="Edit client's order"/></title>
 </head>
 <body>
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 
+    <c:set var="isThisEdition" value="${not empty orderDTO}"/>
 
-    <input type="hidden" name="command" value="editOrder"/>
-    <form method="post" action="/Controller" name="editOrder">
+    <form method="post" action="/Controller" name="saveOrder">
+        <input type="hidden" name="command" value="saveOrder"/>
+        <p><fmt:message key="Edit client's order" bundle="${locale}"/></p>
+        <c:if test="${isThisEdition eq true}">
+            <input type="hidden" name="orderId" value="${orderDTO.id}"/>
+        </c:if>
         <table>
-            <p><fmt:message key="Edit client's order"/></p>
             <tr>
-                <th>Status</th>
-                <th><select name='statusList'>
-                    <c:forEach items="${statusList}" var="status">
-                        <option value="${status}">${status}</option>
-                    </c:forEach>
-                </select>
+                <th><fmt:message key="status" bundle="${locale}"/></th>
+                <th>
+                    <select name='statusName'
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="statusItem" items="${statusList}">
+                                    <c:choose>
+                                        <c:when test="${statusItem eq orderDTO.status}">
+                                            <option value="${orderDTO.status.statusName}"
+                                                    selected>${orderDTO.status.statusName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${statusItem.statusName}">${statusItem.statusName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty statusList}">
+                                <option selected disabled>select status</option>
+                                <c:forEach var="status" items="${statusList}">
+                                    <option value="${status.statusName}">${status.statusName}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no status</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
                 </th>
             <tr>
+
             <tr>
-                <th>Date</th>
-                <th><input type="datetime-local" name="date"></th>
-            </tr>
-            <tr>
-                <th>Client</th>
+                <th><fmt:message key="dateTime" bundle="${locale}"/></th>
                 <th>
-                <th><select name='clientList'>
-                    <c:forEach items="${clientList}" var="client">
-                        <option value="${client}">${client}</option>
-                    </c:forEach>
-                </select></th>
-            </tr>
-            <tr>
-                <th>Taxi</th>
-                <th><select name='taxiList'>
-                    <c:forEach items="${taxiList}" var="taxi">
-                        <option value="${taxi}">${taxi}</option>
-                    </c:forEach>
-                </select></th>
-            </tr>
-            <tr>
-                <th>Start point</th>
-                <th><input type="text" name="startPoint"></th>
-            </tr>
-            <tr>
-                <th>Destination</th>
-                <th><input type="text" name="endPoint"></th>
-            </tr>
-            <tr>
-                <th>Distance</th>
-                <th><input type="number" name="distance"></th>
-            </tr>
-            <tr>
-                <th>Shares</th>
-                <!--todo  multiple choice can be added-->
-                <th><input type="text" name="share"></th>
-                <th><input type="text" name="share"></th>
-                <th><input type="text" name="share"></th>
-            </tr>
-            <tr>
-                <th>Cost</th>
-                <th><input type="number" name="cost"></th>
-            </tr>
-            <tr>
-                <th>Feed time</th>
-                <th><input type="feedTime" name="feedTime"></th>
-            </tr>
-            <tr>
-                <th>Waiting Time</th>
-                <th><input type="number" name="waitingTime"></th>
+                    <input type="datetime-local" name="dateTime"
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                            <c:if test="${isThisEdition}"> value="${orderDTO.dateTime}"</c:if>
+                    />
+                </th>
             </tr>
 
+            <tr>
+                <th><fmt:message key="client" bundle="${locale}"/></th>
+                <th>
+                    <select name='clientId'
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="clientItem" items="${clientList}">
+                                    <c:choose>
+                                        <c:when test="${clientItem eq orderDTO.client}">
+                                            <option value="${orderDTO.client.id}"
+                                                    selected>${orderDTO.client.userName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${clientItem.id}">${clientItem.userName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty clientList}">
+                                <option selected disabled>select client</option>
+                                <c:forEach var="clientItem" items="${clientList}">
+                                    <option value="${clientItem.id}">${clientItem.userName}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no client</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                </th>
+            </tr>
 
+            <tr>
+                <th><fmt:message key="carType" bundle="${locale}"/></th>
+                <th>
+                    <select name='carTypeId'
+                            <c:if test="${sessionScope.role eq 'DRIVER'}"> hidden </c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="carTypeItem" items="${carTypeList}">
+                                    <c:choose>
+                                        <c:when test="${carTypeItem eq orderDTO.carType}">
+                                            <option value="${orderDTO.carType.id}"
+                                                    selected>${orderDTO.carType.typeName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${carTypeItem.id}">${carTypeItem.typeName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty carTypeList}">
+                                <option selected disabled>select carType</option>
+                                <c:forEach var="carTypeItem" items="${carTypeList}">
+                                    <option value="${carTypeItem.id}">${carTypeItem.typeName}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no carType</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="taxi" bundle="${locale}"/></th>
+                <th>
+                    <select name='taxiId'
+                            <c:if test="${sessionScope.role eq 'CLIENT'}"> disabled</c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="taxiItem" items="${taxiList}">
+                                    <c:choose>
+                                        <c:when test="${taxiItem eq orderDTO.taxi}">
+                                            <option value="${orderDTO.taxi.id}"
+                                                    selected>${orderDTO.taxi}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${taxiItem.id}">${taxiItem}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty taxiList}">
+                                <option selected disabled>select taxi</option>
+                                <c:forEach var="taxi" items="${taxiList}">
+                                    <option value="${taxi.id}">${taxi}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no taxi</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="startPoint" bundle="${locale}"/></th>
+                <th>
+                    <input type="text" name="startPoint"
+                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                            <c:if test="${isThisEdition}"> value="${orderDTO.startPoint}"</c:if>
+                    />
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="endPoint" bundle="${locale}"/></th>
+                <input type="text" name="endPoint"
+                        <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                        <c:if test="${isThisEdition}"> value="${orderDTO.endPoint}"</c:if>
+                />
+                <th>
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="distance" bundle="${locale}"/></th>
+                <input type="number" name="distance"
+                        <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                        <c:if test="${isThisEdition}"> value="${orderDTO.distance}"</c:if>
+                />
+            </tr>
+
+            <tr>
+                <th><fmt:message key="loyalty" bundle="${locale}"/></th>
+                <th>
+                    <select name='loyaltyId'
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="loyaltyItem" items="${loyaltyList}">
+                                    <c:choose>
+                                        <c:when test="${loyaltyItem eq orderDTO.loyalty}">
+                                            <!-- todo check if work and what is sending -->
+                                            <option value="${orderDTO.loyalty.id}"
+                                                    selected>${orderDTO.loyalty.shareName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${loyaltyItem.id}">${loyaltyItem.shareName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty loyaltyList}">
+                                <option selected disabled>select loyalty</option>
+                                <c:forEach var="loyaltyItem" items="${loyaltyList}">
+                                    <option value="${loyaltyItem.id}">${loyaltyItem.shareName}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no loyalty</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="share" bundle="${locale}"/></th>
+                <th>
+                    <select name='shareId'
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                    >
+                        <c:choose>
+                            <c:when test="${isThisEdition}">
+                                <c:forEach var="shareItem" items="${shareList}">
+                                    <c:choose>
+                                        <c:when test="${shareItem eq orderDTO.share}">
+                                            <!-- todo check if work and what is sending -->
+                                            <option value="${orderDTO.share.id}"
+                                                    selected>${orderDTO.share.shareName}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${shareItem.id}">${shareItem.shareName}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </c:when>
+                            <c:when test="${not empty shareList}">
+                                <option selected disabled>select share</option>
+                                <c:forEach var="shareItem" items="${shareList}">
+                                    <option value="${shareItem.id}">${shareItem.shareName}</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option selected disabled>no share</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="discount" bundle="${locale}"/></th>
+                <input type="number" name="discount"
+                        <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                        <c:if test="${isThisEdition}"> value="${orderDTO.discount}"</c:if>
+                />
+            </tr>
+
+            <tr>
+                <th><fmt:message key="cost" bundle="${locale}"/></th>
+                <input type="number" name="cost" disabled
+                        <c:if test="${isThisEdition}"> value="${orderDTO.cost}"</c:if>
+                />
+            </tr>
+
+            <tr>
+                <th><fmt:message key="feedTime" bundle="${locale}"/></th>
+                <th>
+                    <input type="datetime-local" name="feedTime"
+                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                            <c:if test="${isThisEdition}"> value="${orderDTO.feedTime}"</c:if>
+                    />
+                </th>
+            </tr>
+
+            <tr>
+                <th><fmt:message key="waitingTime" bundle="${locale}"/></th>
+                <input type="number" name="waitingTime"
+                        <c:if test="${sessionScope.role eq 'CLIENT'}"> disabled</c:if>
+                        <c:if test="${isThisEdition}"> value="${orderDTO.waitingTime}"</c:if>
+                />
+            </tr>
+
+            <tr>
+                <th>
+                    <input type="submit" name="saveUser"
+                           value="<fmt:message key="saveBtn" bundle="${locale}"/>">
+                </th>
+            </tr>
         </table>
     </form>
 </div>

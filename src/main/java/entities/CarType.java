@@ -34,10 +34,6 @@ public class CarType implements Serializable {
         this.price = price;
     }
 
-    public CarType(String typeName) {
-        this.typeName = typeName;
-    }
-
     public Long getId() {
         return id;
     }

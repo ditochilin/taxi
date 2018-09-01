@@ -21,8 +21,8 @@ public class RemoveCarTypeCommand implements ICommand {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             carTypeService.remove(Long.valueOf(request.getParameter("carTypeId")));
-        } catch (Exception e) {
-            LOGGER.error(e.getCause());
+        }catch (ServiceException e){
+            request.setAttribute("resultMessage", "You can't remove this car type! May be it's used in taxis or orders.");
         }
 
         return new OpenListCarTypesCommand().execute(request,response);

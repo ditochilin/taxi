@@ -22,7 +22,7 @@ public class RemoveShareCommand implements ICommand {
         try {
             shareService.remove(Long.valueOf(request.getParameter("shareId")));
         }catch (ServiceException e){
-            request.setAttribute("resultMessage", "You can't remove this share!");
+            request.setAttribute("resultMessage", "You can't remove this share! May be it's used in orders.");
         }
 
         return new OpenListSharesCommand().execute(request,response);

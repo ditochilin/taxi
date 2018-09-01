@@ -1,16 +1,12 @@
 package command;
 
-import entities.CarType;
 import service.ICarTypeService;
-import service.IShareService;
 import service.exceptions.ServiceException;
 import service.implementation.CarTypeService;
 import utils.Config;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class OpenListCarTypesCommand implements ICommand {
 
@@ -22,8 +18,8 @@ public class OpenListCarTypesCommand implements ICommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        request.setAttribute("carTypeList",carTypeService.getAll());
-        request.setAttribute("itemMenuSelected","carTypes");
+        request.setAttribute("carTypeList", carTypeService.getAll());
+        request.setAttribute("itemMenuSelected", "carTypes");
 
         return Config.getProperty(Config.ADMIN);
     }

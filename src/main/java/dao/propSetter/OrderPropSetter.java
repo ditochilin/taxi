@@ -32,11 +32,13 @@ public class OrderPropSetter implements IPropSetter<Order> {
                 statusString = Status.CREATED.toString();
             }
             statement.setString(7, statusString);
-            statement.setInt(8, order.getWaitingTime());
+            setValueOrNull(statement, 8, order.getWaitingTime());
+            setValueOrNull(statement, 9, order.getDiscount());
 
-            setValueOrNull(statement, 9, order.getClientId());
-            setValueOrNull(statement, 10, order.getTaxiId());
-            setIdIfNotNull(statement, 11, order.getId());
+            setValueOrNull(statement, 10, order.getClientId());
+            setValueOrNull(statement, 11, order.getTaxiId());
+            setValueOrNull(statement, 12, order.getCarTypeId());
+            setIdIfNotNull(statement, 13, order.getId());
 
         } catch (SQLException e) {
             throw new DaoException("Can't set statement properties for entity " + order, e);

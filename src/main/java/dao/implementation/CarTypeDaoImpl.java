@@ -44,7 +44,7 @@ public class CarTypeDaoImpl extends AbstractDao<CarType> implements ICarTypeDao 
     public CarType findById(Long id) throws DaoException {
         return TransactionManagerImpl.doInTransaction(() -> {
             List<CarType> carTypes = findBy(FIND_ALL, "id_car_type", id, extractor, IEnricher.NULL);
-            if(carTypes.isEmpty()){
+            if (carTypes.isEmpty()) {
                 return null;
             }
             return carTypes.get(0);
@@ -59,8 +59,9 @@ public class CarTypeDaoImpl extends AbstractDao<CarType> implements ICarTypeDao 
 
     @Override
     public List<CarType> findByName(String typeName) throws DaoException {
-        return TransactionManagerImpl.doInTransaction(() ->
-                findByInTransaction(FIND_ALL, "type_name", typeName, extractor, IEnricher.NULL));
+        return TransactionManagerImpl.doInTransaction(() -> {
+            return findByInTransaction(FIND_ALL, "type_name", typeName, extractor, IEnricher.NULL);
+        });
     }
 
     @Override

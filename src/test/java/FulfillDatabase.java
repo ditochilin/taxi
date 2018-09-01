@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
+import static java.util.Optional.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FulfillDatabase {
@@ -184,7 +187,7 @@ public class FulfillDatabase {
         taxi1.setBusy(true);
     }
 
-    public void fulfillOrders() throws ParseException, DaoException {
+    public void fulfillOrders() throws ParseException, DaoException, NoSuchEntityException {
         orders = Arrays.asList(new Order(), new Order(), new Order());
         SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss", Locale.ROOT);
         Order order1 = orders.get(0);
@@ -196,7 +199,8 @@ public class FulfillDatabase {
         order1.setClient(userDao.findByName("Alex").get(0));
         order1.setDistance(2645);
         order1.setFeedTime(dateformat.parse("24-08-2018 14:05:00"));
-        order2.setStatus(Status.CREATED);
+        order1.setStatus(Status.CREATED);
+        order1.setCarType(carTypeDao.findByName("Universal").get(0));
 
         order2.setStartPoint("Zodchih 5");
         order2.setEndPoint("Rudenko 7");
@@ -205,15 +209,18 @@ public class FulfillDatabase {
         order2.setCost(BigDecimal.valueOf(158));
         order2.setFeedTime(dateformat.parse("02-08-2018 19:17:00"));
         order2.setWaitingTime(25);
+        order2.setDiscount(15);   // 15 %
         order2.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(0));
         order2.setStatus(Status.INWORK);
         order2.setDateTime(dateformat.parse("02-04-2018 00:11:42"));
+        order2.setCarType(carTypeDao.findByName("Universal").get(0));
 
         order3.setStartPoint("Khreshatik 25");
         order3.setEndPoint("Gonty 98");
         order3.setClient(userDao.findByName("root").get(0));
         order3.setDistance(4800);
         order3.setWaitingTime(15);
+        order2.setDiscount(7);   // 7 %
         order3.setCost(BigDecimal.valueOf(158));
         order3.setFeedTime(dateformat.parse("01-08-2018 21:00:00"));
         order3.setTaxi(taxiDao.findByUser(userDao.findByName("Ivan").get(0)).get(1));
@@ -221,6 +228,7 @@ public class FulfillDatabase {
         order3.setDateTime(dateformat.parse("20-08-2018 15:51:04"));
         order3.setShares(Arrays.asList(shareDao.findByName("Share_15").get(0),
                                         shareDao.findByName("loyalry_10").get(0)));
+        order3.setCarType(carTypeDao.findByName("Pikap").get(0));
 
     }
 
@@ -244,6 +252,12 @@ public class FulfillDatabase {
         } catch (DaoException e) {
             LOGGER.error("testFindAllRoles not works");
         }
+    }
+
+    @Test
+    public void findOrderByCarType() throws NoSuchEntityException, DaoException {
+        List<Order> orders = orderDao.findByCarType(carTypeDao.findByName("PIKAP").get(0));
+        Assert.assertEquals(1, orders.size());
     }
 
     public void insertShares() throws DaoException {
@@ -323,6 +337,17 @@ public class FulfillDatabase {
     }
 
     @Test
+    public void testCheckOrderIfItHasDiscount() throws DaoException {
+        Order order = orderDao.findByClient(userDao.findByPhone("+380502225547").get(0)).get(0);
+        Assert.assertEquals(0, order.getDiscount().intValue());
+
+        List<Order> ordersRoot = orderDao.findByClient(userDao.findByPhone("+380672184141").get(0));
+        Assert.assertEquals(2,ordersRoot.size());
+
+        Assert.assertEquals(7,ordersRoot.get(0).getDiscount().intValue());
+    }
+
+        @Test
     public void testSharesInOrder() throws NoSuchEntityException, DaoException {
         Order order = orderDao.findByClient(userDao.findByPhone("+380502225547").get(0)).get(0);
 

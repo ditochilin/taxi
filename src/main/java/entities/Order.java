@@ -2,7 +2,6 @@ package entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,15 +24,71 @@ public class Order implements Serializable {
     private String endPoint;
     private Integer distance;
     private BigDecimal cost;
+    private Integer discount;
     private Date feedTime;
-    private int waitingTime;
+    private Integer waitingTime;
     private Taxi taxi;
+    private CarType carType;
     private User client;
-
     private Status status;
 
     private List<Share> shares;
+
     public Order() {
+    }
+
+    public Order(Long id, Date dateTime, String startPoint, String endPoint,
+                 CarType carType, User client, Date feedTime) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.carType = carType;
+        this.client = client;
+        this.feedTime = feedTime;
+    }
+
+    public Order(Long id, Date dateTime, String startPoint, String endPoint, Integer distance,
+                 BigDecimal cost, Date feedTime, Integer waitingTime, Taxi taxi,
+                 CarType carType, User client, Status status, List<Share> shares, Integer discount) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.distance = distance;
+        this.cost = cost;
+        this.feedTime = feedTime;
+        this.waitingTime = waitingTime;
+        this.taxi = taxi;
+        this.carType = carType;
+        this.client = client;
+        this.status = status;
+        this.shares = shares;
+        this.discount = discount;
+    }
+
+    public Order(Long id, Date dateTime, String startPoint,
+                 String endPoint, Integer distance, BigDecimal cost, Date feedTime,
+                 Status status, Integer waitingTime, Integer discount) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.distance = distance;
+        this.cost = cost;
+        this.feedTime = feedTime;
+        this.waitingTime = waitingTime;
+        this.status = status;
+        this.discount = discount;
+    }
+
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 
     public void setFeedTime(Date feedTime) {
@@ -44,11 +99,19 @@ public class Order implements Serializable {
         return feedTime;
     }
 
-    public int getWaitingTime() {
+    public Integer getWaitingTime() {
         return waitingTime;
     }
 
-    public void setWaitingTime(int waitingTime) {
+    public CarType getCarType() {
+        return carType;
+    }
+
+    public void setCarType(CarType carType) {
+        this.carType = carType;
+    }
+
+    public void setWaitingTime(Integer waitingTime) {
         this.waitingTime = waitingTime;
     }
 
@@ -131,7 +194,7 @@ public class Order implements Serializable {
     }
 
     public List<Share> getShares() {
-        if(shares==null){
+        if (shares == null) {
             return new ArrayList<>();
         }
         return shares;
@@ -157,6 +220,13 @@ public class Order implements Serializable {
         this.status = status;
     }
 
+    public Long getCarTypeId() {
+        if (carType == null) {
+            return null;
+        }
+        return carType.getId();
+    }
+
     @Override
     public int hashCode() {
         return (id != null) ? id.intValue() : 0;
@@ -176,7 +246,6 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "Order[ dateTime="+dateTime+", client=" + client + ", taxi=" + taxi + "]";
+        return "Order[ dateTime=" + dateTime + ", client=" + client + ", carType=" + carType + ", taxi=" + taxi + "]";
     }
-
 }

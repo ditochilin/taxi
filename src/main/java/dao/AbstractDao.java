@@ -59,8 +59,10 @@ public abstract class AbstractDao<T> implements IDao<T> {
         try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             propSetter.setProperties(statement, entity);
             int effected = statement.executeUpdate();
+
+            //todo : this realised in service...  leave?
             if(effected==0){
-                return 0L;
+                return Long.valueOf(0);
             }
             ResultSet keys = statement.getGeneratedKeys();
             keys.next();
@@ -70,7 +72,7 @@ public abstract class AbstractDao<T> implements IDao<T> {
                 statement.setLong(1, id);
             }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
                 LOGGER.error(String.format("Entity {%s} does not have setId()... Id didn't set",entity));
-                return 0L;
+                return Long.valueOf(0);
             }
             LOGGER.log(Level.INFO, "New record of entity in database: " + entity);
             return id;

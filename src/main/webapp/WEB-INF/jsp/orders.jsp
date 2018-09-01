@@ -15,27 +15,31 @@
     <table border="1">
         <tr>
             <th><fmt:message key="status" bundle="${locale}"/></th>
-            <th><fmt:message key="date order" bundle="${locale}"/></th>
+            <th><fmt:message key="dateTime" bundle="${locale}"/></th>
             <th><fmt:message key="client" bundle="${locale}"/></th>
+            <th><fmt:message key="carType" bundle="${locale}"/></th>
             <th><fmt:message key="taxi" bundle="${locale}"/></th>
-            <th><fmt:message key="start point" bundle="${locale}"/></th>
-            <th><fmt:message key="destination" bundle="${locale}"/></th>
+            <th><fmt:message key="startPoint" bundle="${locale}"/></th>
+            <th><fmt:message key="endPoint" bundle="${locale}"/></th>
             <th><fmt:message key="distance" bundle="${locale}"/></th>
             <th><fmt:message key="shares" bundle="${locale}"/></th>
+            <th><fmt:message key="discount" bundle="${locale}"/></th>
             <th><fmt:message key="cost" bundle="${locale}"/></th>
-            <th><fmt:message key="feed time" bundle="${locale}"/></th>
-            <th><fmt:message key="waiting time" bundle="${locale}"/></th>
+            <th><fmt:message key="feedTime" bundle="${locale}"/></th>
+            <th><fmt:message key="waitingTime" bundle="${locale}"/></th>
         </tr>
         <c:forEach var="order" items="${orderList}">
             <tr>
                 <td><c:out value="${order.status}"/></td>
                 <td><c:out value="${order.dateTime}"/></td>
                 <td><c:out value="${order.client}"/></td>
+                <td><c:out value="${order.carType}"/></td>
                 <td><c:out value="${order.taxi}"/></td>
                 <td><c:out value="${order.startPoint}"/></td>
                 <td><c:out value="${order.endPoint}"/></td>
                 <td><c:out value="${order.distance}"/></td>
                 <td><c:out value="${order.shares}"/></td>
+                <td><c:out value="${order.discount}"/></td>
                 <td><c:out value="${order.cost}"/></td>
                 <td><c:out value="${order.feedTime}"/></td>
                 <td><c:out value="${order.waitingTime}"/></td>

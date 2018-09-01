@@ -30,7 +30,7 @@
                 <input type="hidden" name="carTypeId" value="${carTypeDTO.id}"/>
             </c:if>
             <tr>
-                <th><fmt:message key="Car type" bundle="${locale}"/></th>
+                <th><fmt:message key="carType" bundle="${locale}"/></th>
                 <th><input type="text" name="typeName"
                         <c:choose>
                             <c:when test="${isThisEdition}">
