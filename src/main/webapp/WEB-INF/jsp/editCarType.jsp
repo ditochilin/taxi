@@ -50,12 +50,7 @@
                 </th>
             </tr>
             <tr>
-                <c:if test="${not empty requestScope.errors}">
-                    <c:forEach items="${requestScope.errors}" var="error">
-                        <strong><fmt:message key="error" bundle="${locale}"/></strong> <fmt:message key="${error}"
-                                                                                                    bundle="${locale}"/><br>
-                    </c:forEach>
-                </c:if>
+                <jsp:include page="errorsStack.jsp"/>
             </tr>
             </tr>
             <tr>

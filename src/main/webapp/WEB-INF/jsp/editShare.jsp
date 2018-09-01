@@ -13,7 +13,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="editShare" bundle="${locale}"/></title>
+    <title><fmt:message key="Edit share" bundle="${locale}"/></title>
 </head>
 <body>
 <div class="container">
@@ -82,12 +82,7 @@
                 </th>
             </tr>
             <tr>
-                <c:if test="${not empty requestScope.errors}">
-                    <c:forEach items="${requestScope.errors}" var="error">
-                        <strong><fmt:message key="error" bundle="${locale}"/></strong> <fmt:message key="${error}"
-                                                                                                    bundle="${locale}"/><br>
-                    </c:forEach>
-                </c:if>
+                <jsp:include page="errorsStack.jsp"/>
             </tr>
             </tr>
             <tr>

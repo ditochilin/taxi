@@ -2,7 +2,6 @@ package command;
 
 import controller.ControllerHelper;
 import entities.Order;
-import entities.Share;
 import entities.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +39,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
         try {
-            Set<String> errors = null;
+            Set<String> errors = new HashSet<>();
 
             Order orderDTO = buildOrder(request, errors);
 
@@ -49,52 +48,61 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
                     orderDTO.getId(),
                     request,
                     response,
-                    new EditShareCommand(),
-                    new OpenListSharesCommand());
+                    new EditOrderCommand(),
+                    new OpenListOrdersCommand());
         } catch (ServletException | IOException e) {
             LOGGER.error("Could not execute command to add/update share!", e.getCause());
         }
         return Config.getProperty(Config.ORDERS);
     }
 
+    // todo : make patter Builder
     private static Order buildOrder(HttpServletRequest request, Set<String> errors) throws ServiceException {
 
-        String idParam = request.getParameter("orderId");
-        Long id = (idParam == null) ? Long.valueOf(0) : Long.valueOf(idParam);
+        Long id = getLongParameter(request,"orderId");
         Status status = Status.valueOf(request.getParameter("statusName"));
-        String dateTime = request.getParameter("dateTime");
-        Long clientId = Long.valueOf(request.getParameter("clientId"));
-        Long carTypeId = Long.valueOf(request.getParameter("carTypeId"));
+        String dateOrder = request.getParameter("dateOrder");
+        String timeOrder = request.getParameter("timeOrder");
+        Long clientId = getLongParameter(request,"clientId");
+        Long carTypeId = getLongParameter(request,"carTypeId");
         String startPoint = ControllerHelper.getParameterInUTF8(request, "startPoint");
         String endPoint = ControllerHelper.getParameterInUTF8(request, "endPoint");
-        Long taxiId = Long.valueOf(request.getParameter("taxiId"));
+        Long taxiId = getLongParameter(request,"taxiId");
 
-        Long loyaltyId = Long.valueOf(request.getParameter("loyaltyId"));
-        Long shareId = Long.valueOf(request.getParameter("shareId"));
+        Long loyaltyId = getLongParameter(request,"loyaltyId");
+        Long shareId = getLongParameter(request,"shareId");
 
         Integer discount = Integer.valueOf(request.getParameter("discount"));
 
 //        //auto counted
 //        BigDecimal cost = BigDecimal.valueOf(Long.valueOf(request.getParameter("cost")));
 
-        String feedTime = request.getParameter("feedTime");
+        String dateFeed = request.getParameter("dateFeed");
+        String timeFeed = request.getParameter("timeFeed");
         Integer waitingTime = Integer.valueOf(request.getParameter("waitingTime"));
 
         Order orderDTO = new Order();
         checkOrderFieldsErrorsAndFulFill(orderDTO, id, status,
-                dateTime, clientId, carTypeId,
+                dateOrder, timeOrder, clientId, carTypeId,
                 startPoint, endPoint,
-                taxiId, discount, feedTime, waitingTime, errors);
+                taxiId, discount, dateFeed, timeFeed, waitingTime, errors);
 
         addShares(orderDTO, loyaltyId, shareId);
 
         return orderDTO;
     }
 
-    private static void addShares(Order orderDTO, Long ...sharesIds) throws ServiceException {
-        for (Long shareId:sharesIds
-             ) {
-            if(shareId!=null) {
+    private static Long getLongParameter(HttpServletRequest request, String name){
+        String value = request.getParameter("clientId");
+        if(value==null){
+            return null;
+        }
+        return Long.valueOf(value);
+    }
+
+    private static void addShares(Order orderDTO, Long... sharesIds) throws ServiceException {
+        for (Long shareId : sharesIds) {
+            if (shareId != null) {
                 orderDTO.getShares().add(
                         shareService.getById(shareId)
                 );
@@ -102,10 +110,10 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         }
     }
 
-    private static void checkOrderFieldsErrorsAndFulFill(Order orderDTO, Long id, Status status, String dateTime,
+    private static void checkOrderFieldsErrorsAndFulFill(Order orderDTO, Long id, Status status, String dateOrder, String timeOrder,
                                                          Long clientId, Long carTypeId, String startPoint,
                                                          String endPoint, Long taxiId, Integer discount,
-                                                         String feedTime, Integer waitingTime, Set<String> errors) {
+                                                         String dateFeed, String timeFeed, Integer waitingTime, Set<String> errors) {
         if (id == null) {
             orderDTO.setStatus(Status.CREATED);
         } else if (taxiId != null && Status.CREATED.equals(status)) {
@@ -114,9 +122,9 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
 
         SimpleDateFormat dateformat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss", Locale.ROOT);
         Date newDateTime = new Date();
-        if (id != null || !dateTime.isEmpty()) {
+        if (id != null || (!dateOrder.isEmpty() && !timeOrder.isEmpty())) {
             try {
-                newDateTime = dateformat.parse(dateTime);
+                newDateTime = dateformat.parse(dateOrder + " " + timeOrder);
             } catch (ParseException e) {
                 errors.add("Date & Time couldn't be parsed! " + e.getMessage());
             }
@@ -173,11 +181,12 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             orderDTO.setDiscount(discount);
         }
 
-        if (feedTime.isEmpty()) {
+        if (dateFeed.isEmpty() || timeFeed.isEmpty()) {
             errors.add("Feed time must be!");
         } else {
             try {
-                orderDTO.setFeedTime(dateformat.parse(feedTime));
+                Date newFeedTime = dateformat.parse(dateFeed + " " + timeFeed+":00");
+                orderDTO.setFeedTime(newFeedTime);
             } catch (ParseException e) {
                 errors.add("Feed Time couldn't be parsed! " + e.getMessage());
             }

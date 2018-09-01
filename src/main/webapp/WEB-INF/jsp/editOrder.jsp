@@ -58,9 +58,14 @@
             <tr>
                 <th><fmt:message key="dateTime" bundle="${locale}"/></th>
                 <th>
-                    <input type="datetime-local" name="dateTime"
+                    <input type="text" name="dateOrder" placeholder="dd-MM-yyyy"
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="${orderDTO.dateTime}"</c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}" pattern="dd-MM-yyyy" />" </c:if>
+                    />
+                    <input type="text" name="timeOrder"  placeholder="HH:mm:ss"
+                            <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.dateTime}" pattern="HH:mm:ss" />" </c:if>
+
                     />
                 </th>
             </tr>
@@ -285,9 +290,14 @@
             <tr>
                 <th><fmt:message key="feedTime" bundle="${locale}"/></th>
                 <th>
-                    <input type="datetime-local" name="feedTime"
+                    <input type="text" name="dateFeed" placeholder="dd-MM-yyyy"
                             <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
-                            <c:if test="${isThisEdition}"> value="${orderDTO.feedTime}"</c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}" pattern="dd-MM-yyyy" />" </c:if>
+                    />
+                    <input type="text" name="timeFeed" placeholder="HH:ss"
+                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                            <c:if test="${isThisEdition}"> value="<fmt:formatDate value="${orderDTO.feedTime}" pattern="HH:mm" />" </c:if>
+
                     />
                 </th>
             </tr>
@@ -300,7 +310,9 @@
                 />
                 </th>
             </tr>
-
+            <tr>
+                <jsp:include page="errorsStack.jsp"/>
+            </tr>
             <tr>
                 <th>
                     <input type="submit" name="saveUser"
