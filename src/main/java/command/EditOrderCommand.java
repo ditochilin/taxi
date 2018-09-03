@@ -1,5 +1,6 @@
 package command;
 
+import entities.CarType;
 import entities.Order;
 import entities.Share;
 import entities.Status;
@@ -16,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import static java.util.Optional.*;
 
 public class EditOrderCommand implements ICommand {
 
@@ -38,40 +41,35 @@ public class EditOrderCommand implements ICommand {
 
         List<Share> sharesAll = shareService.getAll();
         Object[] loyaltyArray = sharesAll.stream()
-                .filter(loy -> loy.getIsLoyalty())
+                .filter(loy -> loy.getIsLoyalty() && (Boolean.TRUE.equals(loy.getIsOn())))
                 .toArray();
         if(loyaltyArray.length>0) {
             request.setAttribute("loyaltyList", Arrays.asList(loyaltyArray));
         }
 
         Object[] shareArray = sharesAll.stream()
-                .filter(shar -> !shar.getIsLoyalty())
+                .filter(shar -> !shar.getIsLoyalty() && (Boolean.TRUE.equals(shar.getIsOn())))
                 .toArray();
         if(shareArray.length>0) {
             request.setAttribute("shareList", Arrays.asList(shareArray));
         }
 
         String orderId = request.getParameter("orderId");
+        CarType selectedCarType = null;
         if (orderId != null && !orderId.isEmpty()) {
             Order order = orderService.getById(Long.valueOf(orderId));
-            List<Share> sharesOfOrder = order.getShares();
+            Share loyalty = SystemHelper.getLoyalty(order.getShares(), of(Boolean.TRUE));
 
-            // given that order may have only one loyalty and/or one share
-            Share loyalty = sharesOfOrder.stream()
-                    .filter(loy -> loy.getIsLoyalty())
-                    .findAny()
-                    .orElse(null);
             if(loyalty!=null) {
                 request.setAttribute("loyalty", loyalty);
             }
 
-            Share share = sharesOfOrder.stream()
-                    .filter(shar -> !shar.getIsLoyalty())
-                    .findAny()
-                    .orElse(null);
+            Share share = SystemHelper.getShareNotLoyalty(order.getShares(),of(Boolean.TRUE));
             if(share!=null) {
                 request.setAttribute("share", share);
             }
+
+            selectedCarType = order.getCarType();
 
             request.setAttribute("orderDTO", order);
         }
@@ -79,7 +77,7 @@ public class EditOrderCommand implements ICommand {
         request.setAttribute("statusList", Status.values());
         request.setAttribute("carTypeList", carTypeService.getAll());
         request.setAttribute("clientList", userService.getAllClients());
-        request.setAttribute("taxiList", taxiService.getFreeTaxis());
+        request.setAttribute("taxiList", taxiService.getFreeTaxis(ofNullable(selectedCarType)));
 
         return Config.getProperty(Config.EDIT_ORDER);
     }
@@ -89,10 +87,10 @@ public class EditOrderCommand implements ICommand {
      * @param  shares - all shares of order
      * @param  ifIsLoyalty - Predicate : is share loyalty or not
      */
-    private void setShares(HttpServletRequest request, String shareType, List<Share> shares, Predicate ifIsLoyalty ){
-        Share share = SystemHelper.getShare(shares, ifIsLoyalty);
-        if(share!=null){
-            request.setAttribute(shareType, share);
-        }
-    }
+//    private void setShares(HttpServletRequest request, String shareType, List<Share> shares, Predicate ifIsLoyalty ){
+//        Share share = SystemHelper.getShare(shares, ifIsLoyalty);
+//        if(share!=null){
+//            request.setAttribute(shareType, share);
+//        }
+//    }
 }

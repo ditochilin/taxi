@@ -1,5 +1,6 @@
 package command;
 
+import controller.ControllerHelper;
 import entities.Role;
 import entities.User;
 import service.IUserService;
@@ -31,8 +32,8 @@ public class LoginCommand implements ICommand {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
+        String login =  ControllerHelper.getParameterInUTF8(request,"login");
+        String password =  ControllerHelper.getParameterInUTF8(request,"password");
 
         User userDump = new User(login, password);
 

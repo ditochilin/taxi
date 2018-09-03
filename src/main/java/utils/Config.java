@@ -10,7 +10,6 @@ public class Config {
     public static final String EDIT_SHARE = "EDIT_SHARE";
     public static final String EDIT_CARTYPE = "EDIT_CARTYPE";
     public static final String EDIT_TAXI = "EDIT_TAXI";
-    private static final ResourceBundle resource  = ResourceBundle.getBundle("config");
     public static final String EDIT_USER = "EDIT_USER";
     public static final String ADMIN = "ADMIN";
     public static final String REGISTRATION = "REGISTRATION";
@@ -19,6 +18,7 @@ public class Config {
     public static final String ERROR = "ERROR";
     public static final String LOGIN = "LOGIN";
     public static final String ORDERS = "ORDERS";
+    private static final ResourceBundle resource  = ResourceBundle.getBundle("config");
 
     public static String getProperty(String key) {
         return (String) resource.getObject(key);

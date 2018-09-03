@@ -205,7 +205,7 @@ public class FulfillDatabase {
         order2.setStartPoint("Zodchih 5");
         order2.setEndPoint("Rudenko 7");
         order2.setClient(userDao.findByName("root").get(0));
-        order2.setDistance(1950);
+   //     order2.setDistance(1950);
         order2.setCost(BigDecimal.valueOf(158));
         order2.setFeedTime(dateformat.parse("02-08-2018 19:17:00"));
         order2.setWaitingTime(25);
@@ -407,9 +407,18 @@ public class FulfillDatabase {
 
     //@Test
     public void testDeleteRoles() throws NoSuchEntityException, DaoException {
-        roleDao.delete(roleDao.findByName("CLIENT").getId());
-        roleDao.delete(roleDao.findByName("ADMIN").getId());
-        roleDao.delete(roleDao.findByName("DRIVER").getId());
+        Role role = roleDao.findByName("CLIENT");
+        if(role!=null) {
+            roleDao.delete(role.getId());
+        }
+        Role role2 = roleDao.findByName("ADMIN");
+        if(role2!=null) {
+            roleDao.delete(role2.getId());
+        }
+        Role role3 = roleDao.findByName("DRIVER");
+        if(role3!=null) {
+            roleDao.delete(role3.getId());
+        }
     }
 
     //@Test

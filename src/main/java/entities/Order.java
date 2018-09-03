@@ -24,6 +24,7 @@ public class Order implements Serializable {
     private String endPoint;
     private Integer distance;
     private BigDecimal cost;
+    private BigDecimal baseCost;
     private Integer discount;
     private Date feedTime;
     private Integer waitingTime;
@@ -83,6 +84,13 @@ public class Order implements Serializable {
         this.discount = discount;
     }
 
+    public BigDecimal getBaseCost() {
+        return baseCost;
+    }
+
+    public void setBaseCost(BigDecimal baseCost) {
+        this.baseCost = baseCost;
+    }
 
     public Integer getDiscount() {
         return discount;

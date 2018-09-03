@@ -3,23 +3,26 @@
 /* Created on:     06.08.2018 20:15:44                          */
 /*==============================================================*/
 use taxidb;
-SET FOREIGN_KEY_CHECKS=0;
 
-drop table if exists car_types;
+
+SET FOREIGN_KEY_CHECKS=0;
 
 drop table if exists orders;
 
 drop table if exists orders_shares;
 
-drop table if exists roles;
+drop table if exists taxis;
 
 drop table if exists shares;
 
-drop table if exists taxis;
+drop table if exists roles;
+
+drop table if exists car_types;
 
 drop table if exists users;
+
 SET FOREIGN_KEY_CHECKS=1;
-/*==============================================================*/
+
 create table car_types
 (
 	id_car_type bigint auto_increment
@@ -95,11 +98,18 @@ create table orders
 	status_order varchar(20) default 'CREATED' not null,
 	waiting_time int                           null,
 	feed_time    datetime                      null,
+	id_car_type  bigint                        null,
+	discount     int default '0'               null,
 	constraint fk_orders_taxiorder_taxis
 	foreign key (id_taxi) references taxis (id_taxi),
 	constraint fk_orders_userorder_users
-	foreign key (id_user) references users (id_user)
+	foreign key (id_user) references users (id_user),
+	constraint car_types__fk
+	foreign key (id_car_type) references car_types (id_car_type)
 );
+
+create index car_types__fk
+	on orders (id_car_type);
 
 create index fk_orders_taxiorder_taxis
 	on orders (id_taxi);
@@ -133,4 +143,3 @@ create index fk_taxis_usertaxi_users
 
 create index fk_users_userrole_roles
 	on users (id_role);
-

@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static java.util.Optional.ofNullable;
+
 public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand {
 
     private static final Logger LOGGER = LogManager.getLogger(SaveOrderCommand.class.getName());
@@ -74,6 +76,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         Long shareId = getLongParameter(request,"shareId");
 
         Integer discount = getIntegerParameter(request, "discount");
+        Integer distance = getIntegerParameter(request, "distance");
 
         String dateFeed = request.getParameter("dateFeed");
         String timeFeed = request.getParameter("timeFeed");
@@ -82,7 +85,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
 
         return checkOrderFieldsErrorsAndFulFill(id, status,
                 dateOrder, timeOrder, clientId, carTypeId,
-                startPoint, endPoint,
+                startPoint, endPoint, distance,
                 taxiId, discount, dateFeed, timeFeed, waitingTime,  loyaltyId, shareId, errors);
 
     }
@@ -98,9 +101,9 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
     }
 
     private static Order checkOrderFieldsErrorsAndFulFill(Long id, String status, String dateOrder, String timeOrder,
-                                                         Long clientId, Long carTypeId, String startPoint,
-                                                         String endPoint, Long taxiId, Integer discount,
-                                                         String dateFeed, String timeFeed, Integer waitingTime, Long loyaltyId, Long shareId, Set<String> errors) {
+                                                          Long clientId, Long carTypeId, String startPoint,
+                                                          String endPoint, Integer distance, Long taxiId, Integer discount,
+                                                          String dateFeed, String timeFeed, Integer waitingTime, Long loyaltyId, Long shareId, Set<String> errors) {
         Order orderDTO = new Order();
         if(status==null) {
             orderDTO.setStatus(Status.CREATED);
@@ -170,7 +173,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             orderDTO.setEndPoint(endPoint);
         }
 
-        boolean discountIsPresent = Optional.ofNullable(discount).isPresent();
+        boolean discountIsPresent = ofNullable(discount).isPresent();
         if (discountIsPresent && discount< 0) {
             errors.add("Discount must be positive!");
         } else if (discountIsPresent) {
@@ -186,7 +189,9 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             }
         }
 
-        boolean waitingTimeIsPresent = Optional.ofNullable(waitingTime).isPresent();
+        orderDTO.setDistance(distance);
+
+        boolean waitingTimeIsPresent = ofNullable(waitingTime).isPresent();
         if (waitingTimeIsPresent && waitingTime < 0) {
             errors.add("Waiting time must be positive!");
         } else if (waitingTimeIsPresent) {

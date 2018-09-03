@@ -22,7 +22,7 @@
         </c:if>
         <table>
             <tr>
-                <th><fmt:message key="status" bundle="${locale}"/></th>
+                <th><fmt:message key="orderStatus" bundle="${locale}"/></th>
                 <th>
                     <select name='statusName'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
@@ -78,7 +78,7 @@
                     <select name='clientId'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                     >
-                        <option selected value="${null}">empty client</option>
+                        <option value="${null}">empty client</option>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="clientItem" items="${clientList}">
@@ -107,7 +107,7 @@
                 <th><fmt:message key="carType" bundle="${locale}"/></th>
                 <th>
                     <select name='carTypeId'
-                            <c:if test="${sessionScope.role eq 'DRIVER'}"> hidden </c:if>
+                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled </c:if>
                     >
                         <option selected value="${null}">empty car type</option>
                         <c:choose>

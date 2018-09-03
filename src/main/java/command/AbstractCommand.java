@@ -59,7 +59,7 @@ public abstract class AbstractCommand<T> {
         } catch (Exception e){
             // if not EmptyException than exceptions from update() are waited to get
             if(!(e instanceof EmptyException)) {
-                errors.add(String.valueOf(e.getCause()));
+                errors.add(String.valueOf(e.getMessage()));
             }
             request.setAttribute("errors", errors);
             return commandForReturning.execute(request,response);

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
 
 public class ControllerHelper  {
 
@@ -79,7 +81,8 @@ public class ControllerHelper  {
     }
 
     public static String getParameterInUTF8(HttpServletRequest request, String param){
-        String value = request.getParameter(param);
+        String value = Optional.ofNullable(request.getParameter(param)).get();
+
         byte[] bytes = value.getBytes(StandardCharsets.ISO_8859_1);
         return new String(bytes, StandardCharsets.UTF_8);
     }

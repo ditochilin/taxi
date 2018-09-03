@@ -1,5 +1,9 @@
 package entities;
 
 public enum Status {
-    CREATED, INWORK, REJECTED, DONE
+    CREATED,  //  just created by user
+    INWORK, // if taxi found but not submitted by client
+    AGREE,   //  if client gave agreement
+    REJECTED,  // rejected by any user
+    DONE   // completed
 }
