@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="${not empty sessionScope.locale ? sessionScope.locale : 'en_EN'}"/>
 <fmt:setBundle basename="locale" var="locale"/>
 
 <nav>
@@ -11,7 +11,7 @@
                 <li>
                     <c:choose>
                         <c:when test="${sessionScope.role == 'ADMIN'}">
-                            <a href="${pageContext.request.contextPath}/Controller?command=openAdministration">
+                            <a href="${pageContext.request.contextPath}/Controller/admin?command=openAdministration">
                                 <span><fmt:message key="Admin panel" bundle="${locale}"/></span>
                             </a>
                         </c:when>
@@ -28,7 +28,7 @@
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/Controller?command=openListOrders">
-                        <span><fmt:message key="orders" bundle="${locale}"/></span>
+                        <span><fmt:message key="List of orders" bundle="${locale}"/></span>
                     </a>
                 </li>
                 <li>

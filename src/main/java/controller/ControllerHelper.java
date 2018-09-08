@@ -76,8 +76,7 @@ public class ControllerHelper  {
     }
 
     private boolean ifMakeLogout(HttpServletRequest request) {
-        return request.getAttribute("redirect")
-                .equals(Config.getProperty(Config.LOGIN));
+        return Config.getProperty(Config.LOGIN).equals(request.getAttribute("redirect"));
     }
 
     public static String getParameterInUTF8(HttpServletRequest request, String param){

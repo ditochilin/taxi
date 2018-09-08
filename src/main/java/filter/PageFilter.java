@@ -1,6 +1,7 @@
 package filter;
 
 import utils.Config;
+import utils.Messenger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,15 @@ public class PageFilter implements Filter {
             request.setAttribute("redirect",
                     Config.getProperty(Config.LOGIN));
         } else {
-            request.setAttribute("redirect", "/Controller");
+            String roleName = (String) request.getSession().getAttribute("role");
+            if (uri.contains("admin") && !"ADMIN".equals(roleName)) {
+                request.setAttribute("redirect",
+                        Config.getProperty(Config.ERROR));
+                request.setAttribute("errorDescription", "User '"+userName+"' has no admin role. Root denied!");
+            }
+//            else {
+//                request.setAttribute("redirect", "/Controller");
+//            }
         }
 
         if (uri.endsWith(".jsp")) {
@@ -48,9 +57,10 @@ public class PageFilter implements Filter {
     }
 
     private boolean userMustBeLogout(String userName, String command) {
-        return (command == null || userName==null) &&
+        return (command == null || userName == null) &&
                 !"login".equals(command) &&
                 !"registration".equals(command) &&
+                !"changeLocale".equals(command) &&
                 !"openRegistration".equals(command);
     }
 

@@ -1,6 +1,5 @@
 package dao;
 
-import com.sun.jdi.InvocationException;
 import dao.enricher.IEnricher;
 import dao.exceptions.DaoException;
 import dao.exceptions.NoSuchEntityException;
@@ -10,10 +9,8 @@ import dao.transactionManager.TransactionManagerImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.taglibs.standard.lang.jstl.LessThanOrEqualsOperator;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

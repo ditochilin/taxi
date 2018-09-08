@@ -22,7 +22,7 @@
 
     <c:set var="isThisEdition" value="${not empty userDTO}"/>
 
-    <form method="post" action="/Controller" name="saveUser">
+    <form method="post" action="/Controller/admin" name="saveUser">
         <input type="hidden" name="command" value="saveUser"/>
         <p><fmt:message key="Edit user" bundle="${locale}"/></p>
         <c:if test="${isThisEdition eq true}">

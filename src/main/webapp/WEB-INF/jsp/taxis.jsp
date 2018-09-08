@@ -15,7 +15,7 @@
     <span><fmt:message key="ListOfVehicles" bundle="${locale}"/></span>
     <p style="color: red">
         <c:if test="${not empty resultMessage}">
-            <span><fmt:message key="${resultMessage}"/></span>
+            <span><fmt:message key="${resultMessage}" bundle="${locale}"/></span>
         </c:if>
     </p>
 
@@ -28,10 +28,10 @@
 
     <table border="1">
         <tr>
-            <th><fmt:message key="driver" bundle="${locale}"/></th>
+            <th><fmt:message key="driverUser" bundle="${locale}"/></th>
             <th><fmt:message key="carType" bundle="${locale}"/></th>
             <th><fmt:message key="carName" bundle="${locale}"/></th>
-            <th><fmt:message key="number" bundle="${locale}"/></th>
+            <th><fmt:message key="carNumber" bundle="${locale}"/></th>
             <th><fmt:message key="busy" bundle="${locale}"/></th>
         </tr>
         <c:forEach var="taxi" items="${taxiList}">

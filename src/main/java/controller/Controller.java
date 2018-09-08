@@ -38,9 +38,14 @@ public class Controller extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String page = "";
+        String redirect = (String) request.getAttribute("redirect");
         try {
-            ICommand command = controllerHelper.getCommand(request);
-            page = command.execute(request, response);
+            if (redirect != null) {
+                page = redirect;
+            } else {
+                ICommand command = controllerHelper.getCommand(request);
+                page = command.execute(request, response);
+            }
             LOGGER.info("Servlet forward to page " + page);
         } catch (ServletException e) {
             page = catchHandler(e, request, Messenger.SERVLET_EXCEPTION);
@@ -53,24 +58,14 @@ public class Controller extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
-            response.sendRedirect(request.getHeader("Referer"));
+            response.sendError(404, "no such page or command");
         }
     }
 
     private String catchHandler(Exception e, HttpServletRequest request, String message) {
         LOGGER.error(message);
-        request.setAttribute("messageError", Messenger.getProperty(message));
+        request.setAttribute("errorDescription", Messenger.getProperty(message));
         return Config.getProperty(Config.ERROR);
     }
 
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Dispatcher servlet";
-    }
 }

@@ -8,7 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="${not empty sessionScope.locale ? sessionScope.locale : 'en_EN'}"/>
 <fmt:setBundle basename="locale" var="locale"/>
 <html>
 <head>
@@ -66,7 +66,7 @@
                 </th>
             </tr>
             <tr>
-                <th><fmt:message key="sum" bundle="${locale}"/></th>
+                <th><fmt:message key="bySum" bundle="${locale}"/></th>
                 <th>
                     <input type="number" name="sum"
                             <c:if test="${isThisEdition}"> value="${shareDTO.sum}"</c:if>

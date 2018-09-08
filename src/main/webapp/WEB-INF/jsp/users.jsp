@@ -12,7 +12,7 @@
     </p>
 
     <span><fmt:message key="List of users" bundle="${locale}"/></span>
-    <form action="/Controller" name="addUser" method="post">
+    <form action="/Controller/admin" name="addUser" method="post">
         <input type="hidden" name="command" value="editUser"/>
         <button type="submit" class="smallbutton">
             <fmt:message key="addBtn" bundle="${locale}"/>
@@ -32,14 +32,14 @@
                 <td><c:out value="${user.phone}"/></td>
                 <td><c:out value="${user.password}"/></td>
                 <td>
-                    <form action="/Controller" name="userEdit" method="post">
+                    <form action="/Controller/admin" name="userEdit" method="post">
                         <input type="hidden" name="command" value="editUser"/>
                         <input type="hidden" name="userId" value="${user.id}"/>
                         <button type="submit" class="smallbutton">
                             <fmt:message key="editBtn" bundle="${locale}"/>
                         </button>
                     </form>
-                    <form action="/Controller" name="userRemove" method="post">
+                    <form action="/Controller/admin" name="userRemove" method="post">
                         <input type="hidden" name="command" value="removeUser"/>
                         <input type="hidden" name="userId" value="${user.id}"/>
                         <button type="submit" class="smallbutton">

@@ -19,11 +19,11 @@
     </form>
     <table border="1">
         <tr>
-            <th>Share</th>
-            <th>Loyalty</th>
-            <th>On/Off</th>
-            <th>Sum</th>
-            <th>Percent</th>
+            <th><fmt:message key="share" bundle="${locale}"/></th>
+            <th><fmt:message key="loyalty" bundle="${locale}"/></th>
+            <th><fmt:message key="isOnOff" bundle="${locale}"/></th>
+            <th><fmt:message key="bySum" bundle="${locale}"/></th>
+            <th><fmt:message key="percent" bundle="${locale}"/></th>
         </tr>
         <c:forEach var="share" items="${shareList}">
             <tr>

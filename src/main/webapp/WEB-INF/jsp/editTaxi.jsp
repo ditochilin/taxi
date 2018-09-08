@@ -29,7 +29,7 @@
         </c:if>
         <table>
             <tr>
-                <th><fmt:message key="driver" bundle="${locale}"/></th>
+                <th><fmt:message key="driverUser" bundle="${locale}"/></th>
                 <th>
                     <select name='driverId'>
                         <option selected value="${null}">empty driver</option>

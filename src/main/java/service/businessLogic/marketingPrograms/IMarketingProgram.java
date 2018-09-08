@@ -21,6 +21,9 @@ public interface IMarketingProgram {
 
     void countCost(Order order) throws ServiceException;
 
+
+
+
     default void countCostByPercent(Order order, BigDecimal percent) throws ServiceException {
 
         BigDecimal baseCost = getBaseCostChecked(order);

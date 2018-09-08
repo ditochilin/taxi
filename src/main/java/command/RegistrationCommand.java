@@ -28,11 +28,12 @@ public class RegistrationCommand extends AbstractCommand<User> implements IComma
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
 
-        String action = request.getParameter("action");
-        if (action == null ||
+        String actionRegister = request.getParameter("actionRegister");
+        String actionExit = request.getParameter("actionExit");
+        if ((actionRegister == null && actionExit == null) ||
                 request.getAttribute("errors") != null) {
             return Config.getProperty(Config.REGISTRATION);
-        } else if (action.equals("exit")) {
+        } else if (actionExit!=null) {
             return Config.getProperty(Config.LOGIN);
         }
 

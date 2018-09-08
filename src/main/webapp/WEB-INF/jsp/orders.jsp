@@ -6,7 +6,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="orders" bundle="${locale}"/></title>
+    <title><fmt:message key="List of orders" bundle="${locale}"/></title>
 </head>
 <body>
 <div class="container">
@@ -20,14 +20,14 @@
 
     <span><fmt:message key="List of orders" bundle="${locale}"/></span>
 
-    <c:if test="${not sessionScope.role eq 'DRIVER'}">
+    <%--<c:if test="${not sessionScope.role eq 'DRIVER'}">--%>
         <form action="/Controller" name="addOrder" method="post">
             <input type="hidden" name="command" value="editOrder"/>
             <button type="submit" class="smallbutton">
                 <fmt:message key="addBtn" bundle="${locale}"/>
             </button>
         </form>
-    </c:if>
+    <%--</c:if>--%>
 
     <table border="1">
         <tr>
@@ -53,8 +53,15 @@
             <td><c:out value="${order.status}"/></td>
             <td><c:out value="${order.dateTime}"/></td>
             <td><c:out value="${order.carType.typeName}"/></td>
-            <td><c:out
-                    value="${order.taxi.carName} / ${order.taxi.carNumber} / ${order.taxi.driver.userName} / ${order.taxi.driver.phone}"/></td>
+            <c:choose>
+                <c:when test="${not empty order.taxi}">
+                    <td><c:out
+                            value="${order.taxi.carName} / ${order.taxi.carNumber} / ${order.taxi.driver.userName} / ${order.taxi.driver.phone}"/></td>
+                </c:when>
+                <c:otherwise>
+                    <td><c:out value=""/></td>
+                </c:otherwise>
+            </c:choose>
             <td><c:out value="${order.startPoint}"/></td>
             <td><c:out value="${order.endPoint}"/></td>
             <td><c:out value="${order.cost}"/></td>
@@ -62,8 +69,8 @@
                 <td><c:out value="${order.distance}"/></td>
                 <td><c:out value="${order.client.userName}"/></td>
             </c:if>
-            <c:if test="${not sessionScope.role eq 'CLIENT'}">
-                <td><c:out value="${order.shares.shareName}"/></td>
+            <c:if test="${sessionScope.role eq 'CLIENT'}">
+                <td><c:out value="${order.shares}"/></td>
                 <td><c:out value="${order.discount}"/></td>
             </c:if>
             <td><c:out value="${order.feedTime}"/></td>

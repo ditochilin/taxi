@@ -1,6 +1,7 @@
 package command;
 
 import controller.ControllerHelper;
+import entities.Role;
 import entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,10 +12,12 @@ import service.exceptions.EmptyException;
 import service.exceptions.ServiceException;
 import service.implementation.RoleService;
 import service.implementation.UserService;
+import utils.Messenger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -75,6 +78,14 @@ public abstract class AbstractCommand<T> {
     protected String updateUser( HttpServletRequest request, HttpServletResponse response,
                                  ICommand commandForReturning,
                                  ICommand commandForSuccess) throws ServletException, IOException, ServiceException {
+
+        if(!currentUserIsAdmin(request.getSession()) && request.getParameter("actionRegister")==null){
+            String msg = String.format(Messenger.ACCESS_LEVEL_ERROR, request.getSession().getAttribute("user"));
+            LOGGER.warn(msg);
+            throw new ServiceException(msg, null);
+        }
+
+
         String idParam = request.getParameter("userId");
         String roleName = request.getParameter("roleName");
         String userName = ControllerHelper.getParameterInUTF8(request, "userName");
@@ -93,6 +104,16 @@ public abstract class AbstractCommand<T> {
                 commandForReturning,
                 commandForSuccess);
 
+    }
+
+    private boolean currentUserIsAdmin(HttpSession session) throws ServiceException {
+        String roleName = (String) session.getAttribute("role");
+        if(roleName==null){
+            return false;
+        }
+        Role role = roleService.getByName(
+                roleName);
+        return "ADMIN".equals(role.getRoleName());
     }
 
     private static Set<String> checkUserFieldsErrors(String id, String userName, String phone, String password, String confirmPassword) {
