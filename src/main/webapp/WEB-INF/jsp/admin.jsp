@@ -9,7 +9,7 @@
     <title><fmt:message key="Admin panel" bundle="${locale}"/></title>
 </head>
 <body>
-<div class="container">
+<div class="container position-relative">
     <jsp:include page="navbar.jsp"/>
 
     <jsp:include page="navbarAdmin.jsp"/>

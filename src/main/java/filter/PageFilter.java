@@ -38,9 +38,6 @@ public class PageFilter implements Filter {
                         Config.getProperty(Config.ERROR));
                 request.setAttribute("errorDescription", "User '"+userName+"' has no admin role. Root denied!");
             }
-//            else {
-//                request.setAttribute("redirect", "/Controller");
-//            }
         }
 
         if (uri.endsWith(".jsp")) {

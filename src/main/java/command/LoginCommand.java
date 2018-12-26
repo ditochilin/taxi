@@ -39,14 +39,12 @@ public class LoginCommand implements ICommand {
 
         try {
             userDump = userService.checkUserByPassword(userDump);
-            HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession();
             if (userDump != null) {
                 Role role = userDump.getRole();
                 session.setAttribute("user", userDump.getUserName());
                 session.setAttribute("role", role.getRoleName());
-                if (session.getAttribute("locale") == null) {
-                    session.setAttribute("locale", "en_En");
-                }
+
                 return doCorrectRedirection(role, request, response);
             }
         } catch (IncorrectPassword e) {

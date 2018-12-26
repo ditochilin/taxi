@@ -47,6 +47,4 @@ public class RegistrationCommand extends AbstractCommand<User> implements IComma
 
         return Config.getProperty(Config.LOGIN);
     }
-
-
 }

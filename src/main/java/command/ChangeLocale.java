@@ -12,7 +12,7 @@ public class ChangeLocale implements ICommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        String lang = request.getParameter("selectLangs");
+        String lang = request.getParameter("selectedLang");
         request.getSession().setAttribute("locale", lang);
         String fromPage = request.getParameter("fromURI");
         return  fromPage;

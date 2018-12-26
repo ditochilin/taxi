@@ -14,7 +14,7 @@
     <form action="Controller" method="post">
         <input type="hidden" name="command" value="login">
         <c:if test="${not empty resultMessage}">
-            <span style="color: red"/><fmt:message key="${resultMessage}"/>
+            <span class="text-warning"/><fmt:message key="${resultMessage}"/>
         </c:if>
         <table>
             <tr>

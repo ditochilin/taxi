@@ -103,7 +103,6 @@ public abstract class AbstractCommand<T> {
                 response,
                 commandForReturning,
                 commandForSuccess);
-
     }
 
     private boolean currentUserIsAdmin(HttpSession session) throws ServiceException {

@@ -60,8 +60,10 @@
             <tr>
                 <c:if test="${not empty requestScope.errors}">
                     <c:forEach items="${requestScope.errors}" var="error">
-                        <strong><fmt:message key="error" bundle="${locale}"/></strong> <fmt:message key="${error}"
-                                                                                                    bundle="${locale}"/><br>
+                        <p class="alert-warning">
+                            <strong><fmt:message key="error" bundle="${locale}"/></strong>
+                            <fmt:message key="${error}" bundle="${locale}"/><br>
+                        </p>
                     </c:forEach>
                 </c:if>
             </tr>
