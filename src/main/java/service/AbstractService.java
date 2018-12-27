@@ -73,7 +73,7 @@ public abstract class AbstractService<T> implements IService<T> {
 
     protected void catchServiceException(Exception cause, String message) throws ServiceException {
         String msgCause = cause.getMessage();
-        LOGGER.error(message, msgCause);
+        LOGGER.warn(message, msgCause);
         throw new ServiceException(message, cause);
     }
 }

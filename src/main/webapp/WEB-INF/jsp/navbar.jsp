@@ -11,7 +11,7 @@
                 <li>
                     <c:choose>
                         <c:when test="${sessionScope.role == 'ADMIN'}">
-                            <a class="nav-link text-white" href="${pageContext.request.contextPath}/Controller/admin?command=openAdministration">
+                            <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller/admin?command=openAdministration">
                                 <span><fmt:message key="Admin panel" bundle="${locale}"/></span>
                             </a>
                         </c:when>
@@ -20,21 +20,21 @@
                 <li>
                     <c:choose>
                         <c:when test="${sessionScope.role == 'DRIVER' || sessionScope.role == 'ADMIN'}">
-                            <a class="nav-link text-white" href="${pageContext.request.contextPath}/Controller?command=openListTaxis">
+                            <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=openListTaxis">
                                 <span><fmt:message key="vehicles" bundle="${locale}"/></span>
                             </a>
                         </c:when>
                     </c:choose>
                 </li>
                 <li>
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/Controller?command=openListOrders">
+                    <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=openListOrders">
                         <span><fmt:message key="List of orders" bundle="${locale}"/></span>
                     </a>
                 </li>
             </c:when>
             <c:otherwise>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/Controller?command=openRegistration">
+                    <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=openRegistration">
                         <fmt:message key="registration" bundle="${locale}"/>
                     </a>
                 </li>
@@ -51,7 +51,7 @@
                     </label>
                 </li>
                 <li class="nav-item mr-1">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/Controller?command=logout">
+                    <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=logout">
                         <fmt:message key="logout" bundle="${locale}"/>
                     </a>
                 </li>

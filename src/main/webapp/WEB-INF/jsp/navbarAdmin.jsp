@@ -4,21 +4,21 @@
 <fmt:setLocale value="${not empty sessionScope.locale ? sessionScope.locale : 'en_EN'}"/>
 <fmt:setBundle basename="locale" var="locale"/>
 
-<nav>
-    <ul>
+<nav class="navbar tx-navbar navbar-expand-sm">
+    <ul class="nav navbar-nav mr-auto">
         <li>
-            <a href="${pageContext.request.contextPath}/Controller/admin?command=openListUsers">
-                <span><fmt:message key="users" bundle="${locale}"/></span>
+            <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller/admin?command=openListUsers">
+                <fmt:message key="users" bundle="${locale}"/>
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/Controller?command=openListShares">
-                <span><fmt:message key="shares" bundle="${locale}"/></span>
+            <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=openListShares">
+                <fmt:message key="shares" bundle="${locale}"/>
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/Controller?command=openListCarTypes">
-                <span><fmt:message key="carTypes" bundle="${locale}"/></span>
+            <a class="nav-link text-white tx-navbar-link" href="${pageContext.request.contextPath}/Controller?command=openListCarTypes">
+                <fmt:message key="carTypes" bundle="${locale}"/>
             </a>
         </li>
     </ul>
