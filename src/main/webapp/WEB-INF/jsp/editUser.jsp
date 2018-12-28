@@ -8,12 +8,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="${not empty sessionScope.locale ? sessionScope.locale : 'en_EN'}"/>
 <fmt:setBundle basename="locale" var="locale"/>
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="Edit user"/></title>
+    <title><fmt:message key="Edit user" bundle="${locale}"/></title>
 </head>
 <body>
 <div class="container">
@@ -24,11 +24,11 @@
 
     <form method="post" action="/Controller/admin" name="saveUser">
         <input type="hidden" name="command" value="saveUser"/>
-        <p><fmt:message key="Edit user" bundle="${locale}"/></p>
+        <p class="card-header"><fmt:message key="Edit user" bundle="${locale}"/></p>
         <c:if test="${isThisEdition eq true}">
             <input type="hidden" name="userId" value="${userDTO.id}"/>
         </c:if>
-        <table>
+        <table class="table table-sm table-hover">
             <tr>
                 <th><fmt:message key="User's name" bundle="${locale}"/></th>
                 <th><input type="text" name="userName"
@@ -102,7 +102,7 @@
 
             <tr>
                 <th>
-                    <input type="submit" name="saveUser"
+                    <input class="btn btn-success" type="submit" name="saveUser"
                            value="<fmt:message key="saveBtn" bundle="${locale}"/>">
                 </th>
             </tr>

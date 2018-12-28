@@ -21,7 +21,7 @@ public class LogoutCommand implements ICommand {
 
         if(session!=null){
             session.removeAttribute("user");
-            session.removeAttribute("locale");
+     //       session.removeAttribute("locale");
             session.removeAttribute("role");
         }
 

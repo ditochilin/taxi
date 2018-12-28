@@ -25,7 +25,7 @@
     <form method="post" action="/Controller" name="saveShare">
         <input type="hidden" name="command" value="saveShare"/>
         <p><fmt:message key="Edit share" bundle="${locale}"/></p>
-        <table>
+        <table class="table table-sm table-hover">
             <c:if test="${isThisEdition eq true}">
                 <input type="hidden" name="shareId" value="${shareDTO.id}"/>
             </c:if>
@@ -86,7 +86,7 @@
             </tr>
             <tr>
                 <th>
-                    <input type="submit" name="saveShare"
+                    <input class="btn btn-success" type="submit" name="saveShare"
                            value="<fmt:message key="saveBtn" bundle="${locale}"/>">
                 </th>
             </tr>

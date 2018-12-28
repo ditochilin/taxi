@@ -13,24 +13,25 @@
 <div class="container">
     <jsp:include page="/WEB-INF/jsp/navbar.jsp"/>
 
-    <p style="color: red">
+    <p class="text-info">
         <c:if test="${not empty resultMessage}">
-            <span><fmt:message key="${resultMessage}"/></span>
+            <fmt:message key="${resultMessage}" bundle="${locale}"/>
         </c:if>
     </p>
 
-    <span><fmt:message key="List of orders" bundle="${locale}"/></span>
+    <p class="card-header"><fmt:message key="List of orders" bundle="${locale}"/></p>
 
     <%--<c:if test="${not sessionScope.role eq 'DRIVER'}">--%>
-        <form action="/Controller" name="addOrder" method="post">
-            <input type="hidden" name="command" value="editOrder"/>
-            <button type="submit" class="smallbutton">
-                <fmt:message key="addBtn" bundle="${locale}"/>
-            </button>
-        </form>
+    <form action="/Controller" name="addOrder" method="post">
+        <input type="hidden" name="command" value="editOrder"/>
+        <button type="submit" class="btn btn-success btn-sm">
+            <fmt:message key="addBtn" bundle="${locale}"/>
+        </button>
+    </form>
     <%--</c:if>--%>
 
-    <table border="1">
+    <table class="table table-hover table-bordered table-sm">
+        <thead class="thead-light">
         <tr>
             <th><fmt:message key="orderStatus" bundle="${locale}"/></th>
             <th><fmt:message key="dateTime" bundle="${locale}"/></th>
@@ -50,6 +51,7 @@
             <th><fmt:message key="feedTime" bundle="${locale}"/></th>
             <th><fmt:message key="waitingTime" bundle="${locale}"/></th>
         </tr>
+        </thead>
         <c:forEach var="order" items="${orderList}">
             <td><c:out value="${order.status}"/></td>
             <td><c:out value="${order.dateTime}"/></td>
@@ -79,17 +81,17 @@
 
 
             <td>
-                <form action="/Controller" name="orderEdit" method="post">
+                <form class="d-inline-block float-left mr-3" action="/Controller" name="orderEdit" method="post">
                     <input type="hidden" name="command" value="editOrder"/>
                     <input type="hidden" name="orderId" value="${order.id}"/>
-                    <button type="submit" class="smallbutton">
+                    <button type="submit" class="btn btn-warning btn-sm">
                         <fmt:message key="editBtn" bundle="${locale}"/>
                     </button>
                 </form>
-                <form action="/Controller" name="orderRemove" method="post">
+                <form class="d-inline-block" action="/Controller" name="orderRemove" method="post">
                     <input type="hidden" name="command" value="removeOrder"/>
                     <input type="hidden" name="orderId" value="${order.id}"/>
-                    <button type="submit" class="smallbutton">
+                    <button type="submit" class="btn btn-danger btn-sm">
                         <fmt:message key="removeBtn" bundle="${locale}"/>
                     </button>
                 </form>

@@ -20,7 +20,7 @@
         <c:if test="${isThisEdition eq true}">
             <input type="hidden" name="orderId" value="${orderDTO.id}"/>
         </c:if>
-        <table>
+        <table class="table table-sm table-hover">
             <tr>
                 <th><fmt:message key="orderStatus" bundle="${locale}"/></th>
                 <th>
@@ -318,7 +318,7 @@
             </tr>
             <tr>
                 <th>
-                    <input type="submit" name="saveUser"
+                    <input class="btn btn-success" type="submit" name="saveUser"
                            value="<fmt:message key="saveBtn" bundle="${locale}"/>">
                 </th>
             </tr>

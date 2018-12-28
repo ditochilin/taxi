@@ -27,7 +27,7 @@
         <c:if test="${isThisEdition eq true}">
             <input type="hidden" name="taxiId" value="${taxiDTO.id}"/>
         </c:if>
-        <table>
+        <table class="table table-sm table-hover">
             <tr>
                 <th><fmt:message key="driverUser" bundle="${locale}"/></th>
                 <th>
@@ -118,7 +118,7 @@
             </tr>
             <tr>
                 <th>
-                    <input type="submit" name="saveTaxi"
+                    <input class="btn btn-success" type="submit" name="saveTaxi"
                            value="<fmt:message key="saveBtn" bundle="${locale}"/>"
                     />
 

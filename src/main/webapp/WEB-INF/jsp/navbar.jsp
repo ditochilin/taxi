@@ -75,6 +75,7 @@
                     <input type="hidden" name="command" value="changeLocale">
                     <input type="hidden" id="selectedLang" name="selectedLang">
                     <input type="hidden" name="fromURI" value="${pageContext.request.requestURI}">
+                    <input type="hidden" name="queryString" value="${pageContext.request.queryString}">
                     <a class="dropdown-item" onclick="submit('en_EN')"><img
                             src="../../images/United-Kingdom-icon.png"/> English</a>
                     <a class="dropdown-item" onclick="submit('ru_RU')"><img src="../../images/Russia-icon.png"/>

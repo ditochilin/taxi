@@ -1,11 +1,7 @@
 package command;
 
-import utils.Config;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class ChangeLocale implements ICommand {
 
@@ -14,7 +10,9 @@ public class ChangeLocale implements ICommand {
 
         String lang = request.getParameter("selectedLang");
         request.getSession().setAttribute("locale", lang);
+        //   /Controller/admin?command=openListUsers
         String fromPage = request.getParameter("fromURI");
-        return  fromPage;
+        String queryString = request.getParameter("queryString");
+        return fromPage + "?" + queryString;
     }
 }
