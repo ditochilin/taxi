@@ -18,6 +18,7 @@ public class Config {
     public static final String ERROR = "ERROR";
     public static final String LOGIN = "LOGIN";
     public static final String ORDERS = "ORDERS";
+
     private static final ResourceBundle resource  = ResourceBundle.getBundle("config");
 
     public static String getProperty(String key) {

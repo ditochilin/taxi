@@ -162,13 +162,13 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
         }
 
         if (startPoint.isEmpty()) {
-            errors.add("Start point of root must be!");
+            errors.add("Start point of route must be!");
         } else {
             orderDTO.setStartPoint(startPoint);
         }
 
         if (endPoint.isEmpty()) {
-            errors.add("Destination of root must be!");
+            errors.add("Destination of route must be!");
         } else {
             orderDTO.setEndPoint(endPoint);
         }
@@ -180,7 +180,7 @@ public class SaveOrderCommand extends AbstractCommand<Order> implements ICommand
             orderDTO.setDiscount(discount);
         }
 
-        if (dateFeed.length() > 0 && timeFeed.length() > 0) {
+        if (dateFeed!=null && timeFeed!=null && dateFeed.length() > 0 && timeFeed.length() > 0) {
             try {
                 Date newFeedTime = dateformat.parse(dateFeed + " " + timeFeed+":00");
                 orderDTO.setFeedTime(newFeedTime);

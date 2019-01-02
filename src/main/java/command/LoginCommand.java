@@ -43,6 +43,7 @@ public class LoginCommand implements ICommand {
             if (userDump != null) {
                 Role role = userDump.getRole();
                 session.setAttribute("user", userDump.getUserName());
+                session.setAttribute("userId", userDump.getId());
                 session.setAttribute("role", role.getRoleName());
 
                 return doCorrectRedirection(role, request, response);

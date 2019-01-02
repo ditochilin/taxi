@@ -11,7 +11,7 @@
         </c:if>
     </p>
 
-    <p class="card-header"><fmt:message key="List of shares" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="List of shares" bundle="${locale}"/></p><br>
 
     <form action="/Controller" name="addShare" method="post">
         <input type="hidden" name="command" value="editShare"/>

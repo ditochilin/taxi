@@ -6,7 +6,7 @@
 <html>
 <head>
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
-    <title><fmt:message key="Edit client's order"/></title>
+    <title><fmt:message key="Edit client's order" bundle="${locale}"/></title>
 </head>
 <body>
 <div class="container">
@@ -14,7 +14,7 @@
 
     <c:set var="isThisEdition" value="${not empty orderDTO}"/>
 
-    <p><fmt:message key="Edit client's order" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="Edit client's order" bundle="${locale}"/></p>
     <form method="post" action="/Controller" name="saveOrder">
         <input type="hidden" name="command" value="saveOrder"/>
         <c:if test="${isThisEdition eq true}">
@@ -78,7 +78,11 @@
                     <select name='clientId'
                             <c:if test="${not sessionScope.role eq 'ADMIN'}"> disabled</c:if>
                     >
-                        <option value="${null}">empty client</option>
+                        <% if (session.getAttribute("role").equals("CLIENT")) {%>
+                            <option selected value="${sessionScope.userId}">${sessionScope.user}</option>
+                        <%} else {%>
+                            <option selected value="${null}">empty driver</option>
+                        <%}%>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="clientItem" items="${clientList}">
@@ -107,7 +111,7 @@
                 <th><fmt:message key="carType" bundle="${locale}"/></th>
                 <th>
                     <select name='carTypeId'
-                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled </c:if>
+                            <%--<c:if test="${sessionScope.role eq 'DRIVER'}"> disabled </c:if>--%>
                     >
                         <option selected value="${null}">empty car type</option>
                         <c:choose>
@@ -185,7 +189,7 @@
                 <th><fmt:message key="startPoint" bundle="${locale}"/></th>
                 <th>
                     <input type="text" name="startPoint"
-                            <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                            <%--<c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>--%>
                             <c:if test="${isThisEdition}"> value="${orderDTO.startPoint}"</c:if>
                     />
                 </th>
@@ -194,7 +198,7 @@
             <tr>
                 <th><fmt:message key="endPoint" bundle="${locale}"/></th>
                 <th><input type="text" name="endPoint"
-                        <c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>
+                        <%--<c:if test="${sessionScope.role eq 'DRIVER'}"> disabled</c:if>--%>
                         <c:if test="${isThisEdition}"> value="${orderDTO.endPoint}"</c:if>
                 />
                 </th>

@@ -119,10 +119,10 @@ public abstract class AbstractCommand<T> {
         Set<String> errors = new HashSet<>();
         try {
             if (userService.suchNameIsPresent(userName) && id == null) {
-                errors.add("User with name " + userName + " is present already!");
+                errors.add("User with name");
             }
             if (userService.suchPhoneIsPresent(phone) && id == null) {
-                errors.add("User with phone " + phone + " is present already!");
+                errors.add("User with phone");
             }
             if (password.length() < 4) {
                 errors.add("Password is too short! Must be not less then 4 signs.");

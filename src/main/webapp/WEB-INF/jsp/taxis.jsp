@@ -17,7 +17,7 @@
             <fmt:message key="${resultMessage}" bundle="${locale}"/>
         </c:if>
     </p>
-    <p class="card-header"><fmt:message key="ListOfVehicles" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="ListOfVehicles" bundle="${locale}"/></p><br>
 
     <form action="/Controller" name="addTaxi" method="post">
         <input type="hidden" name="command" value="editTaxi"/>
@@ -38,8 +38,8 @@
         </thead>
         <c:forEach var="taxi" items="${taxiList}">
             <tr>
-                <td><c:out value="${taxi.driver}"/></td>
-                <td><c:out value="${taxi.carType}"/></td>
+                <td><c:out value="${taxi.driver.userName}"/></td>
+                <td><c:out value="${taxi.carType.typeName}"/></td>
                 <td><c:out value="${taxi.carName}"/></td>
                 <td><c:out value="${taxi.carNumber}"/></td>
                 <td><c:out value="${taxi.busy}"/></td>

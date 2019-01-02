@@ -35,8 +35,8 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
             String shareName = ControllerHelper.getParameterInUTF8(request, "shareName");
             Boolean isLoyalty = "on".equals(request.getParameter("isLoyalty"));
             Boolean isOnOff = "on".equals(request.getParameter("isOnOff"));
-            BigDecimal sum = BigDecimal.valueOf(Long.valueOf(request.getParameter("sum")));
-            Float percent = Float.valueOf(request.getParameter("percent"));
+            BigDecimal sum = BigDecimal.valueOf(Long.valueOf(convertParameterValueToString(request,"sum")));
+            Float percent = Float.valueOf(convertParameterValueToString(request, "percent"));
 
             Set<String> errors = checkShareFieldsErrors(idParam, shareName, isLoyalty, sum, percent);
             Long id = (idParam==null)?Long.valueOf(0):Long.valueOf(idParam);
@@ -55,12 +55,19 @@ public class SaveShareCommand extends AbstractCommand<Share> implements ICommand
 
     }
 
+    private String convertParameterValueToString(HttpServletRequest request, String name){
+        String value = request.getParameter(name);
+        if(value.equals("")){
+            return "0";
+        }
+        return value;
+    }
 
     private Set<String> checkShareFieldsErrors(String id, String shareName, Boolean isLoyalty, BigDecimal sum, Float percent) {
         Set<String> errors = new HashSet<>();
         try {
-            if (shareService.suchShareIsPresent(shareName) && id.isEmpty()) {
-                errors.add("Share with name " + shareName + " is present already!");
+            if (shareService.suchShareIsPresent(shareName) && id == null) {
+                errors.add("Share with such name is present already!");
             }
 
             if (isLoyalty && shareService.ifLoyaltyDoesAlreadyExist(shareName)) {

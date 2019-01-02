@@ -19,7 +19,7 @@
         </c:if>
     </p>
 
-    <p class="card-header"><fmt:message key="List of orders" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="List of orders" bundle="${locale}"/></p><br>
 
     <%--<c:if test="${not sessionScope.role eq 'DRIVER'}">--%>
     <form action="/Controller" name="addOrder" method="post">

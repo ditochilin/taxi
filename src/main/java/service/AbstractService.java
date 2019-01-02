@@ -6,6 +6,8 @@ import dao.exceptions.NoSuchEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.exceptions.ServiceException;
+import utils.Config;
+import utils.Messenger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public abstract class AbstractService<T> implements IService<T> {
         try {
             return dao.findAll();
         } catch (DaoException e) {
-            catchServiceException(e, "Couldn't get all entities from database.");
+            catchServiceException(e, Messenger.NOENTITIES);
         }
         return new ArrayList<>();
     }
@@ -29,7 +31,7 @@ public abstract class AbstractService<T> implements IService<T> {
         try {
             return dao.findById(id);
         } catch (DaoException | NoSuchEntityException e) {
-            catchServiceException(e, "Couldn't get all entities from database.");
+            catchServiceException(e, Messenger.NOENTITYBYID);
         }
         return null;
     }

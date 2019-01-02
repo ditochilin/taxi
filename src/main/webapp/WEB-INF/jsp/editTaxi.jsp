@@ -21,7 +21,7 @@
 
     <c:set var="isThisEdition" value="${not empty taxiDTO}"/>
 
-    <p><fmt:message key="editTaxi" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="editTaxi" bundle="${locale}"/></p>
     <form method="post" action="/Controller" name="saveTaxi">
         <input type="hidden" name="command" value="saveTaxi"/>
         <c:if test="${isThisEdition eq true}">
@@ -32,7 +32,11 @@
                 <th><fmt:message key="driverUser" bundle="${locale}"/></th>
                 <th>
                     <select name='driverId'>
-                        <option selected value="${null}">empty driver</option>
+                        <% if(session.getAttribute("role").equals("DRIVER")){%>
+                            <option selected value="${sessionScope.userId}">${sessionScope.user}</option>
+                        <%} else {%>
+                            <option selected value="${null}">empty driver</option>
+                        <%}%>
                         <c:choose>
                             <c:when test="${isThisEdition}">
                                 <c:forEach var="driverItem" items="${driverList}">

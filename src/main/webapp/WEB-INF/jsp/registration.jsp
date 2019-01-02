@@ -69,10 +69,10 @@
             </tr>
             <tr>
                 <th>
-                    <input type="submit" name="actionRegister" value="<fmt:message key="register" bundle="${locale}"/>">
+                    <input class="btn btn-sm btn-success" type="submit" name="actionRegister" value="<fmt:message key="register" bundle="${locale}"/>">
                 </th>
                 <th>
-                    <input type="submit" name="actionExit" value="<fmt:message key="exit" bundle="${locale}"/>"/>
+                    <input class="btn btn-sm btn-danger" type="submit" name="actionExit" value="<fmt:message key="exit" bundle="${locale}"/>"/>
                 </th>
             </tr>
         </table>

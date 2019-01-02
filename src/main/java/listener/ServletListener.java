@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSessionBindingEvent;
 /**
  * @author Dmitry Tochilin
  */
-//todo ...change sout with LOGGER
 public class ServletListener implements HttpSessionAttributeListener {
 
     private static final Logger LOGGER = LogManager.getLogger(ServletListener.class.getName());
@@ -18,7 +17,7 @@ public class ServletListener implements HttpSessionAttributeListener {
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
 
-        LOGGER.log(Level.INFO, (String) event.getValue());
+        LOGGER.log(Level.INFO, event.getValue());
 
     }
 

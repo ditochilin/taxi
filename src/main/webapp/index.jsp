@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <th>
-                    <input type="submit" name="submit" value="<fmt:message key="enter" bundle="${locale}"/>">
+                    <input class="btn btn-sm btn-primary" type="submit" name="submit" value="<fmt:message key="enter" bundle="${locale}"/>">
                 </th>
             </tr>
         </table>

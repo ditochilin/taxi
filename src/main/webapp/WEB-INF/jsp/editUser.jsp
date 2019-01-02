@@ -59,7 +59,7 @@
                             </c:forEach>
                         </c:when>
                         <c:when test="${not empty roleList}">
-                            <option selected disabled>select role</option>
+                            <option selected disabled><fmt:message key="select role" bundle="${locale}"/></option>
                             <c:forEach var="role" items="${roleList}">
                                 <option value="${role.roleName}">${role.roleName}</option>
                             </c:forEach>

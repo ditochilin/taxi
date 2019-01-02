@@ -11,7 +11,7 @@
         </c:if>
     </p>
 
-    <p class="card-header"><fmt:message key="List of users" bundle="${locale}"/></p>
+    <p class="card-header"><fmt:message key="List of users" bundle="${locale}"/></p><br>
 
     <form action="/Controller/admin" name="addUser" method="post">
         <input type="hidden" name="command" value="editUser"/>

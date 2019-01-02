@@ -24,7 +24,7 @@
 
     <form method="post" action="/Controller" name="saveCarType">
         <input type="hidden" name="command" value="saveCarType"/>
-        <p><fmt:message key="editCarType" bundle="${locale}"/></p>
+        <p  class="card-header"><fmt:message key="editCarType" bundle="${locale}"/></p>
         <table class="table table-sm table-hover">
             <c:if test="${isThisEdition eq true}">
                 <input type="hidden" name="carTypeId" value="${carTypeDTO.id}"/>
