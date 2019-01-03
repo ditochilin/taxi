@@ -35,7 +35,7 @@ public class ConnectionPoolImpl implements IConnectionPool {
     /**
      * gets actual connection of the pool. Overrides doClose() method.
      * When connection's Close() method will be called
-     * first will be come back ino the pool and not closed
+     * first will be come back into the pool and not closed
      *
      * @param resources
      * @return

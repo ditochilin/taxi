@@ -7,6 +7,7 @@ import entities.Status;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -50,7 +51,8 @@ public class OrderPropSetter implements IPropSetter<Order> {
         if(date != null){
             timestamp = new Timestamp(date.getTime());
         }
-        statement.setTimestamp(parameterIndex, timestamp, calendar);
+
+        statement.setObject(parameterIndex, timestamp);
     }
 
 }

@@ -57,7 +57,6 @@ public abstract class AbstractDao<T> implements IDao<T> {
             propSetter.setProperties(statement, entity);
             int effected = statement.executeUpdate();
 
-            //todo : this realised in service...  leave?
             if(effected==0){
                 return Long.valueOf(0);
             }
